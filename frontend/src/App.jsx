@@ -8,6 +8,7 @@ import PlantManage from "./pages/PlantManage/PlantManage";
 // import Market from "./pages/Market/Market";
 // import MyPage from "./pages/MyPage/MyPage";
 import Login from "./pages/Login/Login";
+import BasicLayout from "./layouts/layout/BasicLayout";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,13 +22,33 @@ function App() {
   return (
     <>
       <Header user={mockUser} />
-
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/plants" element={<PlantManage />} />
+        <Route
+          path="/"
+          element={
+            <BasicLayout>
+              <Home />
+            </BasicLayout>
+          }
+        />
+        <Route
+          path="/plants"
+          element={
+            <BasicLayout>
+              <PlantManage />
+            </BasicLayout>
+          }
+        />
         {/* <Route path="/market" element={<Market />} />
         <Route path="/mypage" element={<MyPage />} /> */}
-        <Route path="/login" element={<Login onLogin={setUser} />} />
+        <Route
+          path="/login"
+          element={
+            <BasicLayout>
+              <Login onLogin={setUser} />
+            </BasicLayout>
+          }
+        />
       </Routes>
     </>
   );
