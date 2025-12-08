@@ -1,28 +1,56 @@
-import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+// =============================
+// 우영 App.jsx (로그인 + ID/PW 찾기 시스템 + 팀장 레이아웃 통합본)
+// =============================
 
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Header from "./layouts/header/Header";
+
+// -----------------------------
+// 팀장님 기존 페이지
+// -----------------------------
 import Home from "./pages/Home/Home";
 import PlantManage from "./pages/PlantManage/PlantManage";
-// import Market from "./pages/Market/Market";
-// import MyPage from "./pages/MyPage/MyPage";
-import Login from "./pages/Login/Login";
+
+// -----------------------------
+// 팀장님 레이아웃 & 헤더
+// -----------------------------
 import BasicLayout from "./layouts/layout/BasicLayout";
+import Header from "./wooyoung_login/layouts/header/Header"; // 🔥 우영 헤더 유지
+
+// -----------------------------
+// Auth Provider (우영 기능 유지)
+// -----------------------------
+import { AuthProvider } from "./wooyoung_login/auth/AuthContext";
+
+// -----------------------------
+// 로그인 / 회원가입
+// -----------------------------
+import Login from "./wooyoung_login/pages/Login";
+import Signup from "./wooyoung_login/pages/Signup";
+
+// -----------------------------
+// ID/PW 찾기
+// -----------------------------
+import FindIdPw from "./wooyoung_login/pages/FindIdPw";
+import IDFindPage from "./wooyoung_login/pages/IDFindPage";
+import PWFindVerify from "./wooyoung_login/pages/PWFindVerify";
+import PWFindReset from "./wooyoung_login/pages/PWFindReset";
+
+// -----------------------------
+// 테스트 페이지
+// -----------------------------
+import TestHome from "./wooyoung_login/pages/TestHome";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  const mockUser = {
-    name: "테스트 유저",
-    role: "일반회원",
-    profileImg: "/test-user.png",
-  };
-
   return (
-    <>
-      <Header user={mockUser} />
+    <AuthProvider>
+      {/* 🔥 우영 헤더 → 로그인 상태 반영 */}
+      <Header />
+
       <Routes>
+        {/* -------------------------
+            팀장 페이지 + 레이아웃 적용
+        -------------------------- */}
         <Route
           path="/"
           element={
@@ -31,6 +59,7 @@ function App() {
             </BasicLayout>
           }
         />
+
         <Route
           path="/plants"
           element={
@@ -39,18 +68,27 @@ function App() {
             </BasicLayout>
           }
         />
-        {/* <Route path="/market" element={<Market />} />
-        <Route path="/mypage" element={<MyPage />} /> */}
-        <Route
-          path="/login"
-          element={
-            <BasicLayout>
-              <Login onLogin={setUser} />
-            </BasicLayout>
-          }
-        />
+
+        {/* -------------------------
+            로그인 / 회원가입
+        -------------------------- */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* -------------------------
+            ID / PW 찾기
+        -------------------------- */}
+        <Route path="/find" element={<FindIdPw />} />
+        <Route path="/find/id" element={<IDFindPage />} />
+        <Route path="/find/pw/verify" element={<PWFindVerify />} />
+        <Route path="/find/pw/reset" element={<PWFindReset />} />
+
+        {/* -------------------------
+            테스트 페이지
+        -------------------------- */}
+        <Route path="/wootest" element={<TestHome />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 
