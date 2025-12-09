@@ -5,6 +5,8 @@
   box-shadow: 0 8px 20px rgba(100, 120, 80, 0.12);
   backdrop-filter: blur(6px);
   width: 300px;
+  transform: scale(0.9);
+  transform-origin: top center;
 }
 
 .preset-title {

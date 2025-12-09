@@ -22,6 +22,7 @@
   min-height: 120px; /* ⬅ 기존보다 확 줄임 */
   max-height: 150px;
   margin-bottom: 24px;
+  transition: transform 0.3s ease;
 }
 
 /* 헤더 라인 (센서명 + pill) */
@@ -96,39 +97,10 @@
   padding: 10px 0;
 }
 
-.actu-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 14px;
-  color: #2f3b2e;
-}
-
 /* Swiper 전체 */
 .actu-swiper {
   width: 100%;
   padding-bottom: 26px;
-}
-
-/* 개별 카드 */
-.actu-card {
-  background: #f8faf5;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
-}
-
-/* 센서 제목 + 상태 */
-.actu-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.actu-label {
-  font-size: 15px;
-  font-weight: 600;
-  color: #375033;
 }
 
 .actu-pill {
