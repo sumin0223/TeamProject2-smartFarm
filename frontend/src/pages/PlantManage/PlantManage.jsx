@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./PlantManage.css";
 import PlantModal from "./PlantModal";
-import farmFullData from "./farmFullData";
+import farmFullData from "../../api/mockDatas/farmFullData";
 
 import { FarmGrid } from "../../components/PlantManage/FarmGrid";
 import { FarmCreateModal } from "../../components/PlantManage/FarmCreateModal";

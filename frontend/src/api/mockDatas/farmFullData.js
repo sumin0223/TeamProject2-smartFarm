@@ -1,6 +1,5 @@
 // src/api/mockDatas/farmFullData.js
-
-export const farmFullData = {
+const farmFullData = {
   user: {
     user_id: 1,
     login_id: "nova_user",
@@ -217,3 +216,5 @@ export const farmFullData = {
     },
   ],
 };
+
+export default farmFullData;
