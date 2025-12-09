@@ -1,95 +1,92 @@
-// =============================
-// 우영 App.jsx (로그인 + ID/PW 찾기 시스템 + 팀장 레이아웃 통합본)
-// =============================
+import { RouterProvider } from "react-router-dom";
+import { router } from "./utils/routes";
 
-import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ProductProvider } from "./contexts/ProductContext";
+import { CartProvider } from "./contexts/CartContext";
+import { OrderProvider } from "./contexts/OrderContext";
+import { ReviewProvider } from "./contexts/ReviewContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
 
-// -----------------------------
-// 팀장님 기존 페이지
-// -----------------------------
-import Home from "./pages/Home/Home";
-import PlantManage from "./pages/PlantManage/PlantManage";
+import { Toaster } from "./components/ui/sonner";
 
-// -----------------------------
-// 팀장님 레이아웃 & 헤더
-// -----------------------------
-import BasicLayout from "./layouts/layout/BasicLayout";
-import Header from "./wooyoung_login/layouts/header/Header"; // 🔥 우영 헤더 유지
-
-// -----------------------------
-// Auth Provider (우영 기능 유지)
-// -----------------------------
-import { AuthProvider } from "./wooyoung_login/auth/AuthContext";
-
-// -----------------------------
-// 로그인 / 회원가입
-// -----------------------------
-import Login from "./wooyoung_login/pages/Login";
-import Signup from "./wooyoung_login/pages/Signup";
-
-// -----------------------------
-// ID/PW 찾기
-// -----------------------------
-import FindIdPw from "./wooyoung_login/pages/FindIdPw";
-import IDFindPage from "./wooyoung_login/pages/IDFindPage";
-import PWFindVerify from "./wooyoung_login/pages/PWFindVerify";
-import PWFindReset from "./wooyoung_login/pages/PWFindReset";
-
-// -----------------------------
-// 테스트 페이지
-// -----------------------------
-import TestHome from "./wooyoung_login/pages/TestHome";
-
-function App() {
+export default function App() {
   return (
     <AuthProvider>
-      {/* 🔥 우영 헤더 → 로그인 상태 반영 */}
-      <Header />
+      <ProductProvider>
+        <CartProvider>
+          <OrderProvider>
+            <ReviewProvider>
+              <NotificationProvider>
 
-      <Routes>
-        {/* -------------------------
-            팀장 페이지 + 레이아웃 적용
-        -------------------------- */}
-        <Route
-          path="/"
-          element={
-            <BasicLayout>
-              <Home />
-            </BasicLayout>
-          }
-        />
+                {/* ★ Header는 RootLayout 안으로 이동했으므로 제거됨 */}
+                <RouterProvider router={router} />
 
-        <Route
-          path="/plants"
-          element={
-            <BasicLayout>
-              <PlantManage />
-            </BasicLayout>
-          }
-        />
+                <Toaster position="top-right" />
 
-        {/* -------------------------
-            로그인 / 회원가입
-        -------------------------- */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-
-        {/* -------------------------
-            ID / PW 찾기
-        -------------------------- */}
-        <Route path="/find" element={<FindIdPw />} />
-        <Route path="/find/id" element={<IDFindPage />} />
-        <Route path="/find/pw/verify" element={<PWFindVerify />} />
-        <Route path="/find/pw/reset" element={<PWFindReset />} />
-
-        {/* -------------------------
-            테스트 페이지
-        -------------------------- */}
-        <Route path="/wootest" element={<TestHome />} />
-      </Routes>
+              </NotificationProvider>
+            </ReviewProvider>
+          </OrderProvider>
+        </CartProvider>
+      </ProductProvider>
     </AuthProvider>
   );
 }
 
-export default App;
+
+
+
+
+
+
+
+// // src/App.jsx
+
+// import { RouterProvider } from "react-router-dom";
+// import { router } from "./utils/routes";
+
+// // === Context Providers ===
+// import { AuthProvider } from "./contexts/AuthContext";
+// import { ProductProvider } from "./contexts/ProductContext";
+// import { CartProvider } from "./contexts/CartContext";
+// import { OrderProvider } from "./contexts/OrderContext";
+// import { ReviewProvider } from "./contexts/ReviewContext";
+// import { NotificationProvider } from "./contexts/NotificationContext";
+
+// // === Layout / UI ===
+// import Header from "./layouts/header/Header";
+// import { Toaster } from "./components/ui/sonner";
+
+// // 임시 로그인 정보 (원하면 AuthContext로 대체 가능)
+// const mockUser = {
+//   name: "테스트 유저",
+//   role: "일반회원",
+//   profileImg: "/test-user.png",
+// };
+
+// export default function App() {
+//   return (
+//     <AuthProvider>
+//       <ProductProvider>
+//         <CartProvider>
+//           <OrderProvider>
+//             <ReviewProvider>
+//               <NotificationProvider>
+
+//                 {/* 글로벌 Header */}
+//                 <Header user={mockUser} />
+
+//                 {/* 라우터 */}
+//                 <RouterProvider router={router} />
+
+//                 {/* 알람 (Toaster) */}
+//                 <Toaster position="top-right" />
+
+//               </NotificationProvider>
+//             </ReviewProvider>
+//           </OrderProvider>
+//         </CartProvider>
+//       </ProductProvider>
+//     </AuthProvider>
+//   );
+// }

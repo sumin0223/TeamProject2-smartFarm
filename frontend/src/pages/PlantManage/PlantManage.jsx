@@ -7,7 +7,7 @@ import { FarmCreateModal } from "../../components/PlantManage/FarmCreateModal";
 import { TimeLapseModal } from "../../components/TimeLapse/TimeLapseModal";
 import { TimeCreateModal } from "../../components/TimeLapse/TimeCreateModal";
 
-// 예시 데이터 - 실제 데이터는 API로 받아올 예정
+// 예시 데이터 - 실제로는 API나 props로 받아올 수 있습니다
 const initialFarms = [
   {
     farmId: 1,
@@ -47,16 +47,15 @@ function PlantManage() {
   const [isTimeLapseCreateOpen, setIsTimeLapseCreateOpen] = useState(false); //타임랩스 생성 모달
   const [timeLapseDetail, setTimeLapseDetail] = useState(null); // 타임랩스 상세 모달
   const [farms, setFarms] = useState(initialFarms); // 팜 카드 json 데이터
-  const [newFarm, setNewFarm] = useState(null);
 
-  // 다음 단계로 진행 (팜 만들기 → 타임랩스 만들기)
+  const [newFarm, setNewFarm] = useState(null);
   const controlNextStep = (farmData) => {
     setNewFarm(farmData);
     setIsFarmCreateOpen(false);
     setIsTimeLapseCreateOpen(true);
+    
   };
 
-  // 팜 생성 처리
   const handleCreateFarm = (farmData) => {
     const newFarm = {
       slot: farms.length + 1,
@@ -84,26 +83,35 @@ function PlantManage() {
         }}
       />
 
-      {/* 🌱 팜 상세 모달 */}
-      {selectedFarm && <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />}
-
-      {/* 🌱 팜 생성 단계 */}
-      {isFarmCreateOpen && (
-        <FarmCreateModal onClose={() => setIsFarmCreateOpen(false)} onCreate={controlNextStep} />
+      {/* 🔥 모달에 data 전달 */}
+      {selectedFarm && (
+        <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />
       )}
 
-      {/* 🌱 타임랩스 생성 단계 */}
+      {/* New Farm을 추가하는 모달창 */}
+      {isFarmCreateOpen && (
+        <FarmCreateModal
+          onClose={() => {
+            setIsFarmCreateOpen(false);
+          }}
+          onCreate={controlNextStep}
+        />
+      )}
       {isTimeLapseCreateOpen && (
         <TimeCreateModal
-          farm={newFarm}
-          onClose={() => setIsTimeLapseCreateOpen(false)}
+          farm = {newFarm}
+          onClose={() => {
+            setIsTimeLapseCreateOpen(false);
+          }}
           onCreate={handleCreateFarm}
         />
       )}
 
-      {/* 🌱 타임랩스 상세 보기 */}
       {timeLapseDetail && (
-        <TimeLapseModal farm={timeLapseDetail} onClose={() => setTimeLapseDetail(null)} />
+        <TimeLapseModal
+          farm={timeLapseDetail}
+          onClose={() => setTimeLapseDetail(null)}
+        />
       )}
     </div>
   );
