@@ -12,7 +12,10 @@
   "dependencies": {
     "aos": "^2.3.4",
     "gsap": "^3.13.0",
+    "lucide-react": "^0.556.0",
     "react": "^19.2.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^19.2.0",
     "react-google-charts": "^5.2.1",
     "react-router-dom": "^7.9.6"
