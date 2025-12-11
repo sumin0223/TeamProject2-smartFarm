@@ -200,6 +200,8 @@
   border-radius: 8px;
   color: white;
   cursor: pointer;
+  width: auto;
+  white-space: nowrap;
 }
 
 /* 프리셋 리스트 */
@@ -300,7 +302,7 @@
   color: white;
   font-size: 1rem;
   font-weight: 600;
-  width: 200px;
+  width: 30px;
 }
 .stage-name-edit:focus {
   outline: none;

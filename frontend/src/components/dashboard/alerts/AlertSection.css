@@ -1,0 +1,116 @@
+/* =========================================
+   2열 알람 레이아웃
+========================================= */
+
+.alert-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 0 40px;
+}
+
+/* 각각의 알람 열 */
+.alert-column {
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+}
+
+/* 타이틀 */
+.alert-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #2a3b25;
+  margin-bottom: 14px;
+}
+
+/* 알람 리스트 영역 */
+.alert-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-empty {
+  font-size: 14px;
+  opacity: 0.6;
+  text-align: center;
+  padding-top: 20px;
+}
+
+/* =========================================
+   알람 카드 (A 스타일)
+========================================= */
+
+.alert-card {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+  padding: 16px 18px;
+
+  box-shadow: 0 3px 10px rgba(110, 130, 100, 0.12);
+  transition: 0.25s ease;
+}
+
+.alert-card:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(90, 110, 90, 0.2);
+}
+
+/* 카드 상단: 제목 / 시간 */
+.alert-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert-title-text {
+  font-size: 15px;
+  font-weight: 700;
+  color: #2b3a24;
+}
+
+.alert-time {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.alert-message {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #4a583e;
+  line-height: 1.4;
+}
+
+/* =========================================
+   더보기 버튼 (pill 스타일)
+========================================= */
+
+.more-pill {
+  align-self: center;
+  margin-top: 14px;
+
+  padding: 6px 18px;
+  border-radius: 999px;
+
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+
+  font-size: 13px;
+  font-weight: 600;
+  color: #455739;
+
+  box-shadow: 0 2px 6px rgba(120, 140, 110, 0.18);
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.more-pill:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(80, 100, 90, 0.25);
+}
