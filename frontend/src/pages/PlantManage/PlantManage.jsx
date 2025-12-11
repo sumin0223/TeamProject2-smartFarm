@@ -56,15 +56,11 @@ function PlantManage() {
         setIsTimeLapseCreateOpen(true);
     };
 
-    // 팜 생성 처리
-    const handleCreateFarm = (farmData) => {
-        const newFarmData = {
-            slot: farms.length + 1,
-            ...farmData,
-            image: "figma:asset/3b935539e1a32b33472fa13c4e9875a8c504995c.png",
-        };
-        setFarms([...farms, newFarmData]);
-        setIsFarmCreateOpen(false);
+  // 팜 생성 처리
+  const handleCreateFarm = (farmData) => {
+    const newFarmData = {
+      slot: farms.length + 1,
+      ...farmData,
     };
 
     return (
