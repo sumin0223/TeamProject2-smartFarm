@@ -56,11 +56,14 @@ function PlantManage() {
         setIsTimeLapseCreateOpen(true);
     };
 
-  // 팜 생성 처리
-  const handleCreateFarm = (farmData) => {
-    const newFarmData = {
-      slot: farms.length + 1,
-      ...farmData,
+    // 팜 생성 처리
+    const handleCreateFarm = (farmData) => {
+        const newFarmData = {
+            slot: farms.length + 1,
+            ...farmData,
+        };
+        setFarms([...farms, newFarmData]);
+        setIsFarmCreateOpen(false);
     };
 
     return (
