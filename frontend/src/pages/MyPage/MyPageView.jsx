@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import styles from "./MyPageView.module.css";
 
 function MyPageView() {
   const navigate = useNavigate();
@@ -14,47 +15,47 @@ function MyPageView() {
   });
 
   return (
-    <div className="mypage-card">
-      <h1 className="mypage-title">마이페이지</h1>
+    <div className={styles.mypageCard}>
+      <h1 className={styles.mypageTitle}>마이페이지</h1>
 
-      <div className="info-row">
-        <div className="info-label">아이디</div>
-        <div className="info-value">{userData.loginId}</div>
+      <div className={styles.infoRow}>
+        <div className={styles.infoLabel}>아이디</div>
+        <div className={styles.infoValue}>{userData.loginId}</div>
       </div>
 
-      <div className="info-row">
-        <div className="info-label">이름</div>
-        <div className="info-value">{userData.name}</div>
+      <div className={styles.infoRow}>
+        <div className={styles.infoLabel}>이름</div>
+        <div className={styles.infoValue}>{userData.name}</div>
       </div>
 
-      <div className="info-row">
-        <div className="info-label">주소</div>
-        <div className="info-value">{userData.userAddr}</div>
+      <div className={styles.infoRow}>
+        <div className={styles.infoLabel}>주소</div>
+        <div className={styles.infoValue}>{userData.userAddr}</div>
       </div>
 
-      <div className="info-row">
-        <div className="info-label">이메일</div>
-        <div className="info-value">{userData.email}</div>
+      <div className={styles.infoRow}>
+        <div className={styles.infoLabel}>이메일</div>
+        <div className={styles.infoValue}>{userData.email}</div>
       </div>
 
-      <div className="info-row">
-        <div className="info-label">전화번호</div>
-        <div className="info-value">{userData.phoneNumber}</div>
+      <div className={styles.infoRow}>
+        <div className={styles.infoLabel}>전화번호</div>
+        <div className={styles.infoValue}>{userData.phoneNumber}</div>
       </div>
 
-      <div className="info-row">
-        <div className="info-label">NOVA 시리얼 번호</div>
-        <div className="serial-list">
+      <div className={styles.infoRow}>
+        <div className={styles.infoLabel}>NOVA 시리얼 번호</div>
+        <div className={styles.serialList}>
           {userData.novaSerialNumber.map((s, i) => (
-            <div key={i} className="serial-item-view">
+            <div key={i} className={styles.serialItemView}>
               {s}
             </div>
           ))}
         </div>
       </div>
 
-      <div className="button-area">
-        <button className="edit-btn" onClick={() => navigate("/mypage/edit")}>
+      <div className={styles.buttonArea}>
+        <button className={styles.editBtn} onClick={() => navigate("/mypage/edit")}>
           정보 수정하기
         </button>
       </div>
