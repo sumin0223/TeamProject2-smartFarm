@@ -1,0 +1,349 @@
+/* ======================== */
+/* 기본 레이아웃 */
+/* ======================== */
+.tm_layout {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.tm_modal_box {
+  width: 1200px;
+  height: 800px;
+  background: white;
+  border-radius: 16px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tm_title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #6da800;
+  margin-bottom: 24px;
+}
+
+/* ======================== */
+/* 아이콘 카드 */
+/* ======================== */
+.tm_icon_card {
+  width: 114px;
+  height: 114px;
+  border-radius: 14px;
+  background: #f2f9e6;
+  border: 1px solid #c7df9b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  cursor: grab;
+  transition: 0.2s ease;
+}
+
+.tm_icon_card:hover {
+  background: #eaf4d4;
+}
+
+.tm_icon_label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4e662b;
+}
+
+.tm_icon_list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(114px, 1fr));
+  gap: 10px;
+  justify-items: center;
+  width: 100%;
+}
+
+/* ======================== */
+/* 섹션 공통 */
+/* ======================== */
+.tm_available_section,
+.tm_selected_section,
+.tm_settings_section {
+  padding: 18px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tm_available_section,
+.tm_selected_section {
+  width: 276px;
+  gap: 12px;
+  overflow: visible;
+}
+
+.tm_settings_section {
+  width: 490px;
+  min-width: 490px;
+  gap: 14px;
+}
+
+/* ======================== */
+/* ScrollWrapper */
+/* ======================== */
+.tm_scroll_wrapper {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tm_scroll_inner {
+  height: 486px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: none; /* Firefox */
+}
+
+.tm_scroll_inner::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.tm_scroll_fade_top,
+.tm_scroll_fade_bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.tm_scroll_fade_top {
+  top: 0;
+  background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0));
+}
+
+.tm_scroll_fade_bottom {
+  bottom: 0;
+  background: linear-gradient(to top, #fff, rgba(255, 255, 255, 0));
+}
+
+/* ======================== */
+/* 설정 UI */
+/* ======================== */
+.tm_setting_row {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px 1fr;
+  align-items: center;
+  gap: 16px;
+  background: #f6f9e9;
+  border: 1px solid #e3e9c7;
+  border-radius: 14px;
+  padding: 16px; /* 좌/우 패딩 균일하게 */
+  box-sizing: border-box; /* 내부 패딩 포함 */
+}
+
+.tm_setting_row select {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #c9d8a4;
+  background: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.tm_setting_row select:hover {
+  border-color: #9bb56d;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.tm_settings_section input,
+.tm_settings_section select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #cfd8b4;
+  font-size: 15px;
+  background: white;
+}
+
+/* ======================== */
+/* 비디오 row */
+/* ======================== */
+.tm_video_title {
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.tm_settings_scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* 비디오 row 간 간격 */
+  padding-right: 6px; /* 오른쪽 패딩 확보 */
+  box-sizing: border-box; /* 패딩까지 포함해서 너비 계산 */
+}
+
+.tm_video_row {
+  display: grid;
+  grid-template-columns: 120px 148px 110px;
+  align-items: center;
+  gap: 15px;
+  padding: 14px 20px;
+  background: #f8fbe9;
+  border-radius: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.tm_video_label {
+  width: 120px;
+  font-weight: 600;
+  color: #4a5d23;
+  flex-shrink: 0;
+}
+
+.tm_video_name,
+.tm_video_duration {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #cfd8b4;
+  background: #ffffff;
+}
+
+.tm_video_name {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.tm_video_duration {
+  width: 55px;
+  text-align: center;
+  padding: 7px 6px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.tm_video_duration::-webkit-inner-spin-button,
+.tm_video_duration::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tm_video_duration {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  -webkit-appearance: none;
+}
+
+.tm_duration_box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tm_duration_btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.tm_duration_btn:hover {
+  background: #eaf2d7;
+  border-color: #8ca65c;
+}
+
+/* ======================== */
+/* 버튼 */
+/* ======================== */
+.tm_buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.tm_btn_cancel,
+.tm_btn_save {
+  padding: 10px 0;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 0 0 110px;
+}
+
+.tm_btn_cancel {
+  background: #e5e5e5;
+  color: #555;
+  border: 1px solid #cfcfcf;
+}
+
+.tm_btn_cancel:hover {
+  background: #d6d6d6;
+}
+
+.tm_btn_cancel:active {
+  transform: scale(0.96);
+}
+
+.tm_btn_save {
+  background: #a6c94a;
+  color: white;
+  border: none;
+}
+
+.tm_btn_save:hover {
+  background: #94b63f;
+}
+
+.tm_btn_save:active {
+  transform: scale(0.96);
+}
+
+/* ======================== */
+/* 좌/우 버튼 */
+.tm_action_buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.tm_action_buttons button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 20px;
+  border: none;
+  background: #e6f0c2;
+  color: #5c7a26;
+  cursor: pointer;
+  transition: 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tm_action_buttons button:hover {
+  background: #d9ecaa;
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tm_action_buttons button:active {
+  transform: scale(0.95);
+}
