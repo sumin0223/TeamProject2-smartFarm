@@ -10,6 +10,7 @@ import ToastAlert from "../../components/dashboard/ToastAlert";
 import ActuStatus from "../../components/dashboard/ActuStatus";
 import PresetInfo from "../../components/dashboard/PresetInfo";
 import PlantHistoryCard from "../../components/dashboard/PlantHistoryCard";
+import AlertSection from "../../components/dashboard/alerts/AlertSection";
 
 function PlantModal({ data, onClose }) {
   /* ------------------- 팝업 알림 ------------------- */
@@ -33,6 +34,7 @@ function PlantModal({ data, onClose }) {
   } = data ?? {};
 
   const { current_sensor, sensor_history } = transformSensorLog(sensor_log);
+  const activeStep = Array.isArray(preset_step) ? preset_step[0] : preset_step;
 
   useEffect(() => {
     if (!plant_alarm?.length) return;
@@ -130,70 +132,57 @@ function PlantModal({ data, onClose }) {
 
             {/* ========== MIDDLE COLUMN ========== */}
             <div className="grid-2">
+              <div className="sensor-status-top">
+                <WaterLevelCard value={current_sensor.water_level} />
+              </div>
+            </div>
+
+            <div className="grid-3">
+              <div className="grid-3-top">
+                {/* 4) 장치 작동 상태 */}
+                <div className="card actu-box">
+                  <ActuStatus
+                    logs={actuator_log}
+                    current_sensor={{ ...current_sensor, preset_step }}
+                  />
+                </div>
+              </div>
               {/* 2) 프리셋 */}
               <div className="card preset-card">
                 <PresetInfo preset_step={preset_step} />
               </div>
             </div>
 
-            <div className="grid-3">
-              <div className="sensor-status-top">
-                <WaterLevelCard value={current_sensor.water_level} />
-              </div>
-
-              {/* 4) 장치 작동 상태 */}
-              <div className="card actu-box">
-                <ActuStatus
-                  logs={actuator_log}
-                  current_sensor={{ ...current_sensor, preset_step }}
-                />
-              </div>
-            </div>
+            {/* 3) 최근 활동 */}
+            {/* <div className="card history-card">
+                  <PlantHistoryCard
+                    history={[
+                      { type: "water", title: "물주기", date: "2024-12-08 15:30" },
+                      { type: "repot", title: "분갈이", date: "2024-12-05 12:10" },
+                      { type: "trim", title: "가지치기", date: "2024-12-03 09:50" },
+                      { type: "light", title: "LED 조정", date: "2024-12-02 18:44" },
+                    ]}
+                  />
+                </div> */}
             <div className="grid-4">
-              {/* 3) 최근 활동 */}
-              <div className="card history-card">
-                <PlantHistoryCard
-                  history={[
-                    { type: "water", title: "물주기", date: "2024-12-08 15:30" },
-                    { type: "repot", title: "분갈이", date: "2024-12-05 12:10" },
-                    { type: "trim", title: "가지치기", date: "2024-12-03 09:50" },
-                    { type: "light", title: "LED 조정", date: "2024-12-02 18:44" },
-                  ]}
-                />
-              </div>
-            </div>
-
-            {/* ========== RIGHT COLUMN ========== */}
-            <div className="grid-right">
               {/* 1) 센서 상태 요약 */}
-              <div className="card sensor-status-card">
-                <div className="sensor-status-main">
-                  <SensorBar sensor={current_sensor} preset_step={preset_step} />
-                </div>
+              <div className="sensor-status-main">
+                <SensorBar sensor={current_sensor} preset_step={activeStep} />
               </div>
             </div>
           </div>
 
-          {/* 🔶 하단 — 최근 알람 */}
+          {/* 하단 — 최근 알람 */}
           <div className="card alarm-section-wide">
             <h3 className="section-title">최근 알람</h3>
 
-            <div className="alarm-list">
-              {plant_alarm.slice(0, 5).map((a) => (
-                <div key={a.p_alarm_id} className="alarm-item">
-                  <strong>{a.title}</strong>
-                  <p>{a.message}</p>
-                  <span className="alarm-time">{a.created_at}</span>
-                </div>
-              ))}
+            <div className="alarm-2grid">
+              <AlertSection plant_alarm={plant_alarm} />
             </div>
-
-            <button className="more-btn">더보기</button>
           </div>
 
           {/* 🔶 FOOTER 버튼 */}
           <div className="modal-actions">
-            <button className="action-btn green">편집</button>
             <button
               className="action-btn blue"
               onClick={() =>

@@ -37,59 +37,62 @@ export default function ActuStatus({ logs = [], current_sensor = {} }) {
 
   return (
     <div className="actu-wrapper">
-      <h2 className="actu-title">장치 작동 상태</h2>
+      <h2 className="actu-title">Device Operations</h2>
+      <div className="actu-swiper-mask">
+        <Swiper
+          className="actu-swiper"
+          modules={[EffectCoverflow, Pagination]}
+          effect="coverflow"
+          grabCursor={true}
+          loop={true}
+          // loopedSlides={5}
+          centeredSlides={true}
+          slidesPerView={2}
+          spaceBetween={-100}
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 80,
+            modifier: 1,
+            slideShadows: false,
+          }}
+          pagination={{ clickable: true }}
+        >
+          {Object.entries(SENSORS).map(([key, label]) => {
+            const sensorValue = current_sensor[key];
+            const sensorState = getState(current_sensor[key] || {}, sensorValue);
+            const recentLog = groupedLogs[key];
 
-      <Swiper
-        className="actu-swiper"
-        modules={[EffectCoverflow, Pagination]}
-        effect="coverflow"
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={2}
-        spaceBetween={-100}
-        coverflowEffect={{
-          rotate: 0,
-          stretch: 0,
-          depth: 80,
-          modifier: 1,
-          slideShadows: false,
-        }}
-        pagination={{ clickable: true }}
-      >
-        {Object.entries(SENSORS).map(([key, label]) => {
-          const sensorValue = current_sensor[key];
-          const sensorState = getState(current_sensor[key] || {}, sensorValue);
-          const recentLog = groupedLogs[key];
+            return (
+              <SwiperSlide key={key}>
+                <div className="actu-card" key={key}>
+                  <div className="actu-header">
+                    <span className="actu-label">{label}</span>
 
-          return (
-            <SwiperSlide key={key}>
-              <div className="actu-card" key={key}>
-                <div className="actu-header">
-                  <span className="actu-label">{label}</span>
+                    <span className={`actu-pill ${sensorState}`}>
+                      {sensorState === "high" && "↑ High"}
+                      {sensorState === "low" && "↓ Low"}
+                      {sensorState === "normal" && "✓ Normal"}
+                    </span>
+                  </div>
 
-                  <span className={`actu-pill ${sensorState}`}>
-                    {sensorState === "high" && "↑ High"}
-                    {sensorState === "low" && "↓ Low"}
-                    {sensorState === "normal" && "✓ Normal"}
-                  </span>
+                  <div className="actu-body">
+                    {recentLog ? (
+                      <div className="log-item">
+                        <span className="log-action">{recentLog.action}</span>
+                        <span className="log-device">{recentLog.actuator_type}</span>
+                        <span className="log-time">{recentLog.created_at}</span>
+                      </div>
+                    ) : (
+                      <div className="log-empty">최근 작동 로그 없음</div>
+                    )}
+                  </div>
                 </div>
-
-                <div className="actu-body">
-                  {recentLog ? (
-                    <div className="log-item">
-                      <span className="log-action">{recentLog.action}</span>
-                      <span className="log-device">{recentLog.actuator_type}</span>
-                      <span className="log-time">{recentLog.created_at}</span>
-                    </div>
-                  ) : (
-                    <div className="log-empty">최근 작동 로그 없음</div>
-                  )}
-                </div>
-              </div>
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
     </div>
   );
 }

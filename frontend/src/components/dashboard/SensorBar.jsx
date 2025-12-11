@@ -23,46 +23,46 @@ export default function SensorBar({ sensor, preset_step }) {
       type: "temperature",
       label: "Temperature",
       value: sensor.temperature,
-      presetMin: preset_step.temp.min,
-      presetMax: preset_step.temp.max,
+      presetMin: preset_step?.temp?.min,
+      presetMax: preset_step?.temp?.max,
       unit: "℃",
     },
     {
       type: "soil",
       label: "Soil Moisture",
       value: sensor.soil_moisture,
-      presetMin: preset_step.soil?.min,
-      presetMax: preset_step.soil?.max,
+      presetMin: preset_step?.soil?.min,
+      presetMax: preset_step?.soil?.max,
       unit: "%",
     },
     {
       type: "light",
       label: "Light",
       value: sensor.lightPower,
-      presetMin: preset_step.light?.min,
-      presetMax: preset_step.light?.max,
+      presetMin: preset_step?.light?.min,
+      presetMax: preset_step?.light?.max,
       unit: "lx",
     },
     {
       type: "humidity",
       label: "Humidity",
       value: sensor.humidity,
-      presetMin: preset_step.humidity?.min,
-      presetMax: preset_step.humidity?.max,
+      presetMin: preset_step?.humidity?.min,
+      presetMax: preset_step?.humidity?.max,
       unit: "%",
     },
     {
       type: "co2",
       label: "CO₂",
       value: sensor.co2,
-      presetMin: preset_step.co2?.min,
-      presetMax: preset_step.co2?.max,
+      presetMin: preset_step?.co2?.min,
+      presetMax: preset_step?.co2?.max,
       unit: "ppm",
     },
   ];
 
   return (
-    <div className="sensor-box sensor-scale">
+    <div className="sensor-wrapper">
       <div className="sensor-box">
         <div className="sensor-box-header">
           <span>Environmental Sensors</span>
@@ -75,11 +75,10 @@ export default function SensorBar({ sensor, preset_step }) {
             </button>
           </div>
         </div>
+        {items.map((item) => (
+          <SensorRow key={item.type} {...item} />
+        ))}
       </div>
-
-      {items.map((item) => (
-        <SensorRow key={item.type} {...item} />
-      ))}
     </div>
   );
 }
@@ -133,7 +132,7 @@ function SensorRow({ type, label, value, presetMin, presetMax, unit }) {
 
         {/* 눈금 */}
         <div className="tick-bar">
-          {Array.from({ length: 40 }).map((_, i) => (
+          {Array.from({ length: 45 }).map((_, i) => (
             <div key={i} className="tick" />
           ))}
         </div>

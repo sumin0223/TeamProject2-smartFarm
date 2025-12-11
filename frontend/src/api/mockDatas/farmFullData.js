@@ -42,20 +42,56 @@ export const farmFullData = {
     user_id: 0, // 0 = 추천 프리셋
   },
 
-  preset_step: {
-    step_id: 101,
-    preset_id: 10,
-    growth_step: 1,
-    period_days: 15,
+  preset_step: [
+    {
+      step_id: 101,
+      preset_id: 10,
+      growth_step: 0,
+      period_days: 15,
 
-    temp: { min: 18, max: 32 },
-    humidity: { min: 40, max: 75 },
-    light: { min: 200, max: 700 },
-    co2: { min: 200, max: 800 },
-    soil_moisture: { min: 30, max: 60 },
+      temp: { min: 18, max: 32 },
+      humidity: { min: 40, max: 75 },
+      light: { min: 200, max: 700 },
+      co2: { min: 200, max: 800 },
+      soil_moisture: { min: 30, max: 60 },
+    },
+    {
+      step_id: 102,
+      preset_id: 10,
+      growth_step: 1,
+      period_days: 10,
 
-    growth_step_name: "초기 생장",
-  },
+      temp: { min: 20, max: 30 },
+      humidity: { min: 50, max: 64 },
+      light: { min: 300, max: 600 },
+      co2: { min: 200, max: 780 },
+      soil_moisture: { min: 35, max: 80 },
+    },
+    {
+      step_id: 103,
+      preset_id: 10,
+      growth_step: 2,
+      period_days: 20,
+
+      temp: { min: 20, max: 30 },
+      humidity: { min: 50, max: 64 },
+      light: { min: 300, max: 600 },
+      co2: { min: 200, max: 780 },
+      soil_moisture: { min: 35, max: 80 },
+    },
+    {
+      step_id: 104,
+      preset_id: 10,
+      growth_step: 3,
+      period_days: 15,
+
+      temp: { min: 18, max: 32 },
+      humidity: { min: 40, max: 75 },
+      light: { min: 200, max: 700 },
+      co2: { min: 200, max: 800 },
+      soil_moisture: { min: 30, max: 60 },
+    },
+  ],
 
   sensor_log: [
     {
@@ -138,9 +174,10 @@ export const farmFullData = {
       p_alarm_id: 201,
       user_id: 1,
       farm_id: 1,
-      alarm_type: "sensor",
+      step_id: 101,
+      alarm_type: "preset",
       title: "습도 낮음",
-      message: "현재 습도가 기준 이하입니다.",
+      message: "현재 습도가 설정 프리셋 기준 이하입니다.",
       created_at: "2024-12-10 13:22:00",
       is_read: false,
       extra_data: {},

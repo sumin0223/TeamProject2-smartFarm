@@ -1,4 +1,4 @@
-/* 전체 기본 스타일 초기화 + 애플 느낌 베이스 */
+/* 전체 기본 스타일 초기화 */
 
 *,
 *::before,
@@ -8,8 +8,6 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui,
-    -system-ui, sans-serif;
   background: #ffffff;
   color: #111111;
 }
