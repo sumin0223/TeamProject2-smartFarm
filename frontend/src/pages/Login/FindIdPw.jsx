@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import BackButton from "../components/BackButton"; // 🔥 추가
+import BackButton from "../../components/loginBackButton/BackButton";
 import "./Find.css";
 
 export default function FindIdPw() {

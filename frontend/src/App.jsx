@@ -5,7 +5,7 @@ import { Routes, Route } from "react-router-dom";
 // =============================
 import "./App.css";
 import BasicLayout from "./layouts/layout/BasicLayout";
-import Header from "./wooyoung_login/layouts/header/Header";
+import Header from "./layouts/header/Header";
 
 // =============================
 // 팀장 페이지 영역
@@ -21,20 +21,23 @@ import MyPageTimelapse from "./pages/MyPage/MyPageTimelapse";
 // =============================
 // 우영 로그인/회원가입 + 인증
 // =============================
-import { AuthProvider } from "./wooyoung_login/auth/AuthContext";
-import Login from "./wooyoung_login/pages/Login";
-import Signup from "./wooyoung_login/pages/Signup";
+import { AuthProvider } from "./api/auth/AuthContext";
+
+// 로그인 / 회원가입
+import Login from "./pages/Login/Login";
+import Signup from "./pages/Login/Signup";
 
 // ID/PW 찾기
-import FindIdPw from "./wooyoung_login/pages/FindIdPw";
-import IDFindPage from "./wooyoung_login/pages/IDFindPage";
-import PWFindVerify from "./wooyoung_login/pages/PWFindVerify";
-import PWFindReset from "./wooyoung_login/pages/PWFindReset";
+import FindIdPw from "./pages/Login/FindIdPw";
+import IDFindPage from "./pages/Login/IDFindPage";
+import PWFindVerify from "./pages/Login/PWFindVerify";
+import PWFindReset from "./pages/Login/PWFindReset";
 
-// 테스트
-import TestHome from "./wooyoung_login/pages/TestHome";
-import AdminHome from "./wooyoung_login/pages/AdminHome";
+// 테스트 & 관리자 페이지
+import TestHome from "./pages/Login/TestHome";
+import AdminHome from "./pages/Login/AdminHome";
 
+//usestate 써서 import 해보기
 function App() {
   return (
     <AuthProvider>
