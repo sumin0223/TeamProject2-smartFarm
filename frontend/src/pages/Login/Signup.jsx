@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext";
-import BackButton from "../components/BackButton"; // 🔥 추가됨
+import { useAuth } from "../../api/auth/AuthContext";
+import BackButton from "../../components/loginBackButton/BackButton";
 import "./Signup.css";
 
 export default function Signup() {

@@ -1,4 +1,4 @@
-import { useAuth } from "../auth/AuthContext";
+import { useAuth } from "../../api/auth/AuthContext";
 
 export default function TestHome() {
   const { user } = useAuth();

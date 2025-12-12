@@ -48,3 +48,51 @@
   color: #007aff;
   margin-bottom: 10px;
 }
+
+/* 로그인 필요 UI */
+.need-login-wrap {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.need-login-box {
+  margin: 40px auto;
+  padding: 40px 30px;
+  width: 60%;
+  max-width: 480px;
+
+  background: #ffffffdd;
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.need-login-box h2 {
+  margin-bottom: 15px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.need-login-box p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.login-go-btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+
+  background: linear-gradient(135deg, #8bc34a, #6fa83d);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.login-go-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #7cb342, #5f9833);
+}

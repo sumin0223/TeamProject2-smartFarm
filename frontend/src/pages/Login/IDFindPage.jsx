@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useAuth } from "../auth/AuthContext";
-import BackButton from "../components/BackButton";
+import { useAuth } from "../../api/auth/AuthContext";
+import BackButton from "../../components/loginBackButton/BackButton";
 import "./Find.css";
 
 export default function IDFindPage() {
