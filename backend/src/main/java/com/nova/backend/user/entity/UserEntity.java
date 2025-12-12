@@ -1,8 +1,7 @@
-package com.nova.backend.user.woo.entity;
+package com.nova.backend.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity

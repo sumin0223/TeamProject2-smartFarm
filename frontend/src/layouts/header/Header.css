@@ -1,10 +1,13 @@
-/* ================================
-   전체 헤더 (FULL WIDTH + 고급 그라데이션)
-================================ */
+/* ======================================
+   공통 상단 헤더 (Nova + 우영 스타일 통합)
+====================================== */
+
+/* root padding 제거 */
 #root {
   padding: 0;
 }
 
+/* 전체 헤더 */
 .nova-header {
   position: sticky;
   top: 0;
@@ -12,10 +15,10 @@
 
   width: 100%;
   min-width: 1280px;
-  background: linear-gradient(135deg, rgba(205, 234, 106, 0.45), rgba(255, 255, 255, 0.75));
-  background-size: cover;
-  backdrop-filter: blur(14px);
+
   padding: 14px 48px;
+  background: linear-gradient(135deg, rgba(205, 234, 106, 0.45), rgba(255, 255, 255, 0.75));
+  backdrop-filter: blur(14px);
 
   box-shadow: 0 4px 22px rgba(0, 0, 0, 0.06);
 }
@@ -26,27 +29,27 @@
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  flex-wrap: nowrap;
-  gap: clamp(20px, 4vw, 80px);
   align-items: center;
+  gap: clamp(20px, 4vw, 80px);
 }
 
-/* ================================
-   로고 영역
-================================ */
+/* --------------------------------------
+   로고
+--------------------------------------- */
 .header-logo {
   display: flex;
   align-items: center;
-  text-decoration: none;
 }
 
 .logo-img {
   width: 150px;
   height: 80px;
+  object-fit: contain;
 }
-/* ================================
-   가운데 탭바
-================================ */
+
+/* --------------------------------------
+   네비게이션 (nav)
+--------------------------------------- */
 .nova-nav {
   display: flex;
   gap: 32px;
@@ -59,12 +62,10 @@
   backdrop-filter: blur(8px);
 
   transition: 0.25s ease;
-  white-space: nowrap; /* 텍스트 줄바꿈 금지 */
+  white-space: nowrap;
 }
 
-/* 기본 nav-item */
 .nav-item {
-  /* position: relative; */
   font-size: 16px;
   font-weight: 600;
   color: #253126;
@@ -77,102 +78,24 @@
 
   display: flex;
   align-items: center;
-  white-space: nowrap; /* 텍스트 줄바꿈 금지 */
 }
 
-.nav-item:visited {
-  color: #253126;
-}
-
-/* ★ hover 효과 업그레이드 (살짝 scale + shadow + 컬러 변화) */
 .nav-item:hover {
   background: rgba(207, 234, 106, 0.55);
   color: #2f3f22;
-
   transform: translateY(-1px) scale(1.05);
   box-shadow: inset 0 0 6px rgba(172, 218, 0, 0.45);
 }
-.nav-item span {
-  position: relative;
-  display: inline-block; /* 텍스트 너비만큼 box 생성 */
-}
 
-.nav-item span::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -1px;
-
-  width: calc(100% + 7px); /* ← 항상 6px씩 양쪽 확장 */
-  height: 1.5px;
-  background: #2f3f22;
-  transform: translateX(-50%) scaleX(0);
-  transform-origin: center;
-
-  border-radius: 2px;
-  transition: transform 0.15s ease;
-}
-
-.nav-item:hover span::after {
-  transform: translateX(-50%) scaleX(1);
-}
-
-/* ==========================
-   서브 메뉴
-=========================== */
-.submenu-zone {
-  position: absolute;
-  top: 110px; /* 네비 바로 아래 */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 40;
-}
-
-.submenu {
-  display: flex;
-  gap: 28px;
-  background: #ffffffdd;
-  padding: 14px 24px;
-  border-radius: 18px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(8px);
-  animation: fadeDown 0.22s ease;
-}
-
-.submenu a {
-  text-decoration: none;
-  color: #2f3f22;
-  font-weight: 600;
-  padding: 8px 10px;
-  border-radius: 10px;
-  transition: 0.25s ease;
-}
-
-.submenu a:hover {
-  background: rgba(207, 234, 106, 0.55);
-  transform: translateY(-1px) scale(1.03);
-}
-
-/* 등장 애니메이션 */
-@keyframes fadeDown {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ================================
-   우측 사용자 버튼
-================================ */
+/* --------------------------------------
+   우측 사용자 영역
+--------------------------------------- */
 .user-area {
   position: relative;
-  flex-shrink: 0; /* 이 영역은 절대 눌리지 않게 */
+  flex-shrink: 0;
 }
 
+/* 로그인 후 버튼 스타일 */
 .user-dropdown-btn {
   display: flex;
   align-items: center;
@@ -184,20 +107,20 @@
   border: none;
 
   cursor: pointer;
+  color: #253126;
+
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.101);
   transition: 0.25s ease;
-  flex-shrink: 0; /* 버튼 가로 크기 유지 */
-
-  color: #253126;
 }
 
 .user-dropdown-btn:hover {
   background: rgba(116, 134, 49, 0.773);
+  color: #fff;
   transform: translateY(-1px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.287);
-  color: white;
 }
 
+/* 프로필 이미지 */
 .user-img {
   width: 34px;
   height: 34px;
@@ -214,28 +137,27 @@
   font-size: 12px;
 }
 
-/* ================================
+/* --------------------------------------
    드롭다운 메뉴
-================================ */
+--------------------------------------- */
 .dropdown-menu {
   position: absolute;
   right: 0;
-  top: 54px;
+  top: 58px;
+
+  width: 180px;
+  padding: 12px;
 
   background: #ffffffee;
-  border-radius: 16px;
-  padding: 12px;
-  width: 170px;
-
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(14px);
 
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+
   animation: dropdownFade 0.22s ease-out;
-  flex-shrink: 0;
   white-space: nowrap;
 }
 
-/* 부드러운 등장 애니메이션 */
 @keyframes dropdownFade {
   from {
     opacity: 0;
@@ -247,55 +169,44 @@
   }
 }
 
-/* 메뉴 항목 */
-.dropdown-menu a {
+.dropdown-menu a,
+.dropdown-menu .dropdown-item {
   display: block;
   padding: 10px;
-  border-radius: 10px;
-
   text-decoration: none;
+
+  border-radius: 10px;
   color: #1a211a;
   font-size: 14px;
-
   transition: 0.2s ease;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
-/* 로그아웃 전용 스타일 */
-.dropdown-menu .logout-btn {
-  display: block;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-
-  cursor: pointer;
-  text-decoration: none;
-  color: #ffffff;
-  font-size: 14px;
-
-  background: rgba(14, 14, 14, 0.8);
-  transition: 0.2s ease;
-  white-space: nowrap; /* 텍스트 줄바꿈 금지 */
-  flex-shrink: 0; /* 폭 줄어드는 것 방지 */
-}
-
-/* 일반 메뉴 hover */
-.dropdown-menu a:not(.logout-btn):hover {
+.dropdown-menu a:hover,
+.dropdown-item:hover {
   background: rgba(188, 213, 98, 0.5);
   transform: translateX(2px);
 }
 
-/* 로그아웃 hover */
-.dropdown-menu .logout-btn:hover {
-  background: rgba(0, 0, 0, 1); /* 더 진한 블랙 */
-  transform: translateX(2px);
-  color: #fff;
+/* 로그아웃 버튼 */
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(20, 20, 20, 0.85);
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  transition: 0.2s ease;
 }
 
-/* 경계선 */
+.logout-btn:hover {
+  background: black;
+  transform: translateX(2px);
+}
+
+/* 구분선 */
 .menu-divider {
   height: 1px;
   background: #e3e3e3;
-  margin: 8px 0;
+  margin: 10px 0;
 }
