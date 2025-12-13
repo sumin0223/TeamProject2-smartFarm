@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PresetRepository extends JpaRepository<Preset,Integer> {
     List<Preset> findByUserId(int userId);
+    // UserId가 userId or NULL 인 경우
+    List<Preset> findByUserIdOrUserIdIsNull(int userId);
 }
