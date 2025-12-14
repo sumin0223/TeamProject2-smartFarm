@@ -10,12 +10,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PresetStep {
+public class PresetStepEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int stepId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "preset_id")
-    private Preset preset;
+    private PresetEntity preset;
     private int growthStep;
     private int periodDays;
+
+    // 기준값은 JSON
+    @Column(columnDefinition = "json")
+    private String temp;
+
+    @Column(columnDefinition = "json")
+    private String humidity;
+
+    @Column(columnDefinition = "json")
+    private String soilMoisture;
+
+    @Column(columnDefinition = "json")
+    private String lightPower;
+
+    @Column(columnDefinition = "json")
+    private String co2;
 }

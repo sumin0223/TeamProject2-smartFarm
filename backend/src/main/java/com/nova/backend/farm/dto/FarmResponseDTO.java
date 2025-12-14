@@ -11,9 +11,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FarmResponseDTO {
-    private int farmId;
+    private Long farmId;
     private String farmName;
-    private int location;
+    private int slot;
 
     private NovaResponseDTO nova;
     private StepResponseDTO presetStep;

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PresetService {
     void insertPreset(PresetRequestDTO preset);
-    List<PresetResponseDTO> findPresetListByUserId(int userId);
+    List<PresetResponseDTO> findPresetListByUserId(Long userId);
     void updatePreset();
     void deletePreset();
 }

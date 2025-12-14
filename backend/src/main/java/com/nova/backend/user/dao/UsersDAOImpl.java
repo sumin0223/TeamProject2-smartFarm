@@ -12,7 +12,7 @@ import java.util.List;
 public class UsersDAOImpl implements UsersDAO {
     private final UsersRepository usersRepository;
     @Override
-    public UsersEntity findByUserId(int userId) {
+    public UsersEntity findByUserId(Long userId) {
         return usersRepository.findByUserId(userId);
     }
 

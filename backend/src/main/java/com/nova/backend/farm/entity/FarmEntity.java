@@ -1,7 +1,7 @@
-package com.nova.backend.farm.Entity;
+package com.nova.backend.farm.entity;
 
 import com.nova.backend.nova.entity.NovaEntity;
-import com.nova.backend.preset.entity.PresetStep;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,24 +15,24 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"nova","presetStep"})
-public class Farm {
+public class FarmEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int farmId;
+    private Long farmId;
 
     @Column(nullable = false)
     private String farmName;
 
     @Column(nullable = false)
-    private int location;
+    private int slot;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nova_id", nullable = false)
     private NovaEntity nova;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "step_id", nullable = false)
-    private PresetStep presetStep;
+    private PresetStepEntity presetStepEntity;
 
     @CreationTimestamp
     private Timestamp createdTime;
@@ -40,10 +40,10 @@ public class Farm {
     private Timestamp updateTime;
 
     @Builder
-    public Farm(String farmName, int location, NovaEntity nova, PresetStep presetStep) {
+    public FarmEntity(String farmName, int slot, NovaEntity nova, PresetStepEntity presetStepEntity) {
         this.farmName = farmName;
-        this.location = location;
+        this.slot = slot;
         this.nova = nova;
-        this.presetStep = presetStep;
+        this.presetStepEntity = presetStepEntity;
     }
 }

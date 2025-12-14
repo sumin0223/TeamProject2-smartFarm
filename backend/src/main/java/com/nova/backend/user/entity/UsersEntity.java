@@ -11,12 +11,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class UsersEntity {
-
     // PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
 
     // 로그인 ID
     @Column(name = "login_id", nullable = false, unique = true)
@@ -66,7 +65,7 @@ public class UsersEntity {
     @Column(name = "login_type", nullable = false)
     private String loginType;
 
-    public UsersEntity(int userId, String loginId, String password, String name, String email, String phoneNumber, String postalCode, String address, String addressDetail) {
+    public UsersEntity(Long userId, String loginId, String password, String name, String email, String phoneNumber, String postalCode, String address, String addressDetail) {
         this.userId = userId;
         this.loginId = loginId;
         this.password = password;

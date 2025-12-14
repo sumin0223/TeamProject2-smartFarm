@@ -16,7 +16,7 @@ import java.util.List;
 public class FarmController {
     private final FarmService farmService;
     @GetMapping("/list")
-    public List<FarmResponseDTO> getFarmListByNovaId(@RequestParam("novaId") int novaId) {
+    public List<FarmResponseDTO> getFarmListByNovaId(@RequestParam("novaId") Long novaId) {
         return farmService.getFarmListByNovaId(novaId);
     }
 

@@ -16,7 +16,7 @@ import java.util.List;
 public class NovaController {
     private final NovaService novaService;
     @GetMapping("/list")
-    public List<NovaResponseDTO> getNovaListByUserId(@RequestParam("userId")int userId) {
+    public List<NovaResponseDTO> getNovaListByUserId(@RequestParam Long userId) {
         return novaService.getNovaListByUserId(userId);
     }
 }

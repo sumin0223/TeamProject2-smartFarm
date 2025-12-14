@@ -1,0 +1,90 @@
+package com.nova.backend.actuator.service;
+
+import com.nova.backend.actuator.dto.ActuatorLogResponseDTO;
+import com.nova.backend.actuator.dto.WateringRequestDTO;
+import com.nova.backend.actuator.dto.WateringResponseDTO;
+import com.nova.backend.actuator.entity.ActuatorLogEntity;
+import com.nova.backend.actuator.repository.ActuatorLogRepository;
+import com.nova.backend.farm.entity.FarmEntity;
+import com.nova.backend.farm.repository.FarmRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class ActuatorServiceImpl implements ActuatorService {
+    private final ActuatorLogRepository actuatorLogRepository;
+    private final FarmRepository farmRepository;
+    private final ModelMapper modelMapper;
+
+
+    @Override
+    public WateringResponseDTO water(WateringRequestDTO request) {
+        // farm 조회
+        FarmEntity farm = farmRepository.findById(request.getFarmId())
+                .orElseThrow(() -> new IllegalArgumentException("Farm not found"));
+
+        // 엑추에이터 로그 생성
+        ActuatorLogEntity log = ActuatorLogEntity.builder()
+                .farm(farm)
+                .actuatorType("PUMP")
+                .action("ON")
+                .currentValue(request.getWaterLevel())
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        // 로그 저장
+        actuatorLogRepository.save(log);
+
+        // 응답 반환
+        return WateringResponseDTO.builder()
+                .success(true)
+                .executedAt(LocalDateTime.now())
+                .message("Watering executed successfully")
+                .build();
+    }
+
+    @Override
+    public List<ActuatorLogResponseDTO> getActuatorLogs(Long farmId) {
+        FarmEntity farm = farmRepository.findById(farmId)
+                .orElseThrow(() -> new IllegalArgumentException("Farm not found"));
+
+        return actuatorLogRepository.findByFarmOrderByCreatedAtDesc(farm)
+                .stream()
+                .map(entity -> modelMapper.map(entity, ActuatorLogResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public WateringResponseDTO waterPlant(Long farmId, WateringRequestDTO request) {
+        // 실제로는 MQTT publish / Raspberry Pi 제어
+        // 지금은 "요청이 왔다"는 로그만 남김
+
+        FarmEntity farm = farmRepository.findById(farmId)
+                .orElseThrow(() -> new IllegalArgumentException("Farm not found"));
+
+        ActuatorLogEntity log = ActuatorLogEntity.builder()
+                .farm(farm)
+                .sensorType("SOIL_MOISTURE")
+                .actuatorType("PUMP")
+                .action("ON")
+                .currentValue(
+                        request != null ? request.getWaterLevel() : 0f
+                )
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        actuatorLogRepository.save(log); // !!!!!핵심
+
+        return WateringResponseDTO.builder()
+                .success(true)
+                .executedAt(LocalDateTime.now())
+                .message("물주기 명령이 정상적으로 실행되었습니다.")
+                .build();
+    }
+}

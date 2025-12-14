@@ -1,5 +1,6 @@
 package com.nova.backend.preset.entity;
 
+import com.nova.backend.user.entity.UsersEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,15 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Preset {
+public class PresetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int presetId;
+    private Long presetId;
     @Column(nullable = false)
     private String plantType;
     @Column(nullable = false)
     private String presetName;
 
-    private Integer userId; //ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")   // 추천 프리셋은 NULL
+    private UsersEntity user; //ManyToOne
 
 }
