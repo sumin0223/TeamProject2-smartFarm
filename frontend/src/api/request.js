@@ -2,6 +2,9 @@
 const requests = {
   myPageView: "/mypage/view",
   myPageEdit: "/mypage/edit",
+  myPageTimelapse: "/maypage/timelapse",
+  timelapseCreate: "/timelapse/create",
+  timelapseInfo: "/timelapse/info",
 };
 
 export default requests;
