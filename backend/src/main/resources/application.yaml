@@ -41,8 +41,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: eddynimo417@gmail.com
-    password: aonqyrmarvcpfhab
+    username: # 빈칸처리
+    password: # 빈칸처리
     properties:
       mail:
         smtp:
@@ -50,6 +50,6 @@ spring:
           starttls:
             enable: true
 solapi:
-  api-key: NCSO6XI63WWYTJQC
-  api-secret: 828LDKYSOGWMSSYUSJJTVCEPSG05VOXO
-  from-number: 010-4063-1565   # 발신번호 인증한 번호
+  api-key:  # 빈칸처리
+  api-secret:  # 빈칸처리
+  from-number:    # 발신번호 인증한 번호, 빈칸처리
