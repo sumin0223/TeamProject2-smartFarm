@@ -35,4 +35,6 @@ public class UserDAOImpl implements UserDao {
     public UserEntity findById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
+
+
 }

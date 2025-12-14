@@ -5,15 +5,15 @@ import com.nova.backend.user.dto.FindIdRequestDTO;
 import com.nova.backend.user.dto.LoginRequestDTO;
 import com.nova.backend.user.dto.ResetPasswordDTO;
 import com.nova.backend.user.dto.SignupRequestDTO;
+import com.nova.backend.user.entity.UserEntity;
 import com.nova.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -32,22 +32,56 @@ public class UserController {
     //로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto) {
-        Long userId = userService.login(dto);
+        try {
+            UserEntity user = userService.login(dto);
 
-        return ResponseEntity.ok("로그인 성공! userId = " + userId);
+            return ResponseEntity.ok(
+                    Map.of(
+                            "userId", user.getUserId(),
+                            "loginId", user.getLoginId(),
+                            "name", user.getName(),
+                            "role", user.getRole()
+                    )
+            );
+
+        } catch (RuntimeException e) {
+            //  핵심
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
     }
 
     //아이디 찾기
     @PostMapping("/find-id")
     public ResponseEntity<?> findId(@RequestBody FindIdRequestDTO dto) {
-        String loginId = userService.findUserId(dto);
-        return ResponseEntity.ok(loginId);
+        try {
+            String loginId = userService.findUserId(dto);
+            return ResponseEntity.ok(loginId);
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(e.getMessage());
+        }
     }
 
-    //비밀번호 찾기 
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO dto) {
-        userService.resetPassword(dto);
-        return ResponseEntity.ok("비밀번호 변경 성공");
+//    //비밀번호 찾기
+//    @PostMapping("/reset-password")
+//    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO dto) {
+//        userService.resetPassword(dto);
+//        return ResponseEntity.ok("비밀번호 변경 성공");
+//    }
+
+    @GetMapping("/check-loginid")
+    public ResponseEntity<?> checkLoginId(@RequestParam String loginId) {
+
+        boolean exists = userService.existsLoginId(loginId);
+
+        if (exists) {
+            return ResponseEntity.badRequest().body("이미 사용 중인 아이디입니다.");
+        }
+
+        return ResponseEntity.ok("사용 가능한 아이디입니다.");
     }
+
 }

@@ -18,4 +18,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     //Id 찾기(이름 + 전화번호)
     UserEntity findByNameAndPhoneNumber(String name, String phoneNumber);
 
+    //  이메일 존재 여부 확인 (비밀번호 찾기용)
+    boolean existsByEmail(String email);
+
+    // 비밀번호 재설정 (이메일)
+    UserEntity findByEmail(String email);
+
+    // ✅ 비밀번호 재설정 (전화번호)
+    UserEntity findByPhoneNumber(String phoneNumber);
 }
