@@ -5,7 +5,7 @@ import com.nova.backend.user.dto.FindIdRequestDTO;
 import com.nova.backend.user.dto.LoginRequestDTO;
 import com.nova.backend.user.dto.ResetPasswordDTO;
 import com.nova.backend.user.dto.SignupRequestDTO;
-import com.nova.backend.user.entity.UserEntity;
+import com.nova.backend.user.entity.UsersEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signUp(SignupRequestDTO dto) {
-        UserEntity exist = userDao.findByLoginId(dto.getLoginId());
+        UsersEntity exist = userDao.findByLoginId(dto.getLoginId());
         if (exist != null) {
             throw new RuntimeException("이미 존재하는 아이디입니다.");
         }
 
-        UserEntity user = new UserEntity();
+        UsersEntity user = new UsersEntity();
         user.setLoginId(dto.getLoginId());
         user.setName(dto.getName());
 
@@ -46,8 +46,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity login(LoginRequestDTO dto) {
-        UserEntity user = userDao.findByLoginId(dto.getLoginId());
+    public UsersEntity login(LoginRequestDTO dto) {
+        UsersEntity user = userDao.findByLoginId(dto.getLoginId());
         if (user == null) {
             throw new RuntimeException("아이디가 존재하지 않습니다.");
         }
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     public String findUserId(FindIdRequestDTO dto) {
 
         if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
-            UserEntity user = userDao.findByNameAndEmail(dto.getName(), dto.getEmail());
+            UsersEntity user = userDao.findByNameAndEmail(dto.getName(), dto.getEmail());
             if (user == null) {
                 throw new RuntimeException("이름 또는 이메일이 일치하지 않습니다.");
             }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (dto.getPhoneNumber() != null && !dto.getPhoneNumber().isEmpty()) {
-            UserEntity user = userDao.findByNameAndPhoneNumber(dto.getName(), dto.getPhoneNumber());
+            UsersEntity user = userDao.findByNameAndPhoneNumber(dto.getName(), dto.getPhoneNumber());
             if (user == null) {
                 throw new RuntimeException("이름 또는 전화번호가 일치하지 않습니다.");
             }
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetPassword(ResetPasswordDTO dto) {
 
-        UserEntity user = userDao.findById(dto.getUserId());
+        UsersEntity user = userDao.findById(dto.getUserId());
         if (user == null) {
             throw new RuntimeException("존재하지 않는 사용자입니다.");
         }

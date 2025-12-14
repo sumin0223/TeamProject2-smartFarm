@@ -1,6 +1,6 @@
 package com.nova.backend.user.service;
 
-import com.nova.backend.user.entity.UserEntity;
+import com.nova.backend.user.entity.UsersEntity;
 import com.nova.backend.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,7 +46,7 @@ public class PasswordServiceImpl implements PasswordService {
         validatePassword(newPassword);
 
         //  2. 사용자 조회
-        UserEntity user = userRepository.findByEmail(email);
+        UsersEntity user = userRepository.findByEmail(email);
         if (user == null) {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }
@@ -66,7 +66,7 @@ public class PasswordServiceImpl implements PasswordService {
         validatePassword(newPassword);
 
         //  2. 사용자 조회
-        UserEntity user = userRepository.findByPhoneNumber(phoneNumber);
+        UsersEntity user = userRepository.findByPhoneNumber(phoneNumber);
         if (user == null) {
             throw new IllegalArgumentException("사용자를 찾을 수 없습니다.");
         }

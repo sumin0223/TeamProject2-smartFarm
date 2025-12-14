@@ -5,7 +5,7 @@ import com.nova.backend.user.dto.FindIdRequestDTO;
 import com.nova.backend.user.dto.LoginRequestDTO;
 import com.nova.backend.user.dto.ResetPasswordDTO;
 import com.nova.backend.user.dto.SignupRequestDTO;
-import com.nova.backend.user.entity.UserEntity;
+import com.nova.backend.user.entity.UsersEntity;
 import com.nova.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +33,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto) {
         try {
-            UserEntity user = userService.login(dto);
+            UsersEntity user = userService.login(dto);
 
             return ResponseEntity.ok(
                     Map.of(

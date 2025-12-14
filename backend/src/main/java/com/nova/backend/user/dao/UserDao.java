@@ -1,13 +1,13 @@
 package com.nova.backend.user.dao;
 
 
-import com.nova.backend.user.entity.UserEntity;
+import com.nova.backend.user.entity.UsersEntity;
 
 public interface UserDao {
 
-    UserEntity save(UserEntity user);
-    UserEntity findByLoginId(String loginId);
-    UserEntity findByNameAndEmail(String name, String email);
-    UserEntity findByNameAndPhoneNumber(String name, String phoneNumber);
-    UserEntity findById(Long id);
+    UsersEntity save(UsersEntity user);
+    UsersEntity findByLoginId(String loginId);
+    UsersEntity findByNameAndEmail(String name, String email);
+    UsersEntity findByNameAndPhoneNumber(String name, String phoneNumber);
+    UsersEntity findById(Long id);
 }
