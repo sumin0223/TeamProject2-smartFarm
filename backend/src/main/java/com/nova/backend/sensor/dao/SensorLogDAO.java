@@ -1,6 +1,6 @@
 package com.nova.backend.sensor.dao;
 
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.sensor.entity.SensorLogEntity;
 
 import java.util.List;

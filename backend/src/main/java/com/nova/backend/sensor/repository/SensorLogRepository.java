@@ -1,6 +1,6 @@
 package com.nova.backend.sensor.repository;
 
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.sensor.entity.SensorLogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

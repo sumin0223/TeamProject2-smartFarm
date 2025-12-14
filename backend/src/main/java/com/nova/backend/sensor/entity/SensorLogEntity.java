@@ -1,11 +1,12 @@
 package com.nova.backend.sensor.entity;
 
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,7 @@ public class SensorLogEntity {
     @JoinColumn(name = "farm_id", nullable = false)
     private FarmEntity farm; //sensorLog:farm - N:1
 
+    @CreationTimestamp
     @Column(name = "record_time", nullable = false)
     private LocalDateTime recordTime;
 

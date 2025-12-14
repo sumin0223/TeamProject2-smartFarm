@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FarmService {
     //2. Farm List NovaId 로 가져오기
-    List<FarmResponseDTO> getFarmListByNovaId(int novaId);
+    List<FarmResponseDTO> getFarmListByNovaId(Long novaId);
 }

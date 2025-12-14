@@ -1,7 +1,7 @@
 package com.nova.backend.alarm.service;
 
 import com.nova.backend.alarm.dto.AlarmResponseDTO;
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 
 import java.util.List;
 
@@ -22,5 +22,5 @@ public interface AlarmService {
     void readAllAlarms(Long farmId);
 
     // 센서 기준 위반 알람 생성
-    void createSensorAlarm(FarmEntity farm,String title,String message);
+    void createSensorAlarm(FarmEntity farm, String alarmType, String title, String message);
 }

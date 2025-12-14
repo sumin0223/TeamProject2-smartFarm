@@ -1,6 +1,6 @@
 package com.nova.backend.actuator.entity;
 
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

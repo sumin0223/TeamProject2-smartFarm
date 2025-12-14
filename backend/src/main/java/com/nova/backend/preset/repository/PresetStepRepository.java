@@ -1,7 +1,7 @@
-package com.nova.backend.dashboard.repository;
+package com.nova.backend.preset.repository;
 
-import com.nova.backend.dashboard.entity.PresetEntity;
-import com.nova.backend.dashboard.entity.PresetStepEntity;
+import com.nova.backend.preset.entity.PresetEntity;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

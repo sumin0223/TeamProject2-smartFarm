@@ -3,9 +3,9 @@ package com.nova.backend.alarm.service;
 import com.nova.backend.alarm.dao.AlarmDAO;
 import com.nova.backend.alarm.dto.AlarmResponseDTO;
 import com.nova.backend.alarm.entity.PlantAlarmEntity;
-import com.nova.backend.alarm.repository.PlantAlarmRepository;
-import com.nova.backend.dashboard.entity.FarmEntity;
-import com.nova.backend.dashboard.repository.FarmRepository;
+import com.nova.backend.farm.entity.FarmEntity;
+import com.nova.backend.farm.repository.FarmRepository;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -30,9 +30,9 @@ public class AlarmServiceImpl implements AlarmService {
     // 실시간 팝업 알림 (읽지 않은 알림)
     @Override
     public List<AlarmResponseDTO> getUnreadAlarms(Long farmId) {
-        FarmEntity farm = getFarm(farmId);
+        FarmEntity farmEntity = getFarm(farmId);
         return alarmDAO
-                .findUnreadByFarm(farm)
+                .findUnreadByFarm(farmEntity)
                 .stream()
                 .map(alarm -> modelMapper.map(alarm, AlarmResponseDTO.class))
                 .collect(Collectors.toList());
@@ -40,10 +40,10 @@ public class AlarmServiceImpl implements AlarmService {
     // 최근 알람 10개
     @Override
     public List<AlarmResponseDTO> getRecentAlarms(Long farmId) {
-        FarmEntity farm = getFarm(farmId);
+        FarmEntity farmEntity = getFarm(farmId);
 
         return alarmDAO
-                .findRecentByFarm(farm)
+                .findRecentByFarm(farmEntity)
                 .stream()
                 .map(alarm -> modelMapper.map(alarm, AlarmResponseDTO.class))
                 .collect(Collectors.toList());
@@ -52,14 +52,14 @@ public class AlarmServiceImpl implements AlarmService {
     // 오늘 알람
     @Override
     public List<AlarmResponseDTO> getTodayAlarms(Long farmId) {
-        FarmEntity farm = getFarm(farmId);
+        FarmEntity farmEntity = getFarm(farmId);
 
         LocalDate today = LocalDate.now();
         LocalDateTime start = today.atStartOfDay();
         LocalDateTime end = today.plusDays(1).atStartOfDay();
 
         return alarmDAO
-                .findTodayByFarm(farm, start, end)
+                .findTodayByFarm(farmEntity, start, end)
                 .stream()
                 .map(alarm -> modelMapper.map(alarm, AlarmResponseDTO.class))
                 .collect(Collectors.toList());
@@ -67,10 +67,10 @@ public class AlarmServiceImpl implements AlarmService {
     // 전체 알람
     @Override
     public List<AlarmResponseDTO> getAllAlarms(Long farmId) {
-        FarmEntity farm = getFarm(farmId);
+        FarmEntity farmEntity = getFarm(farmId);
 
         return alarmDAO
-                .findAllByFarm(farm)
+                .findAllByFarm(farmEntity)
                 .stream()
                 .map(alarm -> modelMapper.map(alarm, AlarmResponseDTO.class))
                 .collect(Collectors.toList());
@@ -78,11 +78,11 @@ public class AlarmServiceImpl implements AlarmService {
 
     @Override
     public void readAllAlarms(Long farmId) {
-        FarmEntity farm = farmRepository.findById(farmId).orElse(null);
-        if (farm == null) return;
+        FarmEntity farmEntity = farmRepository.findById(farmId).orElse(null);
+        if (farmEntity == null) return;
 
         List<PlantAlarmEntity> unreadAlarms =
-                alarmDAO.findUnreadByFarm(farm);
+                alarmDAO.findUnreadByFarm(farmEntity);
 
         for (PlantAlarmEntity alarm : unreadAlarms) {
             alarm.setRead(true);
@@ -91,10 +91,18 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
-    public void createSensorAlarm(FarmEntity farm, String title, String message) {
+    public void createSensorAlarm(FarmEntity farm, String alarmType, String title, String message) {
+        PresetStepEntity step = farm.getPresetStepEntity();
+        if (step == null || step.getPreset() == null) {
+            // preset 없는 상태에서는 알람 생성 안 함
+            return;
+        }
         PlantAlarmEntity alarm = PlantAlarmEntity.builder()
                 .farm(farm)
-                .alarmType("sensor")
+                .user(farm.getNova().getUser())
+                .preset(step.getPreset())
+                .presetStep(step)
+                .alarmType("SENSOR")
                 .title(title)
                 .message(message)
                 .isRead(false)

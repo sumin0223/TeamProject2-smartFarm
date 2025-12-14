@@ -15,8 +15,8 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @GetMapping("/view")
-    public MyPageResponseDTO findByUserId(@RequestParam("userId") String userId) {
-        return myPageService.findByUserId(Integer.parseInt(userId));
+    public MyPageResponseDTO findByUserId(@RequestParam("userId") Long userId) {
+        return myPageService.findByUserId(userId);
     }
 
     @PostMapping("/edit")

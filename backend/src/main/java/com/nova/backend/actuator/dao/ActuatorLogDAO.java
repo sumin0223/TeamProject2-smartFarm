@@ -1,7 +1,7 @@
 package com.nova.backend.actuator.dao;
 
 import com.nova.backend.actuator.entity.ActuatorLogEntity;
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 
 import java.util.List;
 

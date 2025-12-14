@@ -1,7 +1,7 @@
 package com.nova.backend.alarm.dao;
 
 import com.nova.backend.alarm.entity.PlantAlarmEntity;
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

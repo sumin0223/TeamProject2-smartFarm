@@ -1,9 +1,9 @@
 package com.nova.backend.alarm.entity;
 
-import com.nova.backend.dashboard.entity.FarmEntity;
-import com.nova.backend.dashboard.entity.PresetEntity;
-import com.nova.backend.dashboard.entity.PresetStepEntity;
-import com.nova.backend.dashboard.entity.UserEntity;
+import com.nova.backend.farm.entity.FarmEntity;
+import com.nova.backend.preset.entity.PresetEntity;
+import com.nova.backend.user.entity.UsersEntity;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +26,7 @@ public class PlantAlarmEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
+    private UsersEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "step_id", nullable = false)

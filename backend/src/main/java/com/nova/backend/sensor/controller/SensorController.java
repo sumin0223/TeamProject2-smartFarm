@@ -16,10 +16,16 @@ public class SensorController {
     private final SensorService sensorService;
 
     @PostMapping("/log")
-    public ResponseEntity<Void> saveSensorLog(
+    public ResponseEntity<SensorCurrentDTO> saveSensorLog(
             @RequestBody SensorLogEntity sensorLog
     ) {
         sensorService.saveSensorLog(sensorLog);
+
+        SensorCurrentDTO current =
+                sensorService.getCurrentSensor(
+                        sensorLog.getFarm().getFarmId()
+                );
+
         return ResponseEntity.ok().build();
     }
 

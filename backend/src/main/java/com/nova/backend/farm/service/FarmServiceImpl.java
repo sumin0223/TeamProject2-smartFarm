@@ -15,7 +15,7 @@ public class FarmServiceImpl implements FarmService{
     private final ModelMapper mapper;
 
     @Override
-    public List<FarmResponseDTO> getFarmListByNovaId(int novaId) {
+    public List<FarmResponseDTO> getFarmListByNovaId(Long novaId) {
         return farmDAO.findFarmsPresetStepsByNovaId(novaId).stream()
                 .map(farm -> mapper.map(farm,FarmResponseDTO.class))
                 .toList();

@@ -2,7 +2,7 @@ package com.nova.backend.alarm.dao;
 
 import com.nova.backend.alarm.entity.PlantAlarmEntity;
 import com.nova.backend.alarm.repository.PlantAlarmRepository;
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

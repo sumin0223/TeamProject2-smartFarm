@@ -1,7 +1,7 @@
 package com.nova.backend.actuator.repository;
 
 import com.nova.backend.actuator.entity.ActuatorLogEntity;
-import com.nova.backend.dashboard.entity.FarmEntity;
+import com.nova.backend.farm.entity.FarmEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
