@@ -9,8 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserEntity {
-
+public class UsersEntity {
     // PK
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,4 +64,17 @@ public class UserEntity {
     // 로그인 타입(normal/google/kakao)
     @Column(name = "login_type", nullable = false)
     private String loginType;
+
+    public UsersEntity(Long userId, String loginId, String password, String name, String email, String phoneNumber, String postalCode, String address, String addressDetail) {
+        this.userId = userId;
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.postalCode = postalCode;
+        this.address = address;
+        this.addressDetail = addressDetail;
+    }
 }
+
