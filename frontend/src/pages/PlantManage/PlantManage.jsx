@@ -38,10 +38,7 @@ function PlantManage() {
         <div className="need-login-box">
           <h2>로그인이 필요합니다</h2>
           <p>내 식물 관리는 로그인한 사용자만 이용할 수 있어요.</p>
-          <button
-            className="login-go-btn"
-            onClick={() => (window.location.href = "/login")}
-          >
+          <button className="login-go-btn" onClick={() => (window.location.href = "/login")}>
             로그인 하러 가기 →
           </button>
         </div>
@@ -52,6 +49,8 @@ function PlantManage() {
   // API 호출 -> 유저 소유의 Nova List 호출
   useEffect(() => {
     const fetchInitData = async () => {
+      console.log("Auth user 객체:", user);
+      console.log("userId 값:", user?.userId);
       if (!user) return;
 
       try {
@@ -82,7 +81,7 @@ function PlantManage() {
     const targetNova = novaList.find((nova) => nova.novaId === selectedId);
 
     setSelectedNova(targetNova);
-    // console.log("선택된 Nova ID:", selectedId);
+    console.log("선택된 Nova ID:", selectedId);
     // 추후 여기에 getFarmList(selectedId) 호출 추가
     const farmData = await getFarmList(selectedId);
     setFarmList(farmData);
@@ -143,15 +142,10 @@ function PlantManage() {
         }}
         onTimeLapse={setTimeLapseDetail}
       />
-      {selectedFarm && (
-        <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />
-      )}
+      {selectedFarm && <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />}
 
       {isFarmCreateOpen && (
-        <FarmCreateModal
-          onClose={() => setIsFarmCreateOpen(false)}
-          onCreate={controlNextStep}
-        />
+        <FarmCreateModal onClose={() => setIsFarmCreateOpen(false)} onCreate={controlNextStep} />
       )}
 
       {isTimeLapseCreateOpen && (
@@ -163,10 +157,7 @@ function PlantManage() {
       )}
 
       {timeLapseDetail && (
-        <TimeLapseModal
-          farm={timeLapseDetail}
-          onClose={() => setTimeLapseDetail(null)}
-        />
+        <TimeLapseModal farm={timeLapseDetail} onClose={() => setTimeLapseDetail(null)} />
       )}
     </div>
   );
