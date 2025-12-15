@@ -12,6 +12,8 @@ const requests = {
   farmCreate: "/farm/create",
   timelapseView: "/timelapse/view",
   myPageCheckPassword: "/mypage/checkpassword",
+  farmDashboard: "/farm/dashboard",
+  waterPlantManual: "/actuator/water",
 };
 
 export default requests;
