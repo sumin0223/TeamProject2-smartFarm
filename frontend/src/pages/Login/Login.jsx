@@ -4,32 +4,33 @@ import { useAuth } from "../../api/auth/AuthContext";
 import "./Login.css";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, users } = useAuth();
   const navigate = useNavigate();
 
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
-    const result = await login(id, pw); // 로그인 시도
+    const result = login(id, pw); // 로그인 시도
 
     if (!result.ok) {
-      alert(result.msg);
+      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
       return;
     }
 
-    alert("로그인 성공!");
+    // 🔥 로그인된 사용자 정보 가져오기
+    const foundUser = users.find((u) => u.id === id);
 
-    // 만약 user.role이 있다면 role 확인 가능
-    const { role } = result.data;
-
-    if (role === "ADMIN") {
+    // 🔥 관리자일 경우 /admin 으로 이동
+    if (foundUser.role === "ADMIN") {
       navigate("/admin");
-    } else {
-      navigate("/");
+      return;
     }
+
+    // 🔥 일반 유저는 홈으로 이동
+    navigate("/");
   };
 
   return (
