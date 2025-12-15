@@ -72,8 +72,8 @@ function ScrollWrapper({children}) {
 
 export const TimeCreateModal = ({farm, onClose, onCreate}) => {
   const baseOrder = useMemo(() => {
-    if (!farm || !farm.stages) return [1];
-    return [1, ...farm.stages.map((s) => s.id)];
+    if (!farm || !farm.stepList) return [1];
+    return [1, ...farm.stepList.map((s) => s.stepId)];
   }, [farm]);
 
   const [availableList, setAvailableList] = useState([]);
@@ -81,16 +81,17 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
   const [videoSettings, setVideoSettings] = useState({});
 
   useEffect(() => {
-    if (!farm?.stages) return;
+    if (!farm?.stepList) return;
 
     const dynamicList = [
       {id: 1, label: "전체 영상", type: "video"},
-      ...farm.stages.map((step) => ({
-        id: step.id,
-        label: step.name,
+      ...farm.stepList.map((step) => ({
+        id: step.stepId,
+        label: step.stepName,
         type: "film",
       })),
     ];
+
     setAvailableList(dynamicList);
   }, [farm]);
 
@@ -100,7 +101,7 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
       newSettings[item.id] = {
         setting_id: null,
         farm_id: null,
-        preset_step_id: item.id,
+        step_id: item.id,
         fps: 30,
         duration: 10,
         interval: null,
@@ -161,8 +162,7 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
         const setting = videoSettings[item.id];
 
         return {
-          farmId: 1,
-          stepId: 1,
+          presetStepId: item.id === 1 ? null : item.id, // 전체 영상은 null
           timelapseName: setting.name,
           fps: setting.fps,
           duration: setting.duration,
@@ -172,9 +172,14 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
         };
       });
 
-      console.log("🔥 서버로 보낼 데이터", timelapseRequestDTOList);
+      const requestPayload = {
+        farmCreateRequest: farm, // ⭐ 팜 생성 payload 그대로
+        timelapseRequestDTOList, // ⭐ 타임랩스 설정
+      };
 
-      await timelapseCreate(timelapseRequestDTOList);
+      console.log("🔥 최종 서버 전송 데이터", requestPayload);
+
+      await timelapseCreate(requestPayload);
 
       alert("타임랩스 생성 완료");
       onClose();

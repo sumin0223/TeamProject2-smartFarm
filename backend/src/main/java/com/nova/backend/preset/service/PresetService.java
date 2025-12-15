@@ -4,6 +4,7 @@ import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.preset.dto.PresetInfoDTO;
 import com.nova.backend.preset.dto.PresetRequestDTO;
 import com.nova.backend.preset.dto.PresetResponseDTO;
+import com.nova.backend.preset.dto.StepResponseDTO;
 
 import java.util.List;
 
@@ -12,5 +13,9 @@ public interface PresetService {
     List<PresetResponseDTO> findPresetListByUserId(Long userId);
     void updatePreset();
     void deletePreset();
+<<<<<<< HEAD
     PresetInfoDTO getPresetInfo(FarmEntity farm);
+=======
+    List<StepResponseDTO> getPresetWithSteps(Long presetId);
+>>>>>>> develop
 }

@@ -2,9 +2,14 @@ package com.nova.backend.preset.service;
 
 import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.preset.dao.PresetDAO;
+<<<<<<< HEAD
 import com.nova.backend.preset.dto.PresetInfoDTO;
+=======
+import com.nova.backend.preset.dao.PresetStepDAO;
+>>>>>>> develop
 import com.nova.backend.preset.dto.PresetRequestDTO;
 import com.nova.backend.preset.dto.PresetResponseDTO;
+import com.nova.backend.preset.dto.StepResponseDTO;
 import com.nova.backend.preset.entity.PresetEntity;
 import com.nova.backend.preset.entity.PresetStepEntity;
 import com.nova.backend.preset.repository.PresetStepRepository;
@@ -19,6 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PresetServiceImpl implements PresetService{
     private final PresetDAO presetDAO;
+    private final PresetStepDAO presetStepDAO;
     private final ModelMapper mapper;
     private final PresetStepRepository presetStepRepository;
 
@@ -52,4 +58,12 @@ public class PresetServiceImpl implements PresetService{
     public void deletePreset() {
 
     }
+
+    @Override
+    public List<StepResponseDTO> getPresetWithSteps(Long presetId) {
+        return presetStepDAO.findAllByPresetId(presetId).stream()
+                .map(entity-> mapper.map(entity,StepResponseDTO.class))
+                .toList();
+    }
+
 }

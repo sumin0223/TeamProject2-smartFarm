@@ -4,10 +4,17 @@ const requests = {
   myPageEdit: "/mypage/edit",
   novaList: "/nova/list",
   farmCardList: "/farm/list",
-  myPageTimelapse: "/maypage/timelapse",
+  myPageTimelapse: "/mypage/timelapse",
   timelapseCreate: "/timelapse/create",
   timelapseInfo: "/timelapse/info",
   presetList: "/preset/list",
+<<<<<<< HEAD
+=======
+  presetStep: "/preset/step",
+  farmCreate: "/farm/create",
+  timelapseView: "/timelapse/view",
+  myPageCheckPassword: "/mypage/checkpassword",
+>>>>>>> develop
   farmDashboard: "/farm/dashboard",
   waterPlantManual: "/actuator/water",
 };

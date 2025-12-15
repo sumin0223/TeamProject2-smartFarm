@@ -23,6 +23,7 @@ public class StepResponseDTO {
     private EnvRange lightPower;
     private EnvRange co2;
     private EnvRange soilMoisture;
+<<<<<<< HEAD
     private Integer waterLevel;
 
     public static StepResponseDTO from(PresetStepEntity e) {
@@ -37,4 +38,6 @@ public class StepResponseDTO {
                 .soilMoisture(e.getSoilMoisture())
                 .build();
     }
+=======
+>>>>>>> develop
 }

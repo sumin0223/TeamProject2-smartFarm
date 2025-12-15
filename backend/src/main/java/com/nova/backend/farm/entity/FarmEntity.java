@@ -30,7 +30,7 @@ public class FarmEntity {
     @JoinColumn(name = "nova_id", nullable = false)
     private NovaEntity nova;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "step_id", nullable = false)
     private PresetStepEntity presetStep;
 
