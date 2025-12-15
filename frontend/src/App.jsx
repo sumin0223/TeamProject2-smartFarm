@@ -36,6 +36,7 @@ import PWFindReset from "./pages/Login/PWFindReset";
 // 테스트 & 관리자 페이지
 import TestHome from "./pages/Login/TestHome";
 import AdminHome from "./pages/Login/AdminHome";
+import AlarmPage from "./pages/Alerts/AlarmPage";
 
 //usestate 써서 import 해보기
 function App() {
@@ -86,6 +87,15 @@ function App() {
         <Route path="/wootest" element={<TestHome />} />
         {/* 🔥 관리자 로그인 / 관리자 페이지 */}
         <Route path="/admin" element={<AdminHome />} />
+        {/* 알람관리 */}
+        <Route
+          path="/alarm"
+          element={
+            <BasicLayout>
+              <AlarmPage />
+            </BasicLayout>
+          }
+        />
       </Routes>
     </AuthProvider>
   );
