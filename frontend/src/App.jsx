@@ -9,6 +9,7 @@ import Header from "./layouts/header/Header";
 
 import Home from "./pages/Home/Home";
 import PlantManage from "./pages/PlantManage/PlantManage";
+import NeedLogin from "./pages/PlantManage/NeedLogin";
 
 import MyPage from "./pages/MyPage/MyPage";
 import MyPageView from "./pages/MyPage/MyPageView";
@@ -50,13 +51,13 @@ function App() {
         <Route
           path="/plants"
           element={
-            <ProtectedRoute>
-              <BasicLayout>
-                <PlantManage />
-              </BasicLayout>
-            </ProtectedRoute>
+            <BasicLayout>
+              <PlantManage />
+            </BasicLayout>
           }
         />
+
+        <Route path="/plants/need-login" element={<NeedLogin />} />
 
         {/* 마이페이지 (로그인 필수) */}
         <Route
