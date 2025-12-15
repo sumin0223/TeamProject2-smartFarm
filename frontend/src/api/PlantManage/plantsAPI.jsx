@@ -19,19 +19,24 @@ export const getFarmList = async (id) => {
   return response.data;
 };
 
-export const getPresetList = async(id)=>{
+export const createFarm = async (datas) => {
+  const request = await backendServer.post(requests.farmCreate, datas);
+  return request;
+};
+
+export const getPresetList = async (id) => {
   const response = await backendServer.get(requests.presetList, {
     params: {
       userId: id,
     },
   });
   return response.data;
-}
-export const getPresetStepList = async(id)=>{
+};
+export const getPresetStepList = async (id) => {
   const response = await backendServer.get(requests.presetStep, {
     params: {
       presetId: id,
     },
   });
   return response.data;
-}
+};

@@ -9,6 +9,7 @@ const requests = {
   timelapseInfo: "/timelapse/info",
   presetList: "/preset/list", 
   presetStep: "/preset/step",
+  farmCreate: "/farm/create"
 };
 
 export default requests;
