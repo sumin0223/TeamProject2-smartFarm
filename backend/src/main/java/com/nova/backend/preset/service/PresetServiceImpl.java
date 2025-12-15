@@ -1,9 +1,13 @@
 package com.nova.backend.preset.service;
 
+import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.preset.dao.PresetDAO;
+import com.nova.backend.preset.dto.PresetInfoDTO;
 import com.nova.backend.preset.dto.PresetRequestDTO;
 import com.nova.backend.preset.dto.PresetResponseDTO;
 import com.nova.backend.preset.entity.PresetEntity;
+import com.nova.backend.preset.entity.PresetStepEntity;
+import com.nova.backend.preset.repository.PresetStepRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,15 @@ import java.util.stream.Collectors;
 public class PresetServiceImpl implements PresetService{
     private final PresetDAO presetDAO;
     private final ModelMapper mapper;
+    private final PresetStepRepository presetStepRepository;
+
+    public PresetInfoDTO getPresetInfo(FarmEntity farm) {
+        PresetStepEntity step = farm.getPresetStep(); // 현재 step
+        PresetEntity preset = step.getPreset();
+
+        return PresetInfoDTO.from(preset, step);
+    }
+
     @Override
     public void insertPreset(PresetRequestDTO presetRequestDTO) {
         PresetEntity presetEntity = mapper.map(presetRequestDTO, PresetEntity.class);

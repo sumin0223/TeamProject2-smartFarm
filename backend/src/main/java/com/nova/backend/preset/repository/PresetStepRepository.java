@@ -9,5 +9,5 @@ import java.util.List;
 // 현재 적용 단계 조회( 팜마다 )
 public interface PresetStepRepository extends JpaRepository<PresetStepEntity,Long> {
     List<PresetStepEntity> findByPreset(PresetEntity preset);
-    List<PresetStepEntity> findByPreset_PresetId(int presetId);
+    List<PresetStepEntity> findByPreset_PresetId(Long presetId);
 }

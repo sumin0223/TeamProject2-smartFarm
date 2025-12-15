@@ -41,5 +41,5 @@ public class PresetStepEntity {
     @Column(columnDefinition = "json")
     private EnvRange soilMoisture;
 
-    private Integer waterLevel;
+//    private Integer waterLevel;
 }

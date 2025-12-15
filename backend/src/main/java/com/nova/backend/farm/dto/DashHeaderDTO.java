@@ -1,10 +1,12 @@
-package com.nova.backend.dashboard.dto;
+package com.nova.backend.farm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //엔티티와 dto와 멤버변수명 이름 동일하게
@@ -19,5 +21,7 @@ public class DashHeaderDTO {
     private String plantType;
     private String status;  // 재배중 / 종료 등
     private int dday;       // D-day (서버 계산값)
-    private LocalDateTime lastUpdatedAt; // 마지막 센서 로그 시간
+    private LocalDate startDate; // 재배 시작일
+    private LocalDate expectedHarvestDate; // 예상 수확일
+    private Timestamp updateTime;
 }
