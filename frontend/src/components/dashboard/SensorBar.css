@@ -1,24 +1,33 @@
 /* 전체 센서 UI 축소 */
-.sensor-scale {
-  transform: scale(0.75); /* 0.70 ~ 0.90 정도로 조절 가능 */
-  transform-origin: top left;
-  width: 100%; /* 축소해도 레이아웃이 깨지지 않도록 */
+.sensor-wrapper {
+  width: 400px; /* 원본 센서 UI 가로 크기 */
+  height: 505px;
+
+  position: relative;
+  overflow: hidden; /* 여백 없이 딱 맞게 보이도록 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sensor-box {
-  width: 100%;
-  max-width: 760px;
-  padding: 10px 14px;
+  width: 400px;
+  height: 505px;
+  padding: 0px 14px 10px 14px;
   background: linear-gradient(180deg, #f5f9e9, #eef5dd);
   border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  margin-bottom: 20px;
 }
 
 .sensor-box-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 8px;
+}
+
+.sensor-box {
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .sensor-box-btns {
@@ -63,21 +72,21 @@
 }
 
 .sensor-row {
-  margin-top: 5px;
+  margin-top: 8px;
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 }
 
 .sensor-title-row {
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 372px;
   margin-bottom: 8px;
 }
 
 .sensor-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   color: #283521;
 }
 
@@ -92,12 +101,12 @@
 .status-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
 
   padding: 4px 10px;
   border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
 
   background: #eef2ea;
   color: #374b32;
@@ -108,7 +117,7 @@
 
 /* pill 안의 아이콘 */
 .status-icon {
-  font-size: 11px;
+  font-size: 12px;
   transform: translateY(-0.5px);
 }
 
@@ -197,12 +206,12 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
-  padding: 10px 18px;
+  padding: 5px 10px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.5);
 
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 500;
   color: #2c3a28;
 
   box-shadow: 0 8px 16px rgba(90, 110, 90, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.35);
@@ -262,22 +271,15 @@
 .tick-bar {
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .tick {
-  width: 2px;
+  width: 1.5px;
   height: 8px;
   background: #c4cfb7;
   border-radius: 2px;
   opacity: 0.9;
-}
-
-.status-text {
-  text-align: right;
-  margin-top: -18px;
-  font-size: 14px;
-  font-weight: 600;
 }
 
 .status-text.normal {

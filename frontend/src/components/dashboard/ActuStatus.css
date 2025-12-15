@@ -1,41 +1,77 @@
 .actu-wrapper {
   width: 290px;
-  height: 150px;
+  height: 170px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  overflow: visible;
+  overflow: visible !important;
 
   position: relative;
 }
 .actu-swiper {
   width: 310px;
-  height: 180px;
+  height: 125px;
   margin: auto 0;
   overflow: visible !important;
+
+  position: relative;
+}
+/* 양쪽 가장자리가 점점 투명해지는 마스크 효과 */
+.actu-swiper-mask {
+  position: relative;
+  overflow: visible; /* Swiper 튀어나오는 부분 숨김 */
+
+  padding-bottom: 22px;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 8%,
+    rgba(0, 0, 0, 0.5) 12%,
+    black 28%,
+    black 72%,
+    rgba(0, 0, 0, 0.5) 88%,
+    transparent 92%,
+    transparent 100%
+  );
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    transparent 8%,
+    rgba(0, 0, 0, 0.5) 12%,
+    black 28%,
+    black 72%,
+    rgba(0, 0, 0, 0.5) 88%,
+    transparent 92%,
+    transparent 100%
+  );
 }
 .swiper-slide {
   overflow: visible !important;
 }
 
 .actu-title {
-  text-align: center;
-  font-size: 13px;
+  align-self: flex-start;
+  font-size: 14px;
   font-weight: 500;
   margin: 0;
   color: #2a3b24;
+  padding-bottom: 10px;
 }
 
 /* 개별 카드 */
 .actu-card {
   width: 230px;
-  height: 140px;
+  height: 120px;
   box-sizing: border-box;
   overflow: hidden;
   background: linear-gradient(180deg, #f6faec, #edf5e1);
   border-radius: 18px;
-  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+
   box-shadow: 0 4px 12px rgba(120, 140, 110, 0.12);
   transition: transform 0.3s ease;
 }
@@ -46,12 +82,13 @@
 }
 
 .actu-wrapper .swiper-pagination {
-  position: absolute;
-  left: 50%;
+  position: absolute !important;
+  bottom: -10px !important;
+  left: 50% !important;
   transform: translateX(-50%);
-  width: 100%;
-  display: flex;
+  display: flex !important;
   justify-content: center;
+  z-index: 50;
 }
 
 /* 헤더 라인 (센서명 + pill) */
@@ -59,7 +96,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  margin-left: 7px;
+  margin-right: 6px;
 }
 
 .actu-label {
@@ -69,6 +109,7 @@
 }
 
 .actu-pill {
+  margin-bottom: 2px;
   padding: 4px 10px;
   border-radius: 10px;
   font-size: 12px;

@@ -1,24 +1,38 @@
-import {FarmCard} from "./FarmCard";
-import {EmptyFarmCard} from "./EmptyFarmCard";
-import "./FarmGrid.css";
+import { FarmCard } from "./FarmCard";
+import { EmptyFarmCard } from "./EmptyFarmCard";
+import styles from "./FarmGrid.module.css";
 
-export function FarmGrid({farms, maxCards, onAddFarm, onSelectFarm, onTimeLapse}) {
-  const emptySlots = maxCards - farms.length;
+export function FarmGrid({
+  farms,
+  maxCards,
+  onAddFarm,
+  onSelectFarm,
+  onTimeLapse,
+}) {
+  const slots = Array.from({ length: maxCards }, (_, i) => i + 1);
 
   return (
-    <div className="farm-grid-container">
-      <div className="farm-grid">
-        {farms.map((farm) => (
-          <FarmCard
-            key={farm.slot}
-            farm={farm}
-            onClick={onSelectFarm}
-            onTimeLapse={onTimeLapse} // farm을 전달하지 않음
-          />
-        ))}
-        {Array.from({length: emptySlots}).map((_, index) => (
-          <EmptyFarmCard key={farms.length + index} onClick={onAddFarm} />
-        ))}
+    <div className={styles["farm-grid-container"]}>
+      <div className={styles["farm-grid"]}>
+        {slots.map((index) => {
+          const isFarm = farms.find((f) => f.slot === index);
+
+          if (isFarm) {
+            return (
+              <FarmCard
+                key={index}
+                farm={isFarm}
+                onClick={() => onSelectFarm(isFarm)}
+                onTimeLapse={onTimeLapse}
+              />
+            );
+          } else {
+            // 해당 위치에 Farm이 없다면 EmptyFarmCard 렌더링
+            return (
+              <EmptyFarmCard key={index} onClick={() => onAddFarm(index)} />
+            );
+          }
+        })}
       </div>
     </div>
   );

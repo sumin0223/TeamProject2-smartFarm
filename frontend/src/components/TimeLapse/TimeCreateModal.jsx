@@ -1,13 +1,13 @@
-import React, {useState, useMemo, useEffect} from "react";
+import React, {useState, useMemo, useEffect, useRef} from "react";
 import {Video, Film} from "lucide-react";
 import {DndProvider, useDrag, useDrop} from "react-dnd";
 import {HTML5Backend} from "react-dnd-html5-backend";
 import {createPortal} from "react-dom";
-import "./SettingModal.css";
+import {timelapseCreate} from "../../api/timelapse/timelapseAPI";
+import styles from "./TimeCreateModal.module.css";
 
 const ItemTypes = {ICON: "icon"};
 
-/* DraggableIcon (unchanged) */
 function DraggableIcon({item, from, onClickMove}) {
   const [{isDragging}, drag] = useDrag({
     type: ItemTypes.ICON,
@@ -20,54 +20,80 @@ function DraggableIcon({item, from, onClickMove}) {
   return (
     <div
       ref={drag}
-      className="icon-card"
+      className={styles.tm_icon_card}
       style={{opacity: isDragging ? 0.4 : 1}}
       onClick={() => onClickMove(item, from)}
     >
       {item.type === "video" ? <Video size={28} /> : <Film size={28} />}
-      <span className="icon-label">{item.label}</span>
+      <span className={styles.tm_icon_label}>{item.label}</span>
     </div>
   );
 }
 
-/* DropZone (unchanged) */
 function DropZone({children, acceptDrop}) {
   const [, drop] = useDrop({
     accept: ItemTypes.ICON,
     drop: (item) => acceptDrop(item),
   });
-
   return <div ref={drop}>{children}</div>;
 }
 
-/* TimeCreateModal with Portal (replace your existing component with this) */
-export const TimeCreateModal = ({farm, onClose, onCreate}) => {
-  useEffect(() => {
-    console.log("🔥 넘어온 farm 데이터:", farm);
-  }, [farm]);
+function ScrollWrapper({children}) {
+  const [topFadeVisible, setTopFadeVisible] = useState(false);
+  const [bottomFadeVisible, setBottomFadeVisible] = useState(true);
+  const scrollRef = useRef();
 
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    setTopFadeVisible(el.scrollTop > 0);
+    setBottomFadeVisible(el.scrollTop + el.clientHeight < el.scrollHeight);
+  };
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    handleScroll();
+    el.addEventListener("scroll", handleScroll);
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div className={styles.tm_scroll_wrapper}>
+      {topFadeVisible && <div className={styles.tm_scroll_fade_top} />}
+      <div ref={scrollRef} className={styles.tm_scroll_inner}>
+        {children}
+      </div>
+      {bottomFadeVisible && <div className={styles.tm_scroll_fade_bottom} />}
+    </div>
+  );
+}
+
+export const TimeCreateModal = ({farm, onClose, onCreate}) => {
   const baseOrder = useMemo(() => {
-    if (!farm || !farm.stages) return [1];
-    return [1, ...farm.stages.map((s) => s.id)];
+    if (!farm || !farm.stepList) return [1];
+    return [1, ...farm.stepList.map((s) => s.stepId)];
   }, [farm]);
 
   const [availableList, setAvailableList] = useState([]);
+  const [selectedList, setSelectedList] = useState([]);
+  const [videoSettings, setVideoSettings] = useState({});
+
   useEffect(() => {
-    if (!farm || !farm.stages) return;
+    if (!farm?.stepList) return;
 
     const dynamicList = [
       {id: 1, label: "전체 영상", type: "video"},
-      ...farm.stages.map((step) => ({
-        id: step.id,
-        label: step.name,
+      ...farm.stepList.map((step) => ({
+        id: step.stepId,
+        label: step.stepName,
         type: "film",
       })),
     ];
 
     setAvailableList(dynamicList);
   }, [farm]);
-  const [selectedList, setSelectedList] = useState([]);
-  const [videoSettings, setVideoSettings] = useState({});
 
   useEffect(() => {
     const newSettings = {};
@@ -75,7 +101,7 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
       newSettings[item.id] = {
         setting_id: null,
         farm_id: null,
-        preset_step_id: item.id,
+        step_id: item.id,
         fps: 30,
         duration: 10,
         interval: null,
@@ -107,6 +133,7 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
   const handleDropToSelected = (item) => {
     if (item.from === "available") moveToSelected(item);
   };
+
   const handleDropToAvailable = (item) => {
     if (item.from === "selected") moveToAvailable(item);
   };
@@ -121,16 +148,46 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
     });
   };
 
-  const handleSubmit = () => {
-    const finalData = {
-      ...farm,
-      timelapseSettings: videoSettings,
-    };
-    console.log("🔥 최종 저장 데이터:", finalData);
-    onCreate(finalData);
+  // const handleSubmit = () => {
+  //   const finalData = {
+  //     ...farm,
+  //     timelapseSettings: videoSettings,
+  //   };
+  //   onCreate(finalData);
+  // };
+
+  const handleSubmit = async () => {
+    try {
+      const timelapseRequestDTOList = selectedList.map((item) => {
+        const setting = videoSettings[item.id];
+
+        return {
+          presetStepId: item.id === 1 ? null : item.id, // 전체 영상은 null
+          timelapseName: setting.name,
+          fps: setting.fps,
+          duration: setting.duration,
+          captureInterval: setting.interval ?? 0,
+          resolution: setting.resolution,
+          state: setting.state,
+        };
+      });
+
+      const requestPayload = {
+        farmCreateRequest: farm, // ⭐ 팜 생성 payload 그대로
+        timelapseRequestDTOList, // ⭐ 타임랩스 설정
+      };
+
+      console.log("🔥 최종 서버 전송 데이터", requestPayload);
+
+      await timelapseCreate(requestPayload);
+
+      alert("타임랩스 생성 완료");
+      onClose();
+    } catch (error) {
+      console.error("❌ 타임랩스 생성 실패", error);
+    }
   };
 
-  // 안전한 inline overlay style (우선순위를 높여 부모 제약 회피)
   const overlayStyle = {
     position: "fixed",
     inset: 0,
@@ -139,43 +196,37 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
     alignItems: "center",
     background: "rgba(0,0,0,0.45)",
     zIndex: 9999,
-    // ensure pointer events pass through overlay except the modal itself
   };
 
-  // inline modal-box override to ensure correct dimensions if something overrides CSS
-  const modalBoxInline = {
-    width: "900px",
-    height: "700px",
-    maxWidth: "calc(100% - 40px)",
-    maxHeight: "calc(100vh - 40px)",
-    boxSizing: "border-box",
-  };
-
-  // Build the modal element (same structure as your original)
   const modalElement = (
     <div style={overlayStyle} onClick={onClose}>
       <DndProvider backend={HTML5Backend}>
-        <div className="modal-box" style={modalBoxInline} onClick={(e) => e.stopPropagation()}>
-          <h2 className="modal-title">타임랩스 설정</h2>
-
-          <div className="timelapse-layout">
+        <div className={styles.tm_modal_box} onClick={(e) => e.stopPropagation()}>
+          <h2 className={styles.tm_title}>타임랩스 설정</h2>
+          <div className={styles.tm_layout}>
+            {/* Available */}
             <DropZone acceptDrop={handleDropToAvailable}>
-              <div className="available-section">
-                <h3>생성 가능</h3>
-                <div className="icon-list">
-                  {availableList.map((item) => (
-                    <DraggableIcon
-                      key={item.id}
-                      item={item}
-                      from="available"
-                      onClickMove={() => moveToSelected(item)}
-                    />
-                  ))}
+              <div className={styles.tm_available_section}>
+                <div className={styles.tm_section_title}>
+                  <h3>생성 가능</h3>
                 </div>
+                <ScrollWrapper>
+                  <div className={styles.tm_icon_list}>
+                    {availableList.map((item) => (
+                      <DraggableIcon
+                        key={item.id}
+                        item={item}
+                        from="available"
+                        onClickMove={() => moveToSelected(item)}
+                      />
+                    ))}
+                  </div>
+                </ScrollWrapper>
               </div>
             </DropZone>
 
-            <div className="action-buttons">
+            {/* Buttons */}
+            <div className={styles.tm_action_buttons}>
               <button
                 type="button"
                 onClick={() => {
@@ -196,29 +247,34 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
               </button>
             </div>
 
+            {/* Selected */}
             <DropZone acceptDrop={handleDropToSelected}>
-              <div className="selected-section">
-                <h3>생성 예정</h3>
-                <div className="icon-list">
-                  {selectedList.length === 0 && <p>추가된 설정 없음</p>}
-                  {selectedList.map((item) => (
-                    <DraggableIcon
-                      key={item.id}
-                      item={item}
-                      from="selected"
-                      onClickMove={() => moveToAvailable(item)}
-                    />
-                  ))}
+              <div className={styles.tm_selected_section}>
+                <div className={styles.tm_section_title}>
+                  <h3>생성 예정</h3>
                 </div>
+                <ScrollWrapper>
+                  <div className={styles.tm_icon_list}>
+                    {selectedList.length === 0 && <p>추가된 설정 없음</p>}
+                    {selectedList.map((item) => (
+                      <DraggableIcon
+                        key={item.id}
+                        item={item}
+                        from="selected"
+                        onClickMove={() => moveToAvailable(item)}
+                      />
+                    ))}
+                  </div>
+                </ScrollWrapper>
               </div>
             </DropZone>
 
-            {/* Setting */}
-            <div className="settings-section">
-              <h3>타임랩스 설정</h3>
-
-              {/* 공통 설정 (FPS + 해상도) */}
-              <div className="setting-row">
+            {/* Settings */}
+            <div className={styles.tm_settings_section}>
+              <div className={styles.tm_section_title}>
+                <h3>타임랩스 설정</h3>
+              </div>
+              <div className={styles.tm_setting_row}>
                 <label>FPS</label>
                 <select
                   onChange={(e) =>
@@ -246,41 +302,65 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
                 </select>
               </div>
 
-              {/* 개별 설정 */}
-              <h4 className="video-name-title">영상 설정</h4>
-
-              {selectedList.map((item) => (
-                <div className="video-setting-row" key={item.id}>
-                  <span className="video-setting-label">{item.label}</span>
-
-                  <input
-                    type="text"
-                    className="video-name-input"
-                    placeholder="영상 이름"
-                    value={videoSettings[item.id]?.name || ""}
-                    onChange={(e) => handleSettingChange(item.id, "name", e.target.value)}
-                  />
-
-                  <input
-                    type="number"
-                    className="video-duration-input"
-                    placeholder="초"
-                    min="1"
-                    value={videoSettings[item.id]?.duration || ""}
-                    onChange={(e) =>
-                      handleSettingChange(item.id, "duration", Number(e.target.value))
-                    }
-                  />
+              <h4 className={styles.tm_video_title}>영상 설정</h4>
+              <ScrollWrapper>
+                <div className={styles.tm_settings_scroll}>
+                  {selectedList.map((item) => {
+                    const duration = videoSettings[item.id]?.duration ?? 10;
+                    return (
+                      <div className={styles.tm_video_row} key={item.id}>
+                        <span className={styles.tm_video_label}>{item.label}</span>
+                        <input
+                          type="text"
+                          className={styles.tm_video_name}
+                          placeholder="영상 이름"
+                          value={videoSettings[item.id]?.name || ""}
+                          onChange={(e) => handleSettingChange(item.id, "name", e.target.value)}
+                        />
+                        <div className={styles.tm_duration_box}>
+                          <button
+                            type="button"
+                            className={styles.tm_duration_btn}
+                            onClick={() =>
+                              handleSettingChange(item.id, "duration", Math.max(1, duration - 1))
+                            }
+                          >
+                            −
+                          </button>
+                          <input
+                            type="number"
+                            min="1"
+                            value={duration}
+                            className={styles.tm_video_duration}
+                            onChange={(e) =>
+                              handleSettingChange(
+                                item.id,
+                                "duration",
+                                Math.max(1, Number(e.target.value))
+                              )
+                            }
+                          />
+                          <button
+                            type="button"
+                            className={styles.tm_duration_btn}
+                            onClick={() => handleSettingChange(item.id, "duration", duration + 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
+              </ScrollWrapper>
             </div>
           </div>
 
-          <div className="modal-buttons">
-            <button className="btn-cancel" onClick={onClose}>
+          <div className={styles.tm_buttons}>
+            <button className={styles.tm_btn_cancel} onClick={onClose}>
               취소
             </button>
-            <button className="save-btn" onClick={handleSubmit}>
+            <button className={styles.tm_btn_save} onClick={handleSubmit}>
               저장
             </button>
           </div>
@@ -289,10 +369,8 @@ export const TimeCreateModal = ({farm, onClose, onCreate}) => {
     </div>
   );
 
-  // createPortal -> body 에 붙여서 부모 제약을 완전히 피함
-  if (typeof document !== "undefined" && document.body) {
+  if (typeof document !== "undefined") {
     return createPortal(modalElement, document.body);
   }
-  // fallback (서버 사이드나 document가 없을 때)
   return modalElement;
 };

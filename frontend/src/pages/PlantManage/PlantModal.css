@@ -25,9 +25,13 @@
   overflow: visible !important;
 }
 
+.lodding {
+  width: 1200px;
+  max-height: 92vh;
+}
+
 /* 내부 스크롤 영역 */
 .modal-content {
-  padding: 0px 32px;
   height: calc(92vh - 20px);
   overflow-y: auto;
 }
@@ -68,7 +72,10 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  align-items: center;
+  width: 1150px;
+  margin: 0px auto 0px;
+  margin-bottom: 10px;
+  height: 69.5px;
 }
 
 .modal-header h2 {
@@ -82,13 +89,14 @@
   font-size: 13px;
   color: #7a8a72;
   margin-top: -6px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .header-right {
   display: flex;
   gap: 10px;
-  margin-right: 20px;
+  margin-right: 60px;
+  margin-top: 20px;
 }
 
 .header-left {
@@ -127,6 +135,7 @@
   gap: 10px;
   max-width: 350px;
   padding: 0;
+  margin-top: 10px;
 }
 
 .date-item {
@@ -164,19 +173,20 @@
 .modal-grid {
   display: flex;
   gap: 10px;
-  margin-bottom: 32px;
-  width: 100%;
+  margin: 0 auto 32px;
+  width: fit-content;
   align-items: flex-start;
   justify-content: flex-start;
 }
 
 .grid-1 {
-  width: 180px; /* 식물 사진 + 로그 그래프 */
+  width: 260px; /* 식물 사진 + 로그 그래프 */
   flex-shrink: 0; /* 줄어들지 않게 */
 }
 
 .grid-2 {
-  width: 240px;
+  width: 160px;
+  height: 230px;
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
@@ -185,13 +195,31 @@
 
 .grid-3 {
   width: 310px; /* Water level + 센서 */
+  height: 510px;
   flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+/* 상단을 두 칸 배치 */
+.grid-3-top {
+  margin-bottom: 10px;
 }
 
 .grid-4 {
-  width: 450px; /* Water level + 센서 */
+  width: 400px; /* 센서바 */
+  height: 505px;
   flex-shrink: 0;
-  outline: 1px solid blue;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+  transition: 0.2s ease;
+}
+
+.grid-4:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
 /* card 기본 스타일
@@ -206,22 +234,21 @@
    LEFT COLUMN
 ============================================================ */
 .plant-photo-card {
-  height: 180px;
-  width: 180px;
+  width: 260px;
+  height: 230px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .plant-photo {
-  width: 170px;
-  height: 170px;
-  object-fit: contain;
+  width: 260px;
+  height: 230px;
   border-radius: 18px;
 }
 
 .log-chart-card {
-  height: 330px; /* SensorTrendSlider 안정 높이 */
+  height: 290px; /* SensorTrendSlider 안정 높이 */
   width: 430px;
   padding: 0;
   margin-top: 10px;
@@ -229,7 +256,7 @@
 
 /* 프리셋카드 */
 .preset-card {
-  height: 180px;
+  height: 315px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -240,27 +267,18 @@
 /* ============================================================
    MIDDLE COLUMN
 ============================================================ */
-/* 워터레벨 */
-.sensor-status-card {
-  height: 210px;
-}
-
-.sensor-status-top {
-  margin-bottom: 10px;
-}
-
 /* 최근 활동 */
 .history-card {
+  height: 210px;
   display: flex;
-  flex-direction: column;
-  align-items: center; /* 가운데 정렬 핵심 */
-  gap: 15px; /* 제목과 PresetInfo 간격 */
+  justify-content: center;
+  align-items: center;
 }
 
 /* 장치 작동 상태 */
 .actu-box {
   width: 310px !important;
-  height: 165px;
+  height: 180px;
   border-radius: 18px;
   background: linear-gradient(180deg, #f6faec, #edf5e1);
   padding: 10px;
@@ -269,10 +287,10 @@
   box-sizing: border-box;
 }
 
-/* ============================================================
-   RIGHT COLUMN
-============================================================ */
-
+.sensor-status-main {
+  height: 500px;
+  width: 400px;
+}
 /* ============================================================
    ALARM SECTION (전체 폭)
 ============================================================ */
@@ -309,7 +327,7 @@
    FOOTER BUTTONS
 ============================================================ */
 .modal-actions {
-  margin-top: 28px;
+  margin: 30px;
   display: flex;
   justify-content: space-between;
 }
@@ -326,28 +344,23 @@
 }
 
 .action-btn + .action-btn {
-  margin-left: 12px;
-}
-
-.action-btn.green {
-  background: #72a85a;
-}
-.action-btn.green:hover {
-  background: #6c9f55;
+  margin-left: 30px;
 }
 
 .action-btn.blue {
-  background: #4fa4d8;
+  background: #244152;
+  transition: 0.2s ease;
 }
 .action-btn.blue:hover {
   background: #4699ca;
 }
 
 .action-btn.red {
-  background: #e7645a;
+  background: rgba(0, 0, 0, 1);
+  transition: 0.2s ease;
 }
 .action-btn.red:hover {
-  background: #d7554a;
+  background: rgba(14, 14, 14, 0.8);
 }
 
 /* ============================================================

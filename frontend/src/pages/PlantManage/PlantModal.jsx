@@ -1,6 +1,8 @@
 // src/pages/PlantModal/PlantModal.jsx
 import { useState, useEffect } from "react";
-import { transformSensorLog } from "../../api/utils/sensorTransform";
+import { getDashboard } from "../../api/dashboard/dashboardAPI";
+import { waterPlant } from "../../api/dashboard/actuatorAPI";
+// import { transformSensorLog } from "../../api/utils/sensorTransform";
 import "./PlantModal.css";
 
 import SensorBar from "../../components/dashboard/SensorBar";
@@ -10,35 +12,51 @@ import ToastAlert from "../../components/dashboard/ToastAlert";
 import ActuStatus from "../../components/dashboard/ActuStatus";
 import PresetInfo from "../../components/dashboard/PresetInfo";
 import PlantHistoryCard from "../../components/dashboard/PlantHistoryCard";
+import AlertSection from "../../components/dashboard/alerts/AlertSection";
 
-function PlantModal({ data, onClose }) {
+function PlantModal({ farmId, onClose }) {
+  const [dashboard, setDashboard] = useState(null);
+
   /* ------------------- 팝업 알림 ------------------- */
   const [alerts, setAlerts] = useState([]);
 
   function pushAlert(alert) {
     setAlerts((prev) => [...prev, { id: Date.now(), ...alert }]);
   }
-
   function removeAlert(id) {
     setAlerts((prev) => prev.filter((a) => a.id !== id));
   }
 
-  const {
-    farm = {},
-    // preset = {},
-    preset_step = {},
-    plant_alarm = [],
-    sensor_log = [],
-    actuator_log = [],
-  } = data ?? {};
+  // 모달 열릴 때 대시보드 API 호출
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      if (!farmId) {
+        console.log("farmId 없음, 대시보드 호출 안 함");
+        return;
+      }
 
-  const { current_sensor, sensor_history } = transformSensorLog(sensor_log);
+      try {
+        console.log("대시보드 요청 farmId:", farmId);
+        const dashboardData = await getDashboard(farmId);
+        console.log("🔥 dashboard 전체 응답", dashboardData);
+        console.log("🔥 farm", dashboardData.farm);
+        console.log("🔥 current", dashboardData.current);
+        console.log("🔥 history", dashboardData.history);
+        console.log("🔥 preset", dashboardData.preset);
+        console.log("🔥 actuators", dashboardData.actuators);
+        console.log("🔥 alarms", dashboardData.alarms);
+        setDashboard(dashboardData);
+      } catch (e) {
+        console.error("dashboard api error", e);
+      }
+    };
+
+    fetchDashboard();
+  }, [farmId]);
 
   useEffect(() => {
-    if (!plant_alarm?.length) return;
-
-    const latest = data.plant_alarm[0];
-
+    if (!dashboard?.alarms?.length) return;
+    const latest = dashboard.alarms[0];
     const t = setTimeout(() => {
       pushAlert({
         type: "sensor",
@@ -48,15 +66,38 @@ function PlantModal({ data, onClose }) {
     }, 0);
     // cleanup
     return () => clearTimeout(t);
-  }, [plant_alarm]);
+  }, [dashboard]);
 
-  /* ------------------- D-DAY 계산 ------------------- */
-  const dday = (() => {
-    const today = new Date();
-    const harvest = new Date(farm.expected_harvest_at);
-    const diff = Math.ceil((harvest - today) / (1000 * 60 * 60 * 24));
-    return diff >= 0 ? diff : 0;
-  })();
+  // 아직 데이터 없으면 로딩 처리
+  if (!dashboard) {
+    return (
+      <div className="modal-bg" onClick={onClose}>
+        <div className="modal-frame" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close-btn" onClick={onClose}>
+            ✕
+          </button>
+          <div className="lodding">로딩중...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // 이제부턴 dashboard에서 꺼내 쓰면 됨
+  const farm = dashboard.farm ?? {};
+  const current_sensor = dashboard.current ?? {};
+  const sensor_history = dashboard.history ?? {};
+  // const preset_step = dashboard.preset ?? {}; // (PresetInfoDTO 구조에 맞춰서)
+  const activeStep = dashboard.preset ?? {};
+  const plant_alarm = dashboard.alarms ?? [];
+  const actuator_log = dashboard.actuators ?? [];
+
+  const mappedSensor = {
+    temperature: current_sensor.temp,
+    humidity: current_sensor.humidity,
+    soil: current_sensor.soilMoisture,
+    light: current_sensor.lightPower,
+    co2: current_sensor.co2,
+  };
 
   /* ------------------- UI ------------------- */
 
@@ -75,25 +116,25 @@ function PlantModal({ data, onClose }) {
             <div className="header-left">
               <div className="title-row">
                 <h2>
-                  팜 #{farm.farm_id} — {farm.plant_nickname} ({farm.plant_type})
+                  팜 #{farm.farmId} — {farm.farmName} ({farm.plantType})
                 </h2>
                 {/* 1) 재배 시작 / 예상 수확 */}
                 <div className="card date-card-wrap">
                   <div className="date-item date-start">
                     <label>재배 시작</label>
-                    <span>{farm.started_at}</span>
+                    <span>{farm.startDate}</span>
                   </div>
                   <div className="date-item date-end">
                     <label>예상 수확일</label>
-                    <span>{farm.expected_harvest_at}</span>
+                    <span>{farm.expectedHarvestDate}</span>
                   </div>
                 </div>
               </div>
-              <p className="updated">업데이트: {current_sensor.logged_at}</p>
+              <p className="updated">업데이트: {new Date(farm.updateTime).toLocaleString()}</p>
             </div>
 
             <div className="header-right">
-              <span className="dday-tag">D-{dday}</span>
+              <span className="dday-tag">D-{farm.dday}</span>
               <span className="status-tag">{farm.status}</span>
             </div>
           </div>
@@ -120,7 +161,7 @@ function PlantModal({ data, onClose }) {
                   charts={[
                     { title: "온도 변화", unit: "℃", data: sensor_history.temperature || [] },
                     { title: "습도 변화", unit: "%", data: sensor_history.humidity || [] },
-                    { title: "토양 수분 변화", unit: "%", data: sensor_history.soil || [] },
+                    { title: "토양 수분 변화", unit: "%", data: sensor_history.soilMoisture || [] },
                     { title: "광량 변화", unit: "lx", data: sensor_history.light || [] },
                     { title: "CO₂ 변화", unit: "ppm", data: sensor_history.co2 || [] },
                   ]}
@@ -130,79 +171,76 @@ function PlantModal({ data, onClose }) {
 
             {/* ========== MIDDLE COLUMN ========== */}
             <div className="grid-2">
-              {/* 2) 프리셋 */}
-              <div className="card preset-card">
-                <PresetInfo preset_step={preset_step} />
+              <div className="sensor-status-top">
+                <WaterLevelCard value={current_sensor.waterLevel} />
               </div>
             </div>
 
             <div className="grid-3">
-              <div className="sensor-status-top">
-                <WaterLevelCard value={current_sensor.water_level} />
-              </div>
-
-              {/* 4) 장치 작동 상태 */}
-              <div className="card actu-box">
-                <ActuStatus
-                  logs={actuator_log}
-                  current_sensor={{ ...current_sensor, preset_step }}
-                />
-              </div>
-            </div>
-            <div className="grid-4">
-              {/* 3) 최근 활동 */}
-              <div className="card history-card">
-                <PlantHistoryCard
-                  history={[
-                    { type: "water", title: "물주기", date: "2024-12-08 15:30" },
-                    { type: "repot", title: "분갈이", date: "2024-12-05 12:10" },
-                    { type: "trim", title: "가지치기", date: "2024-12-03 09:50" },
-                    { type: "light", title: "LED 조정", date: "2024-12-02 18:44" },
-                  ]}
-                />
-              </div>
-            </div>
-
-            {/* ========== RIGHT COLUMN ========== */}
-            <div className="grid-right">
-              {/* 1) 센서 상태 요약 */}
-              <div className="card sensor-status-card">
-                <div className="sensor-status-main">
-                  <SensorBar sensor={current_sensor} preset_step={preset_step} />
+              <div className="grid-3-top">
+                {/* 4) 장치 작동 상태 */}
+                <div className="card actu-box">
+                  <ActuStatus logs={actuator_log} current_sensor={mappedSensor} />
                 </div>
+              </div>
+              {/* 2) 프리셋 */}
+              <div className="card preset-card">
+                <PresetInfo
+                  presetSteps={dashboard.presetSteps}
+                  activePresetStepId={dashboard.activePresetStepId}
+                />
+              </div>
+            </div>
+
+            {/* 3) 최근 활동 */}
+            {/* <div className="card history-card">
+                  <PlantHistoryCard
+                    history={[
+                      { type: "water", title: "물주기", date: "2024-12-08 15:30" },
+                      { type: "repot", title: "분갈이", date: "2024-12-05 12:10" },
+                      { type: "trim", title: "가지치기", date: "2024-12-03 09:50" },
+                      { type: "light", title: "LED 조정", date: "2024-12-02 18:44" },
+                    ]}
+                  />
+                </div> */}
+            <div className="grid-4">
+              {/* 1) 센서 상태 요약 */}
+              <div className="sensor-status-main">
+                <SensorBar sensor={mappedSensor} preset_step={activeStep} />
               </div>
             </div>
           </div>
 
-          {/* 🔶 하단 — 최근 알람 */}
+          {/* 하단 — 최근 알람 */}
           <div className="card alarm-section-wide">
             <h3 className="section-title">최근 알람</h3>
 
-            <div className="alarm-list">
-              {plant_alarm.slice(0, 5).map((a) => (
-                <div key={a.p_alarm_id} className="alarm-item">
-                  <strong>{a.title}</strong>
-                  <p>{a.message}</p>
-                  <span className="alarm-time">{a.created_at}</span>
-                </div>
-              ))}
+            <div className="alarm-2grid">
+              <AlertSection plant_alarm={plant_alarm} />
             </div>
-
-            <button className="more-btn">더보기</button>
           </div>
 
           {/* 🔶 FOOTER 버튼 */}
           <div className="modal-actions">
-            <button className="action-btn green">편집</button>
             <button
               className="action-btn blue"
-              onClick={() =>
-                pushAlert({
-                  type: "water",
-                  title: "물 주기 실행",
-                  message: "자동 물 공급 동작이 실행되었습니다.",
-                })
-              }
+              onClick={async () => {
+                try {
+                  await waterPlant(farm.farmId);
+
+                  pushAlert({
+                    type: "water",
+                    title: "물 주기 실행",
+                    message: "물 주기가 실행되었습니다.",
+                  });
+                } catch (e) {
+                  pushAlert({
+                    type: "error",
+                    title: "실패",
+                    message: "물 주기 실행 실패",
+                  });
+                }
+              }}
             >
               물 주기
             </button>
