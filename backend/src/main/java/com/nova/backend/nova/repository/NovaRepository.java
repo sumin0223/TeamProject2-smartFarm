@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface NovaRepository extends JpaRepository<NovaEntity, Integer> {
+public interface NovaRepository extends JpaRepository<NovaEntity, Long> {
     List<NovaEntity> findByUser_UserId(Long userId);
 }

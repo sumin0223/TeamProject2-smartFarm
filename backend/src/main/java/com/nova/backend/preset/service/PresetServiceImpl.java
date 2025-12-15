@@ -1,8 +1,10 @@
 package com.nova.backend.preset.service;
 
 import com.nova.backend.preset.dao.PresetDAO;
+import com.nova.backend.preset.dao.PresetStepDAO;
 import com.nova.backend.preset.dto.PresetRequestDTO;
 import com.nova.backend.preset.dto.PresetResponseDTO;
+import com.nova.backend.preset.dto.StepResponseDTO;
 import com.nova.backend.preset.entity.PresetEntity;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PresetServiceImpl implements PresetService{
     private final PresetDAO presetDAO;
+    private final PresetStepDAO presetStepDAO;
     private final ModelMapper mapper;
     @Override
     public void insertPreset(PresetRequestDTO presetRequestDTO) {
@@ -39,4 +42,12 @@ public class PresetServiceImpl implements PresetService{
     public void deletePreset() {
 
     }
+
+    @Override
+    public List<StepResponseDTO> getPresetWithSteps(Long presetId) {
+        return presetStepDAO.findAllByPresetId(presetId).stream()
+                .map(entity-> mapper.map(entity,StepResponseDTO.class))
+                .toList();
+    }
+
 }

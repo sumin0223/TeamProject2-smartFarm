@@ -12,9 +12,10 @@ public class PresetDAOImpl implements PresetDAO {
     private final PresetRepository presetRepository;
 
     @Override
-    public void insertPreset(PresetEntity presetEntity) {
-        presetRepository.save(presetEntity);
+    public PresetEntity insertPreset(PresetEntity presetEntity) {
+        return presetRepository.save(presetEntity);
     }
+
 
     @Override
     public List<PresetEntity> findPresetListByUserId(Long userId) {

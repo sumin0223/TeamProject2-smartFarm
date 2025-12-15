@@ -26,12 +26,15 @@ public class PresetStepDAOImpl implements PresetStepDAO {
 
     @Override
     public List<PresetStepEntity> findAllByPresetId(Long presetId) {
-//        return presetStepRepository.findByPreset_PresetId(presetId);
-        return null;
+        return presetStepRepository.findByPreset_PresetId(presetId);
     }
 
     @Override
     public void deleteById(Long stepId) {
         presetStepRepository.deleteById(stepId);
+    }
+    @Override
+    public Optional<PresetStepEntity> findStartStepByPresetId(Long presetId) {
+        return presetStepRepository.findFirstByPreset_PresetIdOrderByGrowthStepAsc(presetId);
     }
 }
