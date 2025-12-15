@@ -6,10 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class NovaDAOImpl implements NovaDAO {
     private final NovaRepository novaRepository;
+
     @Override
     public List<NovaEntity> getNovaEntity(Long userId) {
         return novaRepository.findByUser_UserId(userId);
@@ -28,5 +31,10 @@ public class NovaDAOImpl implements NovaDAO {
     @Override
     public void create(List<NovaEntity> novaEntityList) {
         novaRepository.saveAll(novaEntityList);
+    }
+
+    @Override
+    public Optional<NovaEntity> findById(Long novaId){
+        return novaRepository.findById(novaId);
     }
 }

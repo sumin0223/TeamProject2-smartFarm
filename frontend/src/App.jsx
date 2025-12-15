@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import {Routes, Route} from "react-router-dom";
 
 // =============================
 // 공통 CSS / 레이아웃
@@ -21,7 +21,7 @@ import MyPageTimelapse from "./pages/MyPage/MyPageTimelapse";
 // =============================
 // 우영 로그인/회원가입 + 인증
 // =============================
-import { AuthProvider } from "./api/auth/AuthContext";
+import {AuthProvider} from "./api/auth/AuthContext";
 
 // 로그인 / 회원가입
 import Login from "./pages/Login/Login";

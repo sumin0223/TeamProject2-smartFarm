@@ -30,7 +30,7 @@ public class PresetStepEntity {
     private EnvRange humidity;
 
     @Type(JsonType.class)
-    @Column(columnDefinition = "json")
+    @Column(name = "light_power", columnDefinition = "json")
     private EnvRange lightPower;
 
     @Type(JsonType.class)
@@ -40,6 +40,4 @@ public class PresetStepEntity {
     @Type(JsonType.class)
     @Column(columnDefinition = "json")
     private EnvRange soilMoisture;
-
-    private Integer waterLevel;
 }
