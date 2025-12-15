@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import "./PlantManage.css";
 import PlantModal from "./PlantModal";
 // import farmFullData from "../../api/mockDatas/farmFullData";
@@ -32,18 +33,7 @@ function PlantManage() {
 
   // 로그인 안 된 경우 → 안내 UI만 보여줌 (기존 코드 영향 없음)
   if (!user) {
-    return (
-      <div className="need-login-wrap">
-        <h1>내 식물 관리</h1>
-        <div className="need-login-box">
-          <h2>로그인이 필요합니다</h2>
-          <p>내 식물 관리는 로그인한 사용자만 이용할 수 있어요.</p>
-          <button className="login-go-btn" onClick={() => (window.location.href = "/login")}>
-            로그인 하러 가기 →
-          </button>
-        </div>
-      </div>
-    );
+    return <Navigate to="/plants/need-login" replace />;
   }
 
   // API 호출 -> 유저 소유의 Nova List 호출
@@ -108,8 +98,7 @@ function PlantManage() {
 
   return (
     <div className="plants-page">
-      <h1>내 식물 관리</h1>
-      <div className="nova-select-wrapper" style={{ marginBottom: "20px" }}>
+      <div className="nova-select-wrapper" style={{ marginBottom: "10px" }}>
         <label htmlFor="nova-select">🌱 관리할 기기 선택:</label>
         <select
           id="nova-select"
