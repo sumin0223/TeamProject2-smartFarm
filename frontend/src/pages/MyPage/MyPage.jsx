@@ -2,7 +2,7 @@ import "./MyPage.css";
 
 import {Outlet} from "react-router-dom";
 import {useEffect, useState} from "react";
-// import {getUserInfo} from "../../api/mypage/mypageAPI";
+import {getUserInfo} from "../../api/mypage/mypageAPI";
 
 function MyPage(userId) {
   // userId 상위에서 받아오는 값
@@ -21,12 +21,13 @@ function MyPage(userId) {
       address: "",
       addressDetail: "",
     },
-    novaResponseDTOList: [],
   });
+  const [novaList, setNovaList] = useState([]);
   useEffect(() => {
     getUserInfo(mockUserId)
       .then((data) => {
-        setUserInfo(data);
+        setUserInfo(data.usersResponseDTO);
+        setNovaList(data.novaResponseDTOList);
         console.log(data);
       })
       .catch((error) => {
@@ -38,7 +39,7 @@ function MyPage(userId) {
     <div className="mypage-wrapper">
       <div className="mypage-container">
         {/* 서브페이지가 이곳에 렌더링됨 */}
-        <Outlet context={{userInfo, setUserInfo}} />
+        <Outlet context={{userInfo, setUserInfo, novaList, setNovaList}} />
       </div>
     </div>
   );
