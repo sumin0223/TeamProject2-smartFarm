@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
     },
     {
       id: "user",
-      userId: 4,
+      userId: 1,
       pw: "1234",
       name: "사용자",
       phone: "010-0000-0000",
@@ -50,9 +50,7 @@ export function AuthProvider({ children }) {
   const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider
-      value={{ user, signup, login, logout, users, setUsers }}
-    >
+    <AuthContext.Provider value={{ user, signup, login, logout, users, setUsers }}>
       {children}
     </AuthContext.Provider>
   );

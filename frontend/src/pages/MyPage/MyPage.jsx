@@ -3,9 +3,6 @@
 import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getUserInfo } from "../../api/mypage/mypageAPI";
-import { Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-// import {getUserInfo} from "../../api/mypage/mypageAPI";
 function MyPage() {
   // userId 상위에서 받아오는 값
   // 토큰에서 분리해서 가져올 예정

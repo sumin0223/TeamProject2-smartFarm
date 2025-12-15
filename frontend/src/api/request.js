@@ -7,7 +7,8 @@ const requests = {
   myPageTimelapse: "/maypage/timelapse",
   timelapseCreate: "/timelapse/create",
   timelapseInfo: "/timelapse/info",
-  presetList: "/preset/list", 
+  presetList: "/preset/list",
+  farmDashboard: "/farm/dashboard",
 };
 
 export default requests;

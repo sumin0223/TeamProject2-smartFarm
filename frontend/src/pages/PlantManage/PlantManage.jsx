@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./PlantManage.css";
 import PlantModal from "./PlantModal";
-import farmFullData from "../../api/mockDatas/farmFullData";
+// import farmFullData from "../../api/mockDatas/farmFullData";
 import { useAuth } from "../../api/auth/AuthContext";
 import { FarmGrid } from "../../components/PlantManage/FarmGrid";
 import { FarmCreateModal } from "../../components/PlantManage/FarmCreateModal";
@@ -57,7 +57,7 @@ function PlantManage() {
         // Nova 리스트 가져오기
         const novaData = await getNovaList(user.userId);
         setNovaList(novaData); // 화면 렌더링을 위해 State 업데이트 요청
-        // console.log("Nova List:", novaData);
+        console.log("Nova List:", novaData);
 
         // 받아온 'novaData' 변수를 직접 사용하여 조건 검사
         if (novaData && novaData.length > 0) {
@@ -85,7 +85,7 @@ function PlantManage() {
     // 추후 여기에 getFarmList(selectedId) 호출 추가
     const farmData = await getFarmList(selectedId);
     setFarmList(farmData);
-    // console.log("Farm List:", farmData);
+    console.log("Farm List:", farmData);
   };
 
   // 팜 생성 → 타임랩스 생성 연결
@@ -137,12 +137,15 @@ function PlantManage() {
           setNewSlot(slot);
         }}
         onSelectFarm={(selected) => {
-          // setSelectedFarm(selected);
-          setSelectedFarm(farmFullData);
+          setSelectedFarm(selected);
+          console.log(selected);
+          // setSelectedFarm(farmFullData);
         }}
         onTimeLapse={setTimeLapseDetail}
       />
-      {selectedFarm && <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />}
+      {selectedFarm && (
+        <PlantModal farmId={selectedFarm.farmId} onClose={() => setSelectedFarm(null)} />
+      )}
 
       {isFarmCreateOpen && (
         <FarmCreateModal onClose={() => setIsFarmCreateOpen(false)} onCreate={controlNextStep} />

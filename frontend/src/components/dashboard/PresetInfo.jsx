@@ -54,8 +54,8 @@ export default function PresetInfo({ preset_step = [] }) {
   const sensorList = [
     { icon: <TempIcon />, label: "Temperature", key: "temp", unit: "℃" },
     { icon: <HumIcon />, label: "Humidity", key: "humidity", unit: "%" },
-    { icon: <SoilIcon />, label: "Soil Moisture", key: "soil_moisture", unit: "%" },
-    { icon: <LightIcon />, label: "Light", key: "light", unit: "lx" },
+    { icon: <SoilIcon />, label: "Soil Moisture", key: "soilMoisture", unit: "%" },
+    { icon: <LightIcon />, label: "Light", key: "lightPower", unit: "lx" },
     { icon: <Co2Icon />, label: "CO₂", key: "co2", unit: "ppm" },
   ];
 
@@ -76,13 +76,13 @@ export default function PresetInfo({ preset_step = [] }) {
 
         {/* 가운데 단계 정보 */}
         <div className="preset-info">
-          <h3>{stageLabel(current.growth_step)}</h3>
+          <h3>{stageLabel(current.growthStep)}</h3>
           {/* 3 / 4  */}
           <span className="step-count">
-            {current.growth_step} / {totalSteps}
+            {current.growthStep} / {totalSteps}
           </span>
           {/* 15 days */}
-          <span className="days">{current.period_days} days</span>
+          <span className="days">{current.periodDays} days</span>
         </div>
 
         <button

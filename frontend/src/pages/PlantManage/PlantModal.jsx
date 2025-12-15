@@ -1,6 +1,7 @@
 // src/pages/PlantModal/PlantModal.jsx
 import { useState, useEffect } from "react";
-import { transformSensorLog } from "../../api/utils/sensorTransform";
+import { getDashboard } from "../../api/dashboard/dashboardAPI";
+// import { transformSensorLog } from "../../api/utils/sensorTransform";
 import "./PlantModal.css";
 
 import SensorBar from "../../components/dashboard/SensorBar";
@@ -12,35 +13,50 @@ import PresetInfo from "../../components/dashboard/PresetInfo";
 import PlantHistoryCard from "../../components/dashboard/PlantHistoryCard";
 import AlertSection from "../../components/dashboard/alerts/AlertSection";
 
-function PlantModal({ data, onClose }) {
+function PlantModal({ farmId, onClose }) {
+  const [dashboard, setDashboard] = useState(null);
+  // const farmId = data?.farmId;
+
   /* ------------------- 팝업 알림 ------------------- */
   const [alerts, setAlerts] = useState([]);
 
   function pushAlert(alert) {
     setAlerts((prev) => [...prev, { id: Date.now(), ...alert }]);
   }
-
   function removeAlert(id) {
     setAlerts((prev) => prev.filter((a) => a.id !== id));
   }
 
-  const {
-    farm = {},
-    // preset = {},
-    preset_step = {},
-    plant_alarm = [],
-    sensor_log = [],
-    actuator_log = [],
-  } = data ?? {};
+  // 모달 열릴 때 대시보드 API 호출
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      if (!farmId) {
+        console.log("farmId 없음, 대시보드 호출 안 함");
+        return;
+      }
 
-  const { current_sensor, sensor_history } = transformSensorLog(sensor_log);
-  const activeStep = Array.isArray(preset_step) ? preset_step[0] : preset_step;
+      try {
+        console.log("대시보드 요청 farmId:", farmId);
+        const dashboardData = await getDashboard(farmId);
+        console.log("🔥 dashboard 전체 응답", dashboardData);
+        console.log("🔥 farm", dashboardData.farm);
+        console.log("🔥 current", dashboardData.current);
+        console.log("🔥 history", dashboardData.history);
+        console.log("🔥 preset", dashboardData.preset);
+        console.log("🔥 actuators", dashboardData.actuators);
+        console.log("🔥 alarms", dashboardData.alarms);
+        setDashboard(dashboardData);
+      } catch (e) {
+        console.error("dashboard api error", e);
+      }
+    };
+
+    fetchDashboard();
+  }, [farmId]);
 
   useEffect(() => {
-    if (!plant_alarm?.length) return;
-
-    const latest = data.plant_alarm[0];
-
+    if (!dashboard?.alarms?.length) return;
+    const latest = dashboard.alarms[0];
     const t = setTimeout(() => {
       pushAlert({
         type: "sensor",
@@ -50,7 +66,38 @@ function PlantModal({ data, onClose }) {
     }, 0);
     // cleanup
     return () => clearTimeout(t);
-  }, [plant_alarm]);
+  }, [dashboard]);
+
+  // 아직 데이터 없으면 로딩 처리
+  if (!dashboard) {
+    return (
+      <div className="modal-bg" onClick={onClose}>
+        <div className="modal-frame" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close-btn" onClick={onClose}>
+            ✕
+          </button>
+          <div className="lodding">로딩중...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // 이제부턴 dashboard에서 꺼내 쓰면 됨
+  const farm = dashboard.farm ?? {};
+  const current_sensor = dashboard.current ?? {};
+  const sensor_history = dashboard.history ?? {};
+  // const preset_step = dashboard.preset ?? {}; // (PresetInfoDTO 구조에 맞춰서)
+  const activeStep = dashboard.preset ?? {};
+  const plant_alarm = dashboard.alarms ?? [];
+  const actuator_log = dashboard.actuators ?? [];
+
+  const mappedSensor = {
+    temperature: current_sensor.temp,
+    humidity: current_sensor.humidity,
+    soil: current_sensor.soilMoisture,
+    light: current_sensor.lightPower,
+    co2: current_sensor.co2,
+  };
 
   /* ------------------- D-DAY 계산 ------------------- */
   const dday = (() => {
@@ -122,7 +169,7 @@ function PlantModal({ data, onClose }) {
                   charts={[
                     { title: "온도 변화", unit: "℃", data: sensor_history.temperature || [] },
                     { title: "습도 변화", unit: "%", data: sensor_history.humidity || [] },
-                    { title: "토양 수분 변화", unit: "%", data: sensor_history.soil || [] },
+                    { title: "토양 수분 변화", unit: "%", data: sensor_history.soilMoisture || [] },
                     { title: "광량 변화", unit: "lx", data: sensor_history.light || [] },
                     { title: "CO₂ 변화", unit: "ppm", data: sensor_history.co2 || [] },
                   ]}
@@ -133,7 +180,7 @@ function PlantModal({ data, onClose }) {
             {/* ========== MIDDLE COLUMN ========== */}
             <div className="grid-2">
               <div className="sensor-status-top">
-                <WaterLevelCard value={current_sensor.water_level} />
+                <WaterLevelCard value={current_sensor.waterLevel} />
               </div>
             </div>
 
@@ -141,15 +188,12 @@ function PlantModal({ data, onClose }) {
               <div className="grid-3-top">
                 {/* 4) 장치 작동 상태 */}
                 <div className="card actu-box">
-                  <ActuStatus
-                    logs={actuator_log}
-                    current_sensor={{ ...current_sensor, preset_step }}
-                  />
+                  <ActuStatus logs={actuator_log} current_sensor={mappedSensor} />
                 </div>
               </div>
               {/* 2) 프리셋 */}
               <div className="card preset-card">
-                <PresetInfo preset_step={preset_step} />
+                <PresetInfo preset_step={[dashboard.preset]} />
               </div>
             </div>
 
@@ -167,7 +211,7 @@ function PlantModal({ data, onClose }) {
             <div className="grid-4">
               {/* 1) 센서 상태 요약 */}
               <div className="sensor-status-main">
-                <SensorBar sensor={current_sensor} preset_step={activeStep} />
+                <SensorBar sensor={mappedSensor} preset_step={activeStep} />
               </div>
             </div>
           </div>

@@ -1,6 +1,8 @@
-package com.nova.backend.dashboard.dto;
+package com.nova.backend.farm.dto;
 
 import com.nova.backend.actuator.dto.ActuatorLogResponseDTO;
+import com.nova.backend.dashboard.dto.AlarmDTO;
+import com.nova.backend.dashboard.dto.PresetInfoDTO;
 import com.nova.backend.sensor.dto.SensorCurrentDTO;
 import com.nova.backend.sensor.dto.SensorHistoryDTO;
 import lombok.AllArgsConstructor;
@@ -15,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DashboardRequestDTO {
+public class DashboardResponseDTO {
     private DashHeaderDTO farm;          // 상단 팜 정보
     private SensorCurrentDTO current;    // 현재 센서 상태 (막대바/텍스트)
     private SensorHistoryDTO history;    // 센서 변화 그래프
