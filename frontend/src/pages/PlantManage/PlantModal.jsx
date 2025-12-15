@@ -1,6 +1,7 @@
 // src/pages/PlantModal/PlantModal.jsx
 import { useState, useEffect } from "react";
 import { getDashboard } from "../../api/dashboard/dashboardAPI";
+import { waterPlant } from "../../api/dashboard/actuatorAPI";
 // import { transformSensorLog } from "../../api/utils/sensorTransform";
 import "./PlantModal.css";
 
@@ -15,7 +16,6 @@ import AlertSection from "../../components/dashboard/alerts/AlertSection";
 
 function PlantModal({ farmId, onClose }) {
   const [dashboard, setDashboard] = useState(null);
-  // const farmId = data?.farmId;
 
   /* ------------------- 팝업 알림 ------------------- */
   const [alerts, setAlerts] = useState([]);
@@ -99,14 +99,6 @@ function PlantModal({ farmId, onClose }) {
     co2: current_sensor.co2,
   };
 
-  /* ------------------- D-DAY 계산 ------------------- */
-  const dday = (() => {
-    const today = new Date();
-    const harvest = new Date(farm.expected_harvest_at);
-    const diff = Math.ceil((harvest - today) / (1000 * 60 * 60 * 24));
-    return diff >= 0 ? diff : 0;
-  })();
-
   /* ------------------- UI ------------------- */
 
   return (
@@ -124,25 +116,25 @@ function PlantModal({ farmId, onClose }) {
             <div className="header-left">
               <div className="title-row">
                 <h2>
-                  팜 #{farm.farm_id} — {farm.plant_nickname} ({farm.plant_type})
+                  팜 #{farm.farmId} — {farm.farmName} ({farm.plantType})
                 </h2>
                 {/* 1) 재배 시작 / 예상 수확 */}
                 <div className="card date-card-wrap">
                   <div className="date-item date-start">
                     <label>재배 시작</label>
-                    <span>{farm.started_at}</span>
+                    <span>{farm.startDate}</span>
                   </div>
                   <div className="date-item date-end">
                     <label>예상 수확일</label>
-                    <span>{farm.expected_harvest_at}</span>
+                    <span>{farm.expectedHarvestDate}</span>
                   </div>
                 </div>
               </div>
-              <p className="updated">업데이트: {current_sensor.logged_at}</p>
+              <p className="updated">업데이트: {new Date(farm.updateTime).toLocaleString()}</p>
             </div>
 
             <div className="header-right">
-              <span className="dday-tag">D-{dday}</span>
+              <span className="dday-tag">D-{farm.dday}</span>
               <span className="status-tag">{farm.status}</span>
             </div>
           </div>
@@ -193,7 +185,10 @@ function PlantModal({ farmId, onClose }) {
               </div>
               {/* 2) 프리셋 */}
               <div className="card preset-card">
-                <PresetInfo preset_step={[dashboard.preset]} />
+                <PresetInfo
+                  presetSteps={dashboard.presetSteps}
+                  activePresetStepId={dashboard.activePresetStepId}
+                />
               </div>
             </div>
 
@@ -229,13 +224,23 @@ function PlantModal({ farmId, onClose }) {
           <div className="modal-actions">
             <button
               className="action-btn blue"
-              onClick={() =>
-                pushAlert({
-                  type: "water",
-                  title: "물 주기 실행",
-                  message: "자동 물 공급 동작이 실행되었습니다.",
-                })
-              }
+              onClick={async () => {
+                try {
+                  await waterPlant(farm.farmId);
+
+                  pushAlert({
+                    type: "water",
+                    title: "물 주기 실행",
+                    message: "물 주기가 실행되었습니다.",
+                  });
+                } catch (e) {
+                  pushAlert({
+                    type: "error",
+                    title: "실패",
+                    message: "물 주기 실행 실패",
+                  });
+                }
+              }}
             >
               물 주기
             </button>

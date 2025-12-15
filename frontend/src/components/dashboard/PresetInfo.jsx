@@ -1,56 +1,38 @@
 // src/components/dashboard/PresetInfo.jsx
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./PresetInfo.css";
 
-import { ArrowLeftIcon, ArrowRightIcon, DotsIcon } from "./icons/NavIcons";
+import { ArrowLeftIcon, ArrowRightIcon } from "./icons/NavIcons";
 import { TempIcon, HumIcon, LightIcon, Co2Icon, SoilIcon } from "./icons/SensorIcons";
-
 import PresetItem from "./PresetItem";
 
-export default function PresetInfo({ preset_step = [] }) {
-  // -----------------------------
-  // 0. 데이터 체크
-  // -----------------------------
-  if (!Array.isArray(preset_step) || preset_step.length === 0) {
+export default function PresetInfo({ presetSteps = [], activePresetStepId }) {
+  if (!Array.isArray(presetSteps) || presetSteps.length === 0) {
     return <div className="preset-card empty">프리셋 정보를 불러오는 중...</div>;
   }
+  const isActive = (step) => step.stepId === activePresetStepId;
 
-  // -----------------------------
-  // 1. 현재 Step Index + 방향
-  // -----------------------------
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState("next"); // "next" | "prev"
+  const [direction, setDirection] = useState("next");
+  const current = presetSteps[index];
 
-  const totalSteps = preset_step.length;
-  const current = preset_step[index] || preset_step[0];
+  const totalSteps = presetSteps.length;
 
-  // 루프 방지용 경계값
   const canPrev = index > 0;
   const canNext = index < totalSteps - 1;
 
-  // -----------------------------
-  // 2. 이전/다음 이동
-  // -----------------------------
   const next = () => {
     if (!canNext) return;
     setDirection("next");
-    setIndex((prev) => Math.min(prev + 1, totalSteps - 1));
+    setIndex((prev) => prev + 1);
   };
 
   const prev = () => {
     if (!canPrev) return;
     setDirection("prev");
-    setIndex((prev) => Math.max(prev - 1, 0));
+    setIndex((prev) => prev - 1);
   };
 
-  // -----------------------------
-  // 3. 단계명
-  // -----------------------------
-  const stageLabel = (step) => `Step ${step}`;
-
-  // -----------------------------
-  // 4. 센서 리스트 구성
-  // -----------------------------
   const sensorList = [
     { icon: <TempIcon />, label: "Temperature", key: "temp", unit: "℃" },
     { icon: <HumIcon />, label: "Humidity", key: "humidity", unit: "%" },
@@ -59,51 +41,33 @@ export default function PresetInfo({ preset_step = [] }) {
     { icon: <Co2Icon />, label: "CO₂", key: "co2", unit: "ppm" },
   ];
 
-  // -----------------------------
-  // 5. UI 렌더링
-  // -----------------------------
+  // 🔎 디버깅 (필요 없으면 나중에 삭제)
+  console.log("current.stepId =", current.stepId);
+  console.log("activePresetStepId =", activePresetStepId);
+
   return (
     <div className="preset-box">
-      {/* -------------------- 헤더 -------------------- */}
+      {/* ---------- HEADER ---------- */}
       <div className="preset-header">
-        <button
-          className={`nav-btn prev ${!canPrev ? "disabled" : ""}`}
-          onClick={prev}
-          aria-label="Previous step"
-        >
+        <button className={`nav-btn prev ${!canPrev ? "disabled" : ""}`} onClick={prev}>
           <ArrowLeftIcon />
         </button>
 
-        {/* 가운데 단계 정보 */}
         <div className="preset-info">
-          <h3>{stageLabel(current.growthStep)}</h3>
-          {/* 3 / 4  */}
+          {/* 표시용 +1만 */}
+          <h3>{`Step ${Number(current.growthStep) + 1}`}</h3>
           <span className="step-count">
-            {current.growthStep} / {totalSteps}
+            {Number(current.growthStep) + 1} / {totalSteps}
           </span>
-          {/* 15 days */}
           <span className="days">{current.periodDays} days</span>
         </div>
 
-        <button
-          className={`nav-btn next ${!canNext ? "disabled" : ""}`}
-          onClick={next}
-          aria-label="Next step"
-        >
+        <button className={`nav-btn next ${!canNext ? "disabled" : ""}`} onClick={next}>
           <ArrowRightIcon />
         </button>
-
-        {/* <div className="header-right">
-          <button className="more-btn">
-            <DotsIcon />
-          </button>
-        </div> */}
       </div>
 
-      {/* -------------------- 콘텐츠 -------------------- */}
-      {/* direction 값으로 slide-next / slide-prev 클래스만 붙여서
-          CSS에서 슬라이드 거리(예: 40px), 속도 조절하면 됨 */}
-      {/* key={index} : index 바뀔 때마다 새로 mount → 애니메이션 매번 확실하게 실행 */}
+      {/* ---------- CONTENT ---------- */}
       <div key={index} className={`preset-content slide-${direction}`}>
         <div className="preset-list">
           {sensorList.map((s) => {
@@ -121,8 +85,10 @@ export default function PresetInfo({ preset_step = [] }) {
           })}
         </div>
 
-        {/* Active 상태 */}
-        <div className="preset-status active">● Active Step</div>
+        {/* ✅ Active / Inactive 정확 */}
+        <div className={`preset-status ${isActive(current) ? "active" : "inactive"}`}>
+          {isActive(current) ? "● Active Step" : "○ Inactive Step"}
+        </div>
       </div>
     </div>
   );

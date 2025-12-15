@@ -9,6 +9,7 @@ const requests = {
   timelapseInfo: "/timelapse/info",
   presetList: "/preset/list",
   farmDashboard: "/farm/dashboard",
+  waterPlantManual: "/actuator/water",
 };
 
 export default requests;
