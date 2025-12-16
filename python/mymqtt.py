@@ -5,6 +5,8 @@ from sensor import DHTSensor, MCPSensor, UltrasonicSensor, CO2Sensor
 from led import LED
 from mycamera import MyCamera
 import paho.mqtt.publish as publisher
+import json
+import time
 
 class MqttWorker:
     #생성자에서 mqtt통신할 수 있는 객체생성, 필요한 다양한 객체생성, 콜백함수 등록
@@ -13,18 +15,21 @@ class MqttWorker:
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         #self.client.on_disconnect = self.on_disconnect
+        
+        # 센서 객체 생성 및 측정 스레드 시작(start)
+        self.dht = DHTSensor()
+        self.dht.start()
+        self.mcp = MCPSensor()
+        self.mcp.start()
+        self.water_level = UltrasonicSensor()
+        self.water_level.start()
+        self.co2 = CO2Sensor()
+        self.co2.start()
+        
+        # 액추에이터 객체 생성 및 제어
         # self.led_pins = [13,23]
         # self.led = list(LED(pin) for pin in self.led_pins)
         self.led = LED(13)
-        self.dht11 = DHTSensor(self.client)
-        self.dht11.start()
-        self.mcp = MCPSensor(self.client)
-        self.mcp.start()
-        self.water_level = UltrasonicSensor(self.client)
-        self.water_level.start()
-        self.co2 = CO2Sensor(self.client)
-        self.co2.start()
-        
         # self.camera = MyCamera()
         # 스트리밍의 상태를 제어하기 위해 변수 생성
         # self.is_streaming = False
@@ -72,7 +77,30 @@ class MqttWorker:
                 print("영상 전송 중 에러: ",e)
                 self.is_streaming = False
                 break
-        
+    
+    # 데이터를 모아서 보내는 쓰레드 메서드
+    def publish_all_sensor_data(self):
+        while True:
+            try:
+                # 각 센서 객체에서 최신 데이터 가져오기
+                payload = {
+                    "temp": self.dht.data["temp"],
+                    "humidity": self.dht.data["humi"],
+                    "soilMoisture": self.mcp.data["soil_moisture"],
+                    "lightPower": self.mcp.data["lightpower"],
+                    "waterLevel": self.water_level.data["water_level"],
+                    "co2": self.co2.data["co2"]
+                }
+                
+                json_str = json.dumps(payload)
+                # topic: 'nova_serial_number/slot' <- 형식 맞추기
+                self.client.publish("NOVA-TMT-001/1/sensor", json_str)
+                print(f"Sent ALL Data: {json_str}")
+                
+            except Exception as e:
+                print(f"Publish Error: {e}")
+            
+            time.sleep(5) # 5초마다 전송
             
     # MQTT 서버연결을 하는 메서드 - 사용자정의
     def mymqtt_connect(self):
@@ -86,9 +114,8 @@ class MqttWorker:
             # 스레드로 작업할 수 있도록 지정
             # loop_forever가 계속 통신을 유지해야 메시지가 도착하면 콜백으로 등록한 on_message가 호출
             # 지속적으로 통신을 유지하는 처리를 해야하므로 스레드로 작업
-            self.client.loop_forever()
-            # mymqtt_obj = Thread(target=self.client.loop_forever)
-            # mymqtt_obj.start()
+            self.client.loop_start()
+            self.publish_all_sensor_data()
         except KeyboardInterrupt:
             pass
         finally:
