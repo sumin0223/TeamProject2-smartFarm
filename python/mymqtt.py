@@ -6,6 +6,7 @@ from led import LED
 from mycamera import MyCamera
 import paho.mqtt.publish as publisher
 import json
+import time
 
 class MqttWorker:
     #생성자에서 mqtt통신할 수 있는 객체생성, 필요한 다양한 객체생성, 콜백함수 등록
@@ -86,14 +87,14 @@ class MqttWorker:
                     "temp": self.dht.data["temp"],
                     "humidity": self.dht.data["humi"],
                     "soilMoisture": self.mcp.data["soil_moisture"],
-                    "lightpower": self.mcp.data["lightpower"],
-                    "waterLevel": self.ultra.data["water_level"],
+                    "lightPower": self.mcp.data["lightpower"],
+                    "waterLevel": self.water_level.data["water_level"],
                     "co2": self.co2.data["co2"]
                 }
                 
                 json_str = json.dumps(payload)
                 # topic: 'nova_serial_number/slot' <- 형식 맞추기
-                self.client.publish("nova_serial_number/slot", json_str)
+                self.client.publish("NOVA-TMT-001/1/sensor", json_str)
                 print(f"Sent ALL Data: {json_str}")
                 
             except Exception as e:
