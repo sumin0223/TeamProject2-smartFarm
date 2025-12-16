@@ -1,0 +1,9 @@
+spring:
+  mail:
+    username: "eddynimo417@gmail.com"
+    password: "aonqyrmarvcpfhab"
+
+solapi:
+  api-key: "NCSO6XI63WWYTJQC"
+  api-secret: "828LDKYSOGWMSSYUSJJTVCEPSG05VOXO"
+  from-number: "010-4063-1565"

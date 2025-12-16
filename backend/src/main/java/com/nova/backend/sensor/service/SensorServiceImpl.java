@@ -1,6 +1,7 @@
 package com.nova.backend.sensor.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nova.backend.actuator.service.ActuatorService;
 import com.nova.backend.alarm.service.AlarmService;
 import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.farm.repository.FarmRepository;
@@ -26,6 +27,7 @@ public class SensorServiceImpl implements SensorService {
     private final FarmRepository farmRepository;
     private final ModelMapper modelMapper;
     private final AlarmService alarmService;
+    private final ActuatorService actuatorService;
 
     @Override
     @Transactional
@@ -167,12 +169,30 @@ public class SensorServiceImpl implements SensorService {
             );
         }
         // 광량
-        if (log.getLightPower() < step.getLightPower().getMin() || log.getLightPower() > step.getLightPower().getMax()) {
+        if (log.getLightPower() < step.getLightPower().getMin()) {
             alarmService.createSensorAlarm(
                     farm,
                     "SENSOR",
-                    "광량 이상",
-                    "광량이 기준 범위를 벗어났습니다. (현재 광량: " + log.getLightPower() + "%)"
+                    "광량 부족",
+                    "광량이 기준보다 낮습니다. (현재 광량: " + log.getLightPower() + "%)"
+            );
+            actuatorService.controlBlind(
+                    farm.getFarmId(),
+                    "OPEN",
+                    log.getLightPower()
+            );
+        }
+        if (log.getLightPower() > step.getLightPower().getMax()) {
+            alarmService.createSensorAlarm(
+                    farm,
+                    "SENSOR",
+                    "광량 과다",
+                    "광량이 기준보다 높습니다. (현재 광량: " + log.getLightPower() + "%)"
+            );
+            actuatorService.controlBlind(
+                    farm.getFarmId(),
+                    "CLOSE",
+                    log.getLightPower()
             );
         }
         // CO2
