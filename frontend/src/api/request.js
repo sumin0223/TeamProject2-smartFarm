@@ -10,6 +10,9 @@ const requests = {
   presetList: "/preset/list",
   farmDashboard: "/farm/dashboard",
   waterPlantManual: "/actuator/water",
+  getAllAlarms: "/alarm/all",
+  getUnreadAlarms: "/alarm/unread",
+  readAllAlarms: "/alarm/read-all",
 };
 
 export default requests;
