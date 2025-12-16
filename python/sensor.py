@@ -53,13 +53,13 @@ class MCPSensor(Thread):
                 soil_value = self.soil.value                
                 # 퍼센트 변환
                 moisture_percent = (soil_dry - soil_value) / (soil_dry - soil_wet) * 100
-                self.data['soil_moisture'] = max(0,min(100,moisture_percent))
+                self.data['soil_moisture'] = round(max(0,min(100,moisture_percent)),1)
 
                 # 조도 센서
                 light_value = self.light.value
                 # 퍼센트 변환
                 light_percent = (light_value / light_max) * 100
-                self.data['lightpower'] = max(0,min(100,light_percent))
+                self.data['lightpower'] = round(max(0,min(100,light_percent)),1)
             except RuntimeError as err:
                 print(err)
             time.sleep(2)
@@ -119,7 +119,7 @@ class UltrasonicSensor(Thread):
                     
                     # 퍼센트 변환
                     water_percent = (water_height / max_water_height) * 100
-                    self.data['water_level']= max(0, min(100, water_percent))
+                    self.data['water_level']= round(max(0, min(100, water_percent)),1)
                 
             except Exception as e:
                 print(f"Ultrasonic Error: {e}")
