@@ -1,9 +1,11 @@
 package com.nova.backend.mqtt;
 
 import com.nova.backend.timelapse.dao.TimelapseDAO;
-import com.nova.backend.timelapse.entity.TimelapseVideoEntity;
-import com.nova.backend.timelapse.service.TimelapseService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nova.backend.sensor.entity.SensorLogEntity;
+import com.nova.backend.sensor.service.SensorService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class MqttService {
     private final MyPublisher publisher;
     private final TimelapseService timelapseService;
+    private final SensorService sensorService;
 
     int count=0;
     @ServiceActivator(inputChannel = "mqttInputChannel")
@@ -24,11 +27,15 @@ public class MqttService {
 
         System.out.println("Received Message: " + payload);
         System.out.println("Received Topic: " + topic);
+        String[] topicList = topic.split("/");
+        String novaSerialNumber = topicList[0];
+        int slot = Integer.parseInt(topicList[1]);
+        try {
+            sensorService.controlSensorData(payload,novaSerialNumber,slot);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
 
-        // 여기서 DB에 저장하거나 로직을 수행하면 됩니다.
-        if (topic.equals("home/sensor/dht11")) {
-            System.out.println(">>> 온습도 센서 데이터 처리 로직 수행");
-            // JSON 파싱 후 온습도 DB 저장 등...
 
         } else if (topic.equals("home/sensor/mcp")) {
             System.out.println(">>> MCP 데이터 처리 로직 수행");

@@ -70,12 +70,11 @@ const Icons = {
 
 // --- 프리셋 생성 시 나오는 트랙바 초기 데이터 값 ---
 const DEFAULT_ENV = {
-  temp: {min: 20, max: 25},
-  humidity: {min: 50, max: 70},
-  co2: {min: 400, max: 800},
-  soilMoisture: {min: 40, max: 60},
-  lightPower: {min: 50, max: 80},
-  waterLevel: 3,
+  temperature: { min: 20, max: 25 },
+  humidity: { min: 50, max: 70 },
+  co2: { min: 400, max: 800 },
+  soilMoisture: { min: 40, max: 60 },
+  light: { min: 5000, max: 10000 },
 };
 // --- 기존에 저장되어 불러온 프리셋 정보
 const MOCK_PRESETS = [
@@ -124,7 +123,6 @@ const MOCK_PRESETS = [
 // --- [Main Component] ---
 export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
   const [farmName, setFarmName] = useState(""); // 입력한 팜 이름
-  const [presetList, setPresetList] = useState(MOCK_PRESETS);
 
   // 프리셋 관련 state
   const [selectedPreset, setSelectedPreset] = useState(null); // 기존 프리셋 선택
@@ -138,24 +136,6 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null); // 미리보기용
 
-  // // API 호출 -> 유저 소유의 Preset List 호출
-  useEffect(() => {
-    const fetchInitData = async () => {
-      if (!user) return;
-
-      try {
-        // Preset 리스트 가져오기
-        const presetData = await getPresetList(user.userId);
-        console.log(presetData);
-        setPresetList(presetData); // 화면 렌더링을 위해 State 업데이트 요청
-      } catch (e) {
-        console.error("데이터 로딩 중 에러:", e);
-      }
-    };
-
-    fetchInitData();
-  }, [user]);
-
   // 이미지 파일 선택 핸들러
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -166,26 +146,25 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
   };
 
   // 성장 단계 데이터(단계 별 센서 범위)
-  const [stepList, setStepList] = useState([]);
-  const [stepOpen, setStepOpen] = useState([stepList.stepId]);
+  const [stepList, setStepList] = useState([
+    {
+      id: Date.now(),
+      name: "0", //몇 단계인지
+      environment: JSON.parse(JSON.stringify(DEFAULT_ENV)), //센서 데이터 범위
+    },
+  ]);
+  const [stepOpen, setStepOpen] = useState([stepList[0].id]); // 펼쳐진 단계 list 관리
 
   // 핸들러: 기존 프리셋 선택
-  const handleSelectPreset = async (preset) => {
+  const handleSelectPreset = (preset) => {
     setSelectedPreset(preset);
-    try {
-      // Preset 리스트 가져오기
-      const presetStep = await getPresetStepList(preset.presetId);
-      console.log(presetStep);
-      setStepList(presetStep);
-      // 첫 번째 단계 열기 (stepId 사용)
-      if (presetStep.length > 0) {
-        setStepOpen([presetStep[0].stepId]);
-      }
-    } catch (e) {
-      console.error("데이터 로딩 중 에러:", e);
-      setStepList([]);
-    }
-
+    // 해당 프리셋에 대한 단계 별 데이터로 값 설정
+    setStepList(
+      preset.stages.map((stage) => ({
+        ...stage,
+        environment: JSON.parse(JSON.stringify(stage.environment)),
+      }))
+    );
     setIsOpen(false); // 리스트 닫기
     setIsCreatingNew(false);
   };
@@ -197,10 +176,9 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
 
     // 초기화
     const newStage = {
-      stepId: 1,
-      growthStep: 1,
-      periodDays: 10,
-      ...DEFAULT_ENV,
+      id: Date.now(),
+      name: "0",
+      environment: JSON.parse(JSON.stringify(DEFAULT_ENV)),
     };
 
     setStepList([newStage]); //초기화 데이터 적용
@@ -209,10 +187,9 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
   // 핸들러: 단계 추가
   const addGrowthStage = () => {
     const newStage = {
-      stepId: stepList.length + 1,
-      growthStep: stepList.length + 1,
-      periodDays: 10,
-      ...DEFAULT_ENV,
+      id: Date.now(),
+      name: `${stepList.length}`,
+      environment: JSON.parse(JSON.stringify(DEFAULT_ENV)),
     };
     setStepList([...stepList, newStage]);
   };
@@ -220,7 +197,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
   // 핸들러: 단계 삭제
   const removeGrowthStage = (id) => {
     if (stepList.length > 1) {
-      setStepList(stepList.filter((stage) => stage.stepId !== id));
+      setStepList(stepList.filter((stage) => stage.id !== id));
     }
   };
 
@@ -233,14 +210,17 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
     }
   };
 
-  // 핸들러: 환경변수(dht, light ...etc) 업데이트
+  // 핸들러: 환경변수 업데이트
   const updateEnvironment = (stageId, key, min, max) => {
     setStepList(
       stepList.map((stage) =>
-        stage.stepId === stageId
+        stage.id === stageId
           ? {
               ...stage,
-              [key]: {min, max},
+              environment: {
+                ...stage.environment,
+                [key]: { min, max },
+              },
             }
           : stage
       )
@@ -279,19 +259,8 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
       stepList: isCreatingNew ? stepList : [],
     };
 
-    // 2. FormData 생성 및 데이터 포장
-    const formData = new FormData();
-    // 일반 JSON 데이터 추가
-    const jsonBlob = new Blob([JSON.stringify(payload)], {
-      type: "application/json",
-    });
-    formData.append("request", jsonBlob);
-    if (selectedFile) {
-      formData.append("image", selectedFile);
-    }
-
-    console.log("Submit FormData:", formData);
-    onCreate(formData);
+    console.log("Submit Payload:", payload);
+    onCreate(payload);
   };
 
   return (
@@ -434,7 +403,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                       {/* 2. 드롭다운 리스트 (isOpen일 때만 보임) */}
                       {isOpen && (
                         <div className={styles["preset-list"]}>
-                          {presetList.map((preset) => (
+                          {MOCK_PRESETS.map((preset) => (
                             <div
                               key={preset.presetId}
                               className={styles["preset-item"]}
@@ -461,7 +430,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                                   color: "#94a3b8",
                                 }}
                               >
-                                {`${preset.plantType}`}
+                                {`${preset.plantType} | ${preset.stages.length}단계`}
                               </div>
                             </div>
                           ))}
@@ -488,6 +457,33 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
             {/* 성장 단계 설정 (트랙바) */}
             {(selectedPreset || isCreatingNew) && (
               <div>
+                <div>
+                  <div className={styles["section-title"]}>
+                    식물 사진 업로드
+                  </div>
+                  <div className={styles["modal-content"]}>
+                    <input
+                      type="file"
+                      className={styles["hidden-input"]}
+                      id="file-upload"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                    {/* 이미지 출력 영역 */}
+                    <div style={{ marginTop: "20px" }}>
+                      {previewUrl ? (
+                        <div>
+                          <p>미리보기:</p>
+                          <img
+                            src={previewUrl}
+                            alt="Preview"
+                            style={{ width: "300px", opacity: 0.5 }}
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </div>
                 <div className={styles["stage-header-row"]}>
                   <div className={styles["section-title"]} style={{margin: 0}}>
                     성장 단계 설정
@@ -507,23 +503,18 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                       <div>
                         <input
                           className={styles["stage-name-edit"]}
-                          name="growthStep"
-                          value={stage.growthStep}
+                          value={stage.name}
                           type="text"
                           onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => updateStageName(stage.stepId, e)}
+                          onChange={(e) => {
+                            const onlyNumbers = e.target.value.replace(
+                              /[^0-9]/g,
+                              ""
+                            );
+                            updateStageName(stage.id, onlyNumbers);
+                          }}
                         />
-                        <span>단계, </span>
-
-                        <span> 소요 일 수: </span>
-                        <input
-                          className={styles["stage-name-edit"]}
-                          name="periodDays"
-                          value={stage.periodDays}
-                          type="text"
-                          onClick={(e) => e.stopPropagation()}
-                          onChange={(e) => updateStageName(stage.stepId, e)}
-                        />
+                        <span>단계</span>
                       </div>
 
                       <div
@@ -537,7 +528,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
-                              removeGrowthStage(stage.stepId);
+                              removeGrowthStage(stage.id);
                             }}
                             style={{
                               background: "none",
@@ -548,7 +539,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                             <Icons.Trash />
                           </button>
                         )}
-                        {stepOpen.includes(stage.stepId) ? (
+                        {stepOpen.includes(stage.id) ? (
                           <Icons.ChevronUp />
                         ) : (
                           <Icons.ChevronDown />
@@ -556,7 +547,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                       </div>
                     </div>
 
-                    {stepOpen.includes(stage.stepId) && (
+                    {stepOpen.includes(stage.id) && (
                       <div className={styles["stage-controls"]}>
                         <RangeSlider
                           label="온도"
@@ -575,8 +566,8 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                           max={100}
                           step={1}
                           unit="%"
-                          minValue={stage.humidity.min}
-                          maxValue={stage.humidity.max}
+                          minValue={stage.environment.humidity.min}
+                          maxValue={stage.environment.humidity.max}
                           onChange={(min, max) =>
                             updateEnvironment(stage.stepId, "humidity", min, max)
                           }
@@ -599,8 +590,8 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                           max={100}
                           step={1}
                           unit="%"
-                          minValue={stage.soilMoisture.min}
-                          maxValue={stage.soilMoisture.max}
+                          minValue={stage.environment.soilMoisture.min}
+                          maxValue={stage.environment.soilMoisture.max}
                           onChange={(min, max) =>
                             updateEnvironment(stage.stepId, "soilMoisture", min, max)
                           }
@@ -609,11 +600,11 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                         <RangeSlider
                           label="조도"
                           min={0}
-                          max={100}
-                          step={1}
-                          unit="%"
-                          minValue={stage.lightPower.min}
-                          maxValue={stage.lightPower.max}
+                          max={20000}
+                          step={500}
+                          unit="Lux"
+                          minValue={stage.environment.light.min}
+                          maxValue={stage.environment.light.max}
                           onChange={(min, max) =>
                             updateEnvironment(stage.stepId, "lightPower", min, max)
                           }

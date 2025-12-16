@@ -1,49 +1,43 @@
-import "./MyPage.css";
-import {useAuth} from "../../api/auth/AuthContext";
-import {Outlet, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {getUserInfo} from "../../api/mypage/mypageAPI";
+// import "./MyPage.css";
 
+import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getUserInfo } from "../../api/mypage/mypageAPI";
 function MyPage() {
-  const {user} = useAuth();
-  const navigate = useNavigate();
+  // userId 상위에서 받아오는 값
+  // 토큰에서 분리해서 가져올 예정
+  const mockUserId = 1; // 우선 mock데이터 사용
+
   const [userInfo, setUserInfo] = useState({
     usersResponseDTO: {
-      userId: "",
-      loginId: "",
-      password: "",
-      name: "",
-      email: "",
-      phoneNumber: "",
-      postalCode: "",
-      address: "",
-      addressDetail: "",
+      userId: "1",
+      loginId: "1",
+      password: "1",
+      name: "1",
+      email: "1",
+      phoneNumber: "1",
+      postalCode: "1",
+      address: "1",
+      addressDetail: "1",
     },
+    novaResponseDTOList: [],
   });
-  const [novaList, setNovaList] = useState([]);
-
   useEffect(() => {
-    if (!user) {
-      navigate("/");
-      return;
-    }
-
-    getUserInfo(user.userId)
+    getUserInfo(mockUserId)
       .then((data) => {
-        setUserInfo(data.usersResponseDTO);
-        setNovaList(data.novaResponseDTOList);
+        setUserInfo(data);
         console.log(data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [user, navigate]);
+  }, []);
 
   return (
     <div className="mypage-wrapper">
       <div className="mypage-container">
         {/* 서브페이지가 이곳에 렌더링됨 */}
-        <Outlet context={{userInfo, setUserInfo, novaList, setNovaList}} />
+        <Outlet context={{ userInfo, setUserInfo }} />
       </div>
     </div>
   );

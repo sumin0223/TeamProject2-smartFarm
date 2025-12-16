@@ -6,6 +6,8 @@ from led import LED
 from mycamera import TimeLapseCamera
 from pump import run_pump
 import paho.mqtt.publish as publisher
+import json
+import time
 
 class MqttWorker:
     #생성자에서 mqtt통신할 수 있는 객체생성, 필요한 다양한 객체생성, 콜백함수 등록
@@ -14,16 +16,15 @@ class MqttWorker:
         self.client.on_connect = self.on_connect
         self.client.on_message = self.on_message
         #self.client.on_disconnect = self.on_disconnect
-        # self.led_pins = [13,23]
-        # self.led = list(LED(pin) for pin in self.led_pins)
-        self.led = LED(13)
-        self.dht11 = DHTSensor(self.client)
-        self.dht11.start()
-        self.mcp = MCPSensor(self.client)
+        
+        # 센서 객체 생성 및 측정 스레드 시작(start)
+        self.dht = DHTSensor()
+        self.dht.start()
+        self.mcp = MCPSensor()
         self.mcp.start()
-        self.water_level = UltrasonicSensor(self.client)
+        self.water_level = UltrasonicSensor()
         self.water_level.start()
-        self.co2 = CO2Sensor(self.client)
+        self.co2 = CO2Sensor()
         self.co2.start()
         
         # MCPSensor 시작 (자동 펌프 콜백 전달)
@@ -88,9 +89,8 @@ class MqttWorker:
             # 스레드로 작업할 수 있도록 지정
             # loop_forever가 계속 통신을 유지해야 메시지가 도착하면 콜백으로 등록한 on_message가 호출
             # 지속적으로 통신을 유지하는 처리를 해야하므로 스레드로 작업
-            self.client.loop_forever()
-            # mymqtt_obj = Thread(target=self.client.loop_forever)
-            # mymqtt_obj.start()
+            self.client.loop_start()
+            self.publish_all_sensor_data()
         except KeyboardInterrupt:
             pass
         finally:
