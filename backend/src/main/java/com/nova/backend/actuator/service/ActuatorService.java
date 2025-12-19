@@ -3,6 +3,7 @@ package com.nova.backend.actuator.service;
 import com.nova.backend.actuator.dto.ActuatorLogResponseDTO;
 import com.nova.backend.actuator.dto.WateringRequestDTO;
 import com.nova.backend.actuator.dto.WateringResponseDTO;
+import com.nova.backend.farm.entity.FarmEntity;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ActuatorService {
 
     // 광량 블라인드용
     void controlBlind(Long farmId, String action, float lightValue);
+    // 팬 액추에이터 동작
+    void controlFan(FarmEntity farm, String sensorType, float sensorValue);
 }

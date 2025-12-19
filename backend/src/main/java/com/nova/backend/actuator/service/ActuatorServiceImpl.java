@@ -122,4 +122,20 @@ public class ActuatorServiceImpl implements ActuatorService {
 //                action
 //        );
     }
+    @Override
+    public void controlFan(FarmEntity farm,String sensorType,float sensorValue){
+        ActuatorLogEntity log = ActuatorLogEntity.builder()
+                .farm(farm)
+                .actuatorType("FAN")
+                .action("ON")
+                .sensorType(sensorType)
+                .currentValue(sensorValue)
+                .build();
+
+        actuatorLogRepository.save(log);
+        String novaSerialNumber = farm.getNova().getNovaSerialNumber();
+        int slot = farm.getSlot();
+        String payload = "{\"action\": "+"ON"+"}";
+        publisher.sendToMqtt(payload,String.format("%s/%d/fan",novaSerialNumber,slot));
+    }
 }
