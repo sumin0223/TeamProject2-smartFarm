@@ -1,0 +1,330 @@
+:root {
+  --noise-texture: url("https://grainy-gradients.vercel.app/noise.svg");
+}
+
+/* 전체 페이지 */
+.cart-page-container {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: radial-gradient(
+        circle,
+        rgba(0, 0, 0, 0.04) 2px,
+        transparent 2px
+      )
+      0 0 / 40px 40px,
+    linear-gradient(
+      180deg,
+      #f5ffe8 0%,
+      #ffffff 40%,
+      #f3ffe0 100%
+    );
+  padding-bottom: 120px;
+}
+
+/* ------ EMPTY ------ */
+.cart-empty-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    #f5ffe8,
+    #ffffff
+  );
+}
+
+.cart-empty-box {
+  text-align: center;
+}
+
+.cart-empty-text {
+  font-size: 24px;
+  color: #556255;
+  margin-bottom: 24px;
+}
+
+.cart-continue-btn {
+  padding: 14px 32px;
+  background: #acda00;
+  border-radius: 30px;
+  color: #253126;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 14px rgba(172, 218, 0, 0.35);
+  transition: 0.25s ease;
+}
+
+.cart-continue-btn:hover {
+  background: #99c200;
+  transform: translateY(-3px);
+}
+
+/* ------ HEADER ------ */
+.cart-header {
+  background: linear-gradient(
+    180deg,
+    #fafff4,
+    #ffffff
+  );
+  height: 80px;
+  border-bottom: 1px solid #d8e2c5;
+}
+
+.cart-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.cart-back-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #253126;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: 0.25s ease;
+}
+
+.cart-back-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.cart-title {
+  font-size: 26px;
+  color: #253126;
+  margin-left: 12px;
+  font-weight: 700;
+}
+
+/* ------ CONTENT ------ */
+.cart-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+/* ------ ITEM CARD ------ */
+.cart-card {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f7fbe8 40%,
+    #f4f2e1
+  );
+  display: flex;
+  gap: 20px;
+  padding: 26px;
+  border-radius: 26px;
+  position: relative;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.cart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+}
+
+.cart-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--noise-texture);
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+.cart-card-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.cart-card-title {
+  font-size: 18px;
+  color: #253126;
+  font-weight: 700;
+}
+
+.cart-card-sub {
+  font-size: 14px;
+  color: #555;
+  margin-top: 6px;
+}
+
+.cart-card-unit {
+  font-size: 12px;
+  margin-top: 8px;
+  color: #6a6a6a;
+}
+
+.cart-qty-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cart-qty-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  background: #f4f6ec;
+  border: 1px solid #d9e0c7;
+}
+
+.cart-qty-box button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #253126;
+  transition: transform 0.1s ease;
+}
+
+.cart-qty-box button:active {
+  transform: scale(0.82);
+}
+
+/* 수량 숫자 애니메이션 */
+.cart-qty-box span {
+  display: inline-block;
+  transition: transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.qty-anim {
+  transform: scale(1.2);
+  opacity: 0.6;
+}
+
+.cart-card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #253126;
+}
+
+/* 삭제 버튼 + hover */
+.cart-remove-btn {
+  background: none;
+  border: none;
+  color: #e85c5c;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  transition: transform 0.25s ease,
+    color 0.25s ease;
+}
+
+.cart-remove-btn:hover {
+  color: #ff2f2f;
+  transform: scale(1.15) rotate(-4deg);
+}
+
+/* 삭제 fade-out */
+.cart-item-fadeout {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* ------ SUMMARY ------ */
+.cart-summary {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f2ffe0
+  );
+  border-radius: 28px;
+  padding: 32px;
+  position: sticky;
+  top: 30px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+.cart-summary h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #253126;
+  margin-bottom: 20px;
+}
+
+.cart-summary-list > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.cart-summary hr {
+  border: none;
+  border-top: 1px solid #d8e2c5;
+  margin: 14px 0;
+}
+
+.cart-summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  color: #253126;
+  font-weight: 700;
+}
+
+.cart-summary .free {
+  color: #15a24a;
+  font-weight: 600;
+}
+
+/* 총 금액 애니메이션 */
+.cart-price-anim {
+  display: inline-block;
+  transition: transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.cart-price-anim.active {
+  transform: scale(1.12);
+  opacity: 0.7;
+}
+
+.cart-order-btn {
+  width: 100%;
+  margin-top: 26px;
+  padding: 14px;
+  background: #253126;
+  color: white;
+  border: none;
+  border-radius: 26px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: 0.25s ease;
+}
+
+.cart-order-btn:hover {
+  background: #182018;
+  transform: translateY(-3px);
+}

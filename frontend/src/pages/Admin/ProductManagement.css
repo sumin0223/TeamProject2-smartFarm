@@ -1,0 +1,279 @@
+/* 페이지 전체 감성 적용 */
+.pm-container {
+  padding-bottom: 120px;
+}
+
+/* -------------------------------- */
+/* HEADER */
+/* -------------------------------- */
+.pm-header {
+  background: linear-gradient(
+    135deg,
+    #f6ffd9,
+    #ffffff
+  );
+  border-bottom: 1px solid #dce6ca;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.pm-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pm-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #253126;
+}
+
+.pm-back-btn,
+.pm-logout-btn {
+  color: #253126 !important;
+}
+
+.pm-back-btn:hover,
+.pm-logout-btn:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+}
+
+.pm-add-btn {
+  background: linear-gradient(
+    135deg,
+    #acda00,
+    #8bbb00
+  );
+  color: #253126;
+  border-radius: 22px;
+  padding: 10px 24px;
+  font-weight: 600;
+}
+
+/* -------------------------------- */
+/* PRODUCT GRID */
+/* -------------------------------- */
+
+.pm-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.pm-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    3,
+    minmax(280px, 1fr)
+  );
+  gap: 28px;
+}
+
+/* -------------------------------- */
+/* PRODUCT CARD */
+/* -------------------------------- */
+
+.pm-card {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f4f7e9
+  );
+  border-radius: 22px;
+  overflow: visible; /* ⭐ 버튼 클릭 불가 문제 해결 핵심 */
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+  transition: 0.35s ease;
+  position: relative;
+  z-index: 1; /* 버튼 클릭 우선권 확보 */
+}
+
+.pm-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.12);
+}
+
+.pm-card-img-wrap {
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pm-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pm-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: 0 !important;
+  color: #fff;
+}
+
+.badge-crop {
+  background: #8ecf3a;
+}
+
+.badge-device {
+  background: #6a98ff;
+}
+
+.badge-service {
+  background: #b777ff;
+}
+
+.pm-card-body {
+  padding: 20px;
+}
+
+.pm-card-title {
+  font-size: 18px;
+  color: #253126;
+  margin-bottom: 4px;
+}
+
+.pm-card-sub {
+  color: #616e57;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.pm-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.pm-price {
+  color: #253126;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.pm-unit {
+  font-size: 12px;
+  color: #8a8f7b;
+}
+
+.pm-stock {
+  color: #fff !important;
+}
+
+.stock-low {
+  background: #ff5555 !important;
+}
+
+.stock-mid {
+  background: #ffa500 !important;
+}
+
+.stock-high {
+  background: #8ecf3a !important;
+}
+
+.pm-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  position: relative;
+  z-index: 10; /* ⭐ hover 시 버튼 클릭 보장 */
+}
+
+.pm-edit-btn {
+  border-color: #cdd9b7 !important;
+  color: #253126 !important;
+}
+
+.pm-delete-btn {
+  border-color: #ff5555 !important;
+  color: #ff5555 !important;
+}
+
+/* -------------------------------- */
+/* DIALOG (모달) */
+/* -------------------------------- */
+
+.pm-dialog {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f6ffd9
+  ) !important;
+  border-radius: 20px !important;
+  border: 1px solid #d6e2c3 !important;
+  color: #253126;
+  z-index: 99999 !important; /* ⭐ 모달이 버튼 위로 반드시 올라오도록 */
+  position: relative;
+}
+
+.pm-dialog-grid {
+  margin-top: 24px;
+  display: grid;
+  gap: 16px;
+}
+
+.pm-input,
+.pm-select {
+  background: rgba(
+    255,
+    255,
+    255,
+    0.65
+  ) !important;
+  border: 1px solid #cdd9b7 !important;
+  color: #253126 !important;
+}
+
+.pm-select {
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.pm-submit-btn {
+  width: 100%;
+  margin-top: 12px;
+  background: linear-gradient(
+    135deg,
+    #acda00,
+    #8bbb00
+  ) !important;
+  color: #253126 !important;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+/* ============================= */
+/*   Dialog (shadcn) FIX 필수     */
+/* ============================= */
+
+/* 모달 배경 (Overlay) */
+[data-radix-dialog-overlay] {
+  position: fixed;
+  inset: 0;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.45
+  ); /* 뒤 배경 어둡게 */
+  backdrop-filter: blur(2px);
+  z-index: 99990 !important;
+}
+
+/* 모달 본체 (Content) */
+[data-radix-dialog-content] {
+  position: fixed !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99999 !important;
+  max-height: 90vh;
+  overflow-y: auto; /* 모달 스크롤 가능 */
+}
