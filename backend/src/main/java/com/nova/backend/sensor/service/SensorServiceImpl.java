@@ -40,8 +40,8 @@ public class SensorServiceImpl implements SensorService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Farm"));
         SensorCurrentDTO sensorDTO = objectMapper.readValue(payload, SensorCurrentDTO.class);
         SensorLogEntity sensorLog = modelMapper.map(sensorDTO, SensorLogEntity.class);
-        sensorLog.setFarm(farm);
-        saveSensorLog(sensorLog);
+        sensorLog.setFarm(farm); // farm 찾기
+        saveSensorLog(sensorLog); // 디비에 저장
     }
 
     @Override
