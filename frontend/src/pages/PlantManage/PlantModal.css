@@ -369,7 +369,7 @@
 .toast-container {
   position: fixed;
   top: 20px;
-  right: 60px;
+  right: 300px;
   display: flex;
   flex-direction: column;
   gap: 10px;

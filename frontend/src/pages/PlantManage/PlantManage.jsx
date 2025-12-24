@@ -43,6 +43,7 @@ function PlantManage() {
       // Nova 리스트 가져오기
       const novaData = await getNovaList(user.userId);
       setNovaList(novaData);
+      console.log(novaData);
 
       let targetNova = selectedNova; // 현재 선택된 것 유지
 
