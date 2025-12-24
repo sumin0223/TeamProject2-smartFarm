@@ -98,10 +98,18 @@
 .alarm-item.unread {
   border-left: 4px solid #22c55e;
 }
+.alarm-item.unread .alarm-title {
+  font-weight: 600;
+  color: #222;
+}
 
 /* 읽은 알람 */
 .alarm-item.read {
   opacity: 0.6;
+}
+.alarm-item.read .alarm-title {
+  font-weight: 400;
+  color: #888;
 }
 
 /* ===== 좌측 (상태) ===== */
@@ -117,11 +125,20 @@
   background: #22c55e;
   border-radius: 50%;
 }
+.alarm-item.read .unread-dot {
+  display: none;
+}
 
 /* ===== 중앙 (내용) ===== */
 .alarm-content {
   flex: 1;
   padding: 0 12px;
+}
+
+.alarm-farm {
+  font-size: 12px;
+  color: #8b8b8b;
+  margin-bottom: 4px;
 }
 
 .alarm-title {

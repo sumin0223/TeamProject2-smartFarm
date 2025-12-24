@@ -1,5 +1,5 @@
 // src/components/dashboard/PresetInfo.jsx
-import { useState, useEffect, useMemo } from "react";
+import { useState } from "react";
 import "./PresetInfo.css";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "./icons/NavIcons";
@@ -37,7 +37,7 @@ export default function PresetInfo({ presetSteps = [], activePresetStepId }) {
     { icon: <TempIcon />, label: "Temperature", key: "temp", unit: "℃" },
     { icon: <HumIcon />, label: "Humidity", key: "humidity", unit: "%" },
     { icon: <SoilIcon />, label: "Soil Moisture", key: "soilMoisture", unit: "%" },
-    { icon: <LightIcon />, label: "Light", key: "lightPower", unit: "lx" },
+    { icon: <LightIcon />, label: "Light", key: "lightPower", unit: "%" },
     { icon: <Co2Icon />, label: "CO₂", key: "co2", unit: "ppm" },
   ];
 
@@ -55,9 +55,9 @@ export default function PresetInfo({ presetSteps = [], activePresetStepId }) {
 
         <div className="preset-info">
           {/* 표시용 +1만 */}
-          <h3>{`Step ${Number(current.growthStep) + 1}`}</h3>
+          <h3>{`Step ${Number(current.growthStep)}`}</h3>
           <span className="step-count">
-            {Number(current.growthStep) + 1} / {totalSteps}
+            {Number(current.growthStep)} / {totalSteps}
           </span>
           <span className="days">{current.periodDays} days</span>
         </div>
