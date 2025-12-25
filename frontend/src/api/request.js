@@ -17,11 +17,34 @@ const requests = {
   getAllAlarms: "/alarm/all",
   getUnreadAlarms: "/alarm/unread",
   readAllAlarms: "/alarm/read-all",
-  getAlarmPage: "/alarm/page",
-  readAlarms: "/alarm/read",
-  dashboardAlarms: "/alarm/dashboard",
-  readDashboardTodayAll: "/alarm/dashboard/today/read-all",
-  readDashboardPreviousAll: "/alarm/dashboard/previous/read-all",
+
+  /* ===== PRODUCT (USER) ===== */
+  productList: "/products",
+  productDetail: (productId) =>
+    `/products/${productId}`,
+
+  /* ===== PRODUCT (ADMIN) ===== */
+  adminProductList: "/admin/products",
+  adminProductDetail: (productId) =>
+    `/admin/products/${productId}`,
+
+  /* ===== CART ===== */
+  // cartAdd: "/api/cart/items",
+  // cartRemove: "/api/cart/remove",
+  // cartUpdate: "/api/cart/update",
+  // cartClear: "/api/cart/clear",
+  // cartList: "/api/cart/items",
+
+  /* ===== CHECKOUT ===== */
+  checkoutDirect: "/checkout/direct",
+  checkoutFromCart: "/checkout/cart",
+
+  /* ===== KAKAO PAY ===== */
+  kakaoPayReady: "/payment/kakao/ready",
+  kakaoPayApprove: "/payment/kakao/approve",
+  kakaoPaySuccess: "/payment/kakao/success",
+  kakaoPayCancel: "/payment/kakao/cancel",
+  kakaoPayFail: "/payment/kakao/fail",
 };
 
 export default requests;

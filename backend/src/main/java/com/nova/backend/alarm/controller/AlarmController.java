@@ -1,13 +1,9 @@
 package com.nova.backend.alarm.controller;
 
 import com.nova.backend.alarm.dto.AlarmResponseDTO;
-import com.nova.backend.alarm.dto.DashboardAlarmResponse;
 import com.nova.backend.alarm.service.AlarmService;
-import com.nova.backend.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,27 +23,6 @@ public class AlarmController {
         return ResponseEntity.ok(
                 alarmService.getUnreadAlarms(farmId)
         );
-    }
-
-    @GetMapping("/dashboard")
-    public ResponseEntity<DashboardAlarmResponse> getDashboardAlarms(
-            @RequestParam Long farmId
-    ) {
-        return ResponseEntity.ok(
-                alarmService.getDashboardAlarm(farmId)
-        );
-    }
-
-    @PostMapping("/dashboard/today/read-all")
-    public ResponseEntity<Void> readDashboardToday(@RequestParam Long farmId) {
-        alarmService.readDashboardTodayAlarms(farmId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/dashboard/previous/read-all")
-    public ResponseEntity<Void> readDashboardPrevious(@RequestParam Long farmId) {
-        alarmService.readDashboardPreviousAlarms(farmId);
-        return ResponseEntity.ok().build();
     }
 
     // 대시보드 최근 알람 10개
@@ -70,19 +45,6 @@ public class AlarmController {
         );
     }
 
-    @GetMapping("/page")
-    public ResponseEntity<List<AlarmResponseDTO>> getUserAlarms(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam(required = false) String alarmType,
-            @RequestParam(required = false) Boolean isRead,
-            @RequestParam(required = false) Long farmId
-    ) {
-        Long userId = userDetails.getUser().getUserId();
-        return ResponseEntity.ok(
-                alarmService.getUserAlarmPage(userId, alarmType, isRead)
-        );
-    }
-
     // 전체 알람 (알람 탭)
     @GetMapping("/all")
     public ResponseEntity<List<AlarmResponseDTO>> getAllAlarms(
@@ -93,12 +55,12 @@ public class AlarmController {
         );
     }
 
-    // 알람 전체 읽음
+    // 팜 알람 전체 읽음
     @PatchMapping("/read-all")
-    public ResponseEntity<Void> readAllAlarms(Authentication authentication) {
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Long userId = userDetails.getUser().getUserId();
-        alarmService.readAllAlarms(userId);
+    public ResponseEntity<Void> readAllAlarms(
+            @RequestParam Long farmId
+    ) {
+        alarmService.readAllAlarms(farmId);
         return ResponseEntity.ok().build();
     }
 
@@ -106,19 +68,11 @@ public class AlarmController {
     @GetMapping("/page/read-status")
     public ResponseEntity<List<AlarmResponseDTO>> getAlarmsByReadStatus(
             @RequestParam Long farmId,
-            @RequestParam(required = false) Boolean isRead
+            @RequestParam boolean isRead
     ) {
         return ResponseEntity.ok(
                 alarmService.getAlarmsByReadStatus(farmId, isRead)
         );
-    }
-    // 단건 읽음 처리
-    @PatchMapping("/read")
-    public ResponseEntity<Void> readAlarm(
-            @RequestParam Long alarmId
-    ) {
-        alarmService.readAlarm(alarmId);
-        return ResponseEntity.ok().build();
     }
 
     // 🔹 알람 페이지 - 타입별 (SENSOR / EVENT 등)
@@ -137,7 +91,7 @@ public class AlarmController {
     public ResponseEntity<List<AlarmResponseDTO>> getAlarmsByTypeAndRead(
             @RequestParam Long farmId,
             @RequestParam String alarmType,
-            @RequestParam(required = false) Boolean isRead
+            @RequestParam boolean isRead
     ) {
         return ResponseEntity.ok(
                 alarmService.getAlarmPageAlarmsByTypeAndRead(

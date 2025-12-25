@@ -1,5 +1,6 @@
 package com.nova.backend.config;
 
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import com.nova.backend.security.CustomAuthenticationProvider;
 import com.nova.backend.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -52,10 +53,18 @@ public class SecurityConfig {
                                 "/api/users/check-loginid",
                                 "/api/users/find-id",
                                 "/api/users/email/**",
-                                "/api/users/password/**"
+                                "/api/users/password/**",
+                                "/products/**"  // 상품
+
                         ).permitAll()
+
+                        // 🔐 카트는 인증 필요
+                        .requestMatchers("/api/cart/**").authenticated()
+
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()
+
+
                 );
 
         return http.build();

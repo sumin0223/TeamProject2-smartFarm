@@ -1,6 +1,11 @@
+server:
+  port: 8080
+
+
 spring:
-  config:
-    import: classpath:security.yaml
+
+  #config:
+    # import: classpath:security.yaml
   mqtt:
     url: tcp://localhost:1883    # 브로커 주소
     #    username: myUser             # (선택) 계정
@@ -32,8 +37,8 @@ spring:
     show-sql: true
     hibernate:
       #      ddl-auto: create
-      ddl-auto: none
-    #      ddl-auto: update
+    #   ddl-auto: none
+          ddl-auto: update
     defer-datasource-initialization: true
     properties:
       hibernate:
@@ -43,10 +48,15 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
+    username: eddynimo417@gmail.com # 빈칸처리
+    password: aonqyrmarvcpfhab # 빈칸처리
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
-solapi: {}
+solapi:
+  api-key: NCSO6XI63WWYTJQC # 빈칸처리
+  api-secret: 828LDKYSOGWMSSYUSJJTVCEPSG05VOXO # 빈칸처리
+  from-number: 010-4063-1565   # 발신번호 인증한 번호, 빈칸처리

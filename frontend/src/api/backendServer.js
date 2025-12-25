@@ -1,7 +1,7 @@
 // src/api/backendServer.js
 import axios from "axios";
 
-export const API_SERVER_HOST = "http://127.0.0.1:8080";
+export const API_SERVER_HOST = "http://localhost:8080";
 
 const backendServer = axios.create({
   baseURL: API_SERVER_HOST,
@@ -21,7 +21,9 @@ backendServer.interceptors.request.use(
       "/api/users/email",
     ];
 
-    const isNoAuth = noAuthUrls.some((url) => config.url.startsWith(url));
+    const isNoAuth = noAuthUrls.some((url) =>
+      config.url.startsWith(url)
+    );
 
     if (!isNoAuth) {
       const user = localStorage.getItem("user");

@@ -2,11 +2,6 @@
 import { useState, useEffect } from "react";
 import { getDashboard } from "../../api/dashboard/dashboardAPI";
 import { waterPlant } from "../../api/dashboard/actuatorAPI";
-import {
-  getDashboardAlarms,
-  readDashboardTodayAll,
-  readDashboardPreviousAll,
-} from "../../api/alarm/DashboardAlarmAPI";
 // import { transformSensorLog } from "../../api/utils/sensorTransform";
 import "./PlantModal.css";
 
@@ -21,10 +16,6 @@ import AlertSection from "../../components/dashboard/alerts/AlertSection";
 
 function PlantModal({ farmId, onClose }) {
   const [dashboard, setDashboard] = useState(null);
-  const [todayAlarms, setTodayAlarms] = useState([]);
-  const [previousAlarms, setPreviousAlarms] = useState([]);
-  const [readingAllToday, setReadingAllToday] = useState(false);
-  const [readingAllPrevious, setReadingAllPrevious] = useState(false);
 
   /* ------------------- 팝업 알림 ------------------- */
   const [alerts, setAlerts] = useState([]);
@@ -53,6 +44,7 @@ function PlantModal({ farmId, onClose }) {
         console.log("🔥 history", dashboardData.history);
         console.log("🔥 preset", dashboardData.preset);
         console.log("🔥 actuators", dashboardData.actuators);
+        console.log("🔥 alarms", dashboardData.alarms);
         setDashboard(dashboardData);
       } catch (e) {
         console.error("dashboard api error", e);
@@ -63,61 +55,18 @@ function PlantModal({ farmId, onClose }) {
   }, [farmId]);
 
   useEffect(() => {
-    if (!farmId) return;
-
-    const fetchAlarms = async () => {
-      try {
-        const data = await getDashboardAlarms(farmId);
-        setTodayAlarms(data.todayAlarms ?? []);
-        setPreviousAlarms(data.previousAlarms ?? []);
-      } catch (e) {
-        console.error("dashboard alarm error", e);
-      }
-    };
-
-    fetchAlarms();
-  }, [farmId]);
-
-  // 단건 읽은 알람 제거 (오늘 / 이전 공통)
-  const handleDashboardAlarmRead = (alarmId) => {
-    setTodayAlarms((prev) => prev.filter((a) => a.alarmId !== alarmId));
-    setPreviousAlarms((prev) => prev.filter((a) => a.alarmId !== alarmId));
-  };
-
-  // 오늘 알람 전체 읽음
-  const handleReadTodayAll = async () => {
-    try {
-      setTodayAlarms((prev) => prev.map((a) => ({ ...a, isRead: true })));
-      setReadingAllToday(true);
-      setTimeout(() => {
-        setTodayAlarms([]);
-        setReadingAllToday(false);
-      }, 2000);
-      await readDashboardTodayAll(farmId);
-      const data = await getDashboardAlarms(farmId);
-      setTodayAlarms(data.todayAlarms);
-      setPreviousAlarms(data.previousAlarms);
-    } catch (e) {
-      console.error("오늘 알림 전체 읽음 실패", e);
-    }
-  };
-
-  const handleReadPreviousAll = async () => {
-    try {
-      setPreviousAlarms((prev) => prev.map((a) => ({ ...a, isRead: true })));
-
-      setTimeout(() => {
-        setPreviousAlarms([]);
-        setReadingAllPrevious(false);
-      }, 2000);
-      await readDashboardPreviousAll(farmId);
-      const data = await getDashboardAlarms(farmId);
-      setTodayAlarms(data.todayAlarms);
-      setPreviousAlarms(data.previousAlarms);
-    } catch (e) {
-      console.error("이전 알림 전체 읽음 실패", e);
-    }
-  };
+    if (!dashboard?.alarms?.length) return;
+    const latest = dashboard.alarms[0];
+    const t = setTimeout(() => {
+      pushAlert({
+        type: "sensor",
+        title: latest.title,
+        message: latest.message,
+      });
+    }, 0);
+    // cleanup
+    return () => clearTimeout(t);
+  }, [dashboard]);
 
   // 아직 데이터 없으면 로딩 처리
   if (!dashboard) {
@@ -139,7 +88,7 @@ function PlantModal({ farmId, onClose }) {
   const sensor_history = dashboard.history ?? {};
   // const preset_step = dashboard.preset ?? {}; // (PresetInfoDTO 구조에 맞춰서)
   const activeStep = dashboard.preset ?? {};
-  // const plant_alarm = dashboard.alarms ?? [];
+  const plant_alarm = dashboard.alarms ?? [];
   const actuator_log = dashboard.actuators ?? [];
 
   const mappedSensor = {
@@ -267,15 +216,7 @@ function PlantModal({ farmId, onClose }) {
             <h3 className="section-title">최근 알람</h3>
 
             <div className="alarm-2grid">
-              <AlertSection
-                todayAlerts={todayAlarms}
-                pastAlerts={previousAlarms}
-                onReadAlarm={handleDashboardAlarmRead}
-                onReadTodayAll={handleReadTodayAll}
-                onReadPreviousAll={handleReadPreviousAll}
-                readingAllToday={readingAllToday}
-                readingAllPrevious={readingAllPrevious}
-              />
+              <AlertSection plant_alarm={plant_alarm} />
             </div>
           </div>
 

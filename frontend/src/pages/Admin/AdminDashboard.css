@@ -1,0 +1,208 @@
+/* ====== 전체 레이아웃 ====== */
+.admin-container {
+  min-height: 100vh;
+  background: #0f172b;
+}
+
+/* ====== 헤더 ====== */
+.admin-header {
+  background: #1d293d;
+  border-bottom: 1px solid #314158;
+}
+
+.admin-header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #155dfc, #9810fa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-header-icon-svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+}
+
+.admin-title {
+  color: #fff;
+  font-size: 20px;
+}
+
+.admin-subtitle {
+  color: #90a1b9;
+  font-size: 14px;
+}
+
+/* ====== 로그아웃 버튼 ====== */
+.admin-logout-btn {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.admin-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.logout-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+}
+
+/* ====== 콘텐츠 ====== */
+.admin-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+/* ===== 카드 그리드 ===== */
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+/* ===== 카드 ===== */
+.admin-card {
+  background: #1d293d;
+  border: 1px solid #314158;
+  border-radius: 16px;
+  padding: 24px;
+  transition: 0.2s;
+}
+
+.admin-card:hover {
+  border-color: #51a2ff;
+}
+
+.admin-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.admin-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bg-blue { background: rgba(81, 162, 255, 0.2); }
+.bg-green { background: rgba(5, 223, 114, 0.2); }
+.bg-purple { background: rgba(194, 122, 255, 0.2); }
+.bg-orange { background: rgba(255, 165, 0, 0.2); }
+
+.icon-blue { color: #51a2ff; width: 24px; height: 24px; }
+.icon-green { color: #05df72; width: 24px; height: 24px; }
+.icon-purple { color: #c27aff; width: 24px; height: 24px; }
+.icon-orange { color: #ffa500; width: 24px; height: 24px; }
+
+.badge {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: white;
+}
+
+.badge.blue { background: #51a2ff; }
+.badge.green { background: #05df72; }
+.badge.orange { background: #ffa500; }
+
+.admin-card-label {
+  color: #90a1b9;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.admin-card-value {
+  color: white;
+  font-size: 32px;
+}
+
+.admin-card-subtext {
+  color: #62748e;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* ===== 빠른 액션 버튼 ===== */
+.admin-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.admin-action-btn {
+  background: #1d293d;
+  border: 1px solid #314158;
+  border-radius: 16px;
+  padding: 32px;
+  text-align: left;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.admin-action-btn:hover {
+  border-color: #51a2ff;
+}
+
+.admin-action-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(to right, #155dfc, #9810fa);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.action-svg {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.admin-action-title {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.admin-action-text {
+  color: #90a1b9;
+  font-size: 16px;
+}

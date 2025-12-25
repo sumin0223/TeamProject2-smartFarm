@@ -53,10 +53,19 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token); // 여기서 검증됨
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            // 토큰 위조, 만료, 형식 오류 등
-            return false;
+        } catch (ExpiredJwtException e) {
+            System.out.println("JWT 만료됨: " + e.getMessage());
+        } catch (MalformedJwtException e) {
+            System.out.println("JWT 형식 오류: " + e.getMessage());
+        } catch (SignatureException e) {
+            System.out.println("JWT 서명 불일치: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("JWT 토큰이 비어있거나 잘못됨: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("기타 JWT 오류: " + e.getMessage());
+        }
+        return false;
         }
     }
 
-}
+

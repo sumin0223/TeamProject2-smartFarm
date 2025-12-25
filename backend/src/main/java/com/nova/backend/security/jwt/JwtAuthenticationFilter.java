@@ -23,6 +23,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
+
+
         String uri = request.getRequestURI();
 
         return uri.startsWith("/api/users/login")
