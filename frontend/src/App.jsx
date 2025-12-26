@@ -50,9 +50,11 @@ function App() {
         <Route
           path="/plants"
           element={
-            <BasicLayout>
-              <PlantManage />
-            </BasicLayout>
+            <ProtectedRoute>
+              <BasicLayout>
+                <PlantManage />
+              </BasicLayout>
+            </ProtectedRoute>
           }
         />
 
@@ -86,6 +88,7 @@ function App() {
         {/* 테스트 / 관리자 */}
         <Route path="/wootest" element={<TestHome />} />
         <Route path="/admin" element={<AdminHome />} />
+
         {/* 알람관리 */}
         <Route
           path="/alarm"
