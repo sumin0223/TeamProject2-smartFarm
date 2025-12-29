@@ -1,5 +1,6 @@
 // src/pages/PlantModal/PlantModal.jsx
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getDashboard } from "../../api/dashboard/dashboardAPI";
 import { waterPlant } from "../../api/dashboard/actuatorAPI";
 import {
@@ -7,6 +8,8 @@ import {
   readDashboardTodayAll,
   readDashboardPreviousAll,
 } from "../../api/alarm/DashboardAlarmAPI";
+import { useAlarm } from "../../sse/AlarmContext";
+import { hasSeenPopupAlarm, markPopupAlarmSeen } from "../../api/utils/popupAlarmStorage";
 // import { transformSensorLog } from "../../api/utils/sensorTransform";
 import "./PlantModal.css";
 
@@ -29,8 +32,15 @@ function PlantModal({ farmId, onClose }) {
   /* ------------------- 팝업 알림 ------------------- */
   const [alerts, setAlerts] = useState([]);
 
+  const { alarms: realtimeAlarms } = useAlarm();
+
+  const navigate = useNavigate();
+
   function pushAlert(alert) {
-    setAlerts((prev) => [...prev, { id: Date.now(), ...alert }]);
+    setAlerts((prev) => [...prev, alert]);
+    setTimeout(() => {
+      setAlerts((prev) => prev.filter((a) => a.id !== alert.id));
+    }, 10000);
   }
   function removeAlert(id) {
     setAlerts((prev) => prev.filter((a) => a.id !== id));
@@ -78,6 +88,66 @@ function PlantModal({ farmId, onClose }) {
     fetchAlarms();
   }, [farmId]);
 
+  // 실시간 알림 반영 useEffect
+  useEffect(() => {
+    if (realtimeAlarms.length === 0) return;
+
+    const latest = realtimeAlarms[0]; // sse는 한 번에 하나(특성)
+    console.log("🧪 latest from SSE:", latest);
+    console.log("🧪 latest keys:", Object.keys(latest));
+    console.log("🧪 current farmId:", farmId);
+    // farmId 다른 알림은 무시
+    if (latest.farmId !== farmId) return;
+    // 이미 팝업으로 보여준 알람이면 무시
+    if (hasSeenPopupAlarm(latest.alarmId)) return;
+
+    // 오늘, 이전 분리하기
+    const created = new Date(latest.createdAt);
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
+    if (created >= todayStart) {
+      setTodayAlarms((prev) => {
+        // 중복 방지 (최신 state 기준)
+        if (prev.some((a) => a.alarmId === latest.alarmId)) return prev;
+        return [latest, ...prev].slice(0, 10);
+      });
+    } else {
+      setPreviousAlarms((prev) => {
+        if (prev.some((a) => a.alarmId === latest.alarmId)) return prev;
+        return [latest, ...prev].slice(0, 10);
+      });
+    }
+    pushAlert({
+      id: `${latest.alarmId}-${latest.createdAt}`,
+      type: "sensor" | "water" | "error" | "actuator" | "preset",
+      title: latest.title,
+      message: latest.message,
+    });
+    // 다시 안 뜨도록 기록
+    markPopupAlarmSeen(latest.alarmId);
+
+    getDashboard(farmId).then(setDashboard);
+  }, [realtimeAlarms, farmId]);
+
+  // 센서바, 엑추상태 적용할 polling useEffect
+  // sse대신에 지정 시간(약 30~60초) 간격으로 풀링해서 대시보드에 보여주기 - 시연해야됨
+  // 시연용으로는 30초면 실제로는 1시간으로 변경하면 됨 ~!
+  useEffect(() => {
+    if (!farmId) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const data = await getDashboard(farmId);
+        setDashboard(data); // current_sensor 갱신
+      } catch (e) {
+        console.error("sensor refresh error", e);
+      }
+    }, 5000); // 5초
+
+    return () => clearInterval(interval);
+  }, [farmId]);
+
   // 단건 읽은 알람 제거 (오늘 / 이전 공통)
   const handleDashboardAlarmRead = (alarmId) => {
     setTodayAlarms((prev) => prev.filter((a) => a.alarmId !== alarmId));
@@ -87,18 +157,18 @@ function PlantModal({ farmId, onClose }) {
   // 오늘 알람 전체 읽음
   const handleReadTodayAll = async () => {
     try {
-      setTodayAlarms((prev) => prev.map((a) => ({ ...a, isRead: true })));
       setReadingAllToday(true);
-      setTimeout(() => {
-        setTodayAlarms([]);
-        setReadingAllToday(false);
-      }, 2000);
+      setTodayAlarms((prev) => prev.map((a) => ({ ...a, isRead: true })));
       await readDashboardTodayAll(farmId);
-      const data = await getDashboardAlarms(farmId);
-      setTodayAlarms(data.todayAlarms);
-      setPreviousAlarms(data.previousAlarms);
+      setTimeout(async () => {
+        const data = await getDashboardAlarms(farmId);
+        setTodayAlarms(data.todayAlarms);
+        setPreviousAlarms(data.previousAlarms);
+        setReadingAllToday(false);
+      }, 350);
     } catch (e) {
       console.error("오늘 알림 전체 읽음 실패", e);
+      setReadingAllToday(false);
     }
   };
 
@@ -276,6 +346,9 @@ function PlantModal({ farmId, onClose }) {
                 readingAllToday={readingAllToday}
                 readingAllPrevious={readingAllPrevious}
               />
+              <button className="alarm-more-btn" onClick={() => navigate("/alarm")}>
+                알림 더보기
+              </button>
             </div>
           </div>
 

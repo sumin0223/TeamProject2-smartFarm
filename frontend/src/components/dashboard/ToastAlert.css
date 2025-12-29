@@ -16,6 +16,7 @@
   inline-size: max-content; /* 🔥 핵심 */
   max-inline-size: 500px; /* 너무 길어지는 것 방지 */
   min-inline-size: 180px;
+  background: #76a74f;
 }
 
 /* 색상 테마 */
