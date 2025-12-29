@@ -4,6 +4,7 @@ import { getAlarmPage } from "../../api/alarm/AlarmPageAPI";
 import { readAllAlarms } from "../../api/alarm/AlarmPageAPI";
 import { readAlarms } from "../../api/alarm/AlarmPageAPI";
 import { formatDateTime } from "./dateFormat";
+import { useAlarm } from "../../sse/AlarmContext";
 
 function AlarmPage() {
   // 1차 탭: 전체 / 센서 / 이벤트
@@ -20,6 +21,9 @@ function AlarmPage() {
 
   // 단건 읽음 처리 시 css 잠시 보여주고 상태 이동 (읽은 알림으로)
   const [animatingId, setAnimatingId] = useState(null);
+
+  // SSE로 “새로 들어온 알람들만” 쌓이는 배열
+  const { alarms: realtimeAlarms } = useAlarm();
 
   const getIsReadParam = () => {
     if (readFilter === "all") return null;
@@ -95,6 +99,44 @@ function AlarmPage() {
     if (animatingId !== null) return;
     fetchAlarms();
   }, [selectedType, readFilter]);
+
+  /** ======================
+   * SSE 실시간 알림 반영
+   * ====================== */
+  useEffect(() => {
+    if (!realtimeAlarms.length) return;
+
+    const latest = realtimeAlarms[0];
+
+    setAlarms((prev) => {
+      // 중복 방지
+      if (prev.some((a) => a.alarmId === latest.alarmId)) {
+        return prev;
+      }
+
+      // 현재 탭 조건 검사
+      const isUnreadTab = readFilter === "unread";
+      const isReadTab = readFilter === "read";
+
+      // 안읽은 탭인데 읽은 알림이면 무시
+      if (isUnreadTab && latest.isRead === true) {
+        return prev;
+      }
+
+      // 읽은 탭인데 안읽은 알림이면 무시
+      if (isReadTab && latest.isRead === false) {
+        return prev;
+      }
+
+      // 타입 필터 검사
+      if (selectedType !== "ALL" && latest.alarmType !== selectedType) {
+        return prev;
+      }
+
+      // 조건 통과 → 맨 위에 추가
+      return [latest, ...prev];
+    });
+  }, [realtimeAlarms]);
 
   useEffect(() => {
     console.log(
