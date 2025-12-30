@@ -33,6 +33,7 @@ public class ActuatorController {
             @RequestParam Long farmId,
             @RequestBody(required = false) WateringRequestDTO request
     ) {
+        System.out.println("✅ [Controller] waterPlant 호출됨 farmId=" + farmId);
         return ResponseEntity.ok(
                 actuatorService.waterPlant(farmId, request)
         );
