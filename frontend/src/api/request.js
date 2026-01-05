@@ -25,6 +25,35 @@ const requests = {
   dashboardAlarms: "/alarm/dashboard",
   readDashboardTodayAll: "/alarm/dashboard/today/read-all",
   readDashboardPreviousAll: "/alarm/dashboard/previous/read-all",
+
+    /* ===== PRODUCT (USER) ===== */
+    productList: "/api/products",
+    productDetail: (productId) =>
+      `/products/${productId}`,
+
+    /* ===== PRODUCT (ADMIN) ===== */
+    adminProductList: "/api/admin/products",
+    adminProductDetail: (productId) =>
+      `/admin/products/${productId}`,
+
+    /* ===== CART ===== */
+    cartItems: "/api/cart/items",
+    addCartItem: "/api/cart/items",
+    updateCartItemQuantity: (cartItemId) =>
+      `/api/cart/items/${cartItemId}`,
+    deleteCartItem: (cartItemId) =>
+      `/api/cart/items/${cartItemId}`,
+    clearCart: "/api/cart/clear",
+
+
+      /* ===== ORDER ===== */
+      orderCreate: "/api/order",
+      orderList: "/api/order/orders",
+      orderDetail: (orderUid) => `/api/order/${orderUid}`,
+
+
+      /* ===== PAYMENT ===== */
+      paymentConfirm: "/api/payment",
 };
 
 export default requests;
