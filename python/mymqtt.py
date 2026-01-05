@@ -15,7 +15,7 @@ import time
 sub_topics = [
     ("+/+/LED",1),
     ("+/+/FAN",1),
-    ("+/+/HUMI",1),
+    ("+/+/HUMIDIFIER",1),
     ("+/+/PUMP",1),
     ("+/+/HEATER",1),
     ("+/+/BLIND",1),
@@ -50,8 +50,8 @@ class MqttWorker:
         self.pump = Pump() # 물 펌프
         self.led = Actuator(13) # P.13 핀에 LED
         self.fan = Actuator(21) # P.21 핀에 FAN
-        self.humidifier = Actuator(10) # P.10 핀에 가습기
-        self.blind = Blind() # 서보모터 (블라인드)
+        self.humidifier = Actuator(20) # P.20 핀에 가습기
+        self.blind = Blind(16) # 서보모터 p.16 핀 (블라인드)
         self.heater = Heater(12)    # 히터 (P.12 핀)
         
         # 타임랩스 카메라 객체 생성
@@ -95,15 +95,13 @@ class MqttWorker:
                 self.led.control_msg(data)
             elif topicArr[2] == "FAN":
                 self.fan.control_msg(data)
-            elif topicArr[2] == "HUMI":
+                self.led.control_msg(data)  # FAN 제어 시 LED도 함께 제어
+            elif topicArr[2] == "HUMIDIFIER":
                 self.humidifier.control_msg(data)
             elif topicArr[2] == "BLIND":
                 self.blind.on_message(data)
             elif topicArr[2] == "PUMP":
-                print(my_val)
-                # if my_val == "pump_on":
-                #     print("웹 요청으로 펌프 작동")
-                #     self.pump.run_pump()
+                self.pump.run_pump()
             elif topicArr[2] == "HEATER":
                 data = json.loads(my_val)
                 action = data.get("action", "").upper()

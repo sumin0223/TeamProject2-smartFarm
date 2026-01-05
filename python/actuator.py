@@ -31,3 +31,13 @@ class Actuator:
 
     def clean(self):
         GPIO.cleanup()
+
+
+if __name__ == "__main__":
+    actuator = Actuator(20)
+    try:
+        while True:
+            actuator.onTime(2)
+            time.sleep(1)
+    except KeyboardInterrupt:
+        actuator.clean()
