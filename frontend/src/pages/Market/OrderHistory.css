@@ -1,0 +1,505 @@
+/* ============================
+   OrderHistory.css
+   home.css 스타일 톤 100% 적용
+   구조화된 순수 CSS + kebab-case
+============================ */
+
+/* =========================
+   전체 페이지 (PAGE WRAPPER)
+========================= */
+.order-history-page {
+  width: 100%;
+  /* max-width: 1200px;  카트 헤더와 동일하게 -> 에러의 원인 */
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 20px;
+
+  font-family: "Pretendard", sans-serif;
+  color: #253126;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.035) 1.5px,
+      transparent 1.5px
+    )
+    0 0 / 40px 40px,
+    #f7ffe8;
+}
+
+
+/* =========================
+   HEADER 
+========================= */
+.order-header {
+  position: sticky;
+  top: 10px;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f7fbe8 40%,
+    #f4f2e1 100%
+  );
+  padding: 14px 22px;
+  border-radius: 18px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+}
+
+.order-header-inner {
+  position: relative;
+  display: flex;
+  justify-content: center; /* 타이틀 항상 중앙 */
+  align-items: center;
+}
+
+.order-header-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #253126;
+}
+
+/* 뒤로가기 버튼 (cart-back-btn 동일 동작) */
+.order-back-btn {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #0f2e0f;
+  border: 1px solid #1a4d1a;
+  color: #4ade80;
+  padding: 6px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.25s;
+}
+
+.order-back-btn:hover {
+  transform: translateY(-50%) scale(1.05);
+  border-color: #22c55e;
+  box-shadow: 0 0 12px #16a34a60;
+}
+
+
+/* 비어있을 때 */
+.order-empty {
+  max-width: 1200px;   /* 🔥 이 한 줄이 핵심 */
+  margin: 0 auto;      /* 중앙 정렬 */
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f7fbe8 40%,
+    #f4f2e1 100%
+  );
+  border-radius: 20px;
+  border: 1px solid #dbe7c9;
+}
+
+.order-empty-icon {
+  width: 42px;
+  height: 42px;
+  margin-bottom: 12px;
+}
+
+.order-empty-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #253126;
+}
+
+.order-empty-desc {
+  font-size: 14px;
+  color: #5c6d5f;
+  margin-bottom: 20px;
+}
+
+.order-empty-btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+}
+
+/* 카드/리스트 컨테이너: 헤더 폭 기준 */
+.order-list-wrapper {
+  width: 100%;
+  max-width: 1200px;   /* 헤더 폭과 동일 */
+  margin: 0 auto;      /* 중앙 정렬 */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 주문 리스트 */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;      /* 부모 컨테이너 폭 채우기 */
+}
+
+/* =========================
+   주문 카드 (hover 확대 + 그림자)
+========================= */
+.order-card {
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid #dbe7c9;
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f7fbe8 40%,
+    #f4f2e1 100%
+  );
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.order-card:hover {
+  transform: scale(1.03); /* 카드 3% 확대 */
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.15); /* 그림자 강조 */
+}
+
+/* 카드 헤더 */
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.order-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.order-id-label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.order-track-btn {
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+/* =========================
+   주문 상태 배지 (통일된 gradient + 강조)
+========================= */
+.status-pending {
+  background: linear-gradient(90deg, #fcd34d, #fbbf24);
+  color: #78350f;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-processing {
+  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+  color: #1e3a8a;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-shipping {
+  background: linear-gradient(90deg, #bbf7d0, #86efac);
+  color: #166534;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-delivered {
+  background: linear-gradient(90deg, #16a34a, #15803d);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.status-confirmed {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.status-cancelled {
+  background: linear-gradient(90deg, #fecaca, #f87171);
+  color: #7f1d1d;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-refund-requested {
+  background: linear-gradient(90deg, #fde68a, #facc15);
+  color: #78350f;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  
+}
+
+.status-refunded {
+  background: linear-gradient(90deg, #bbf7d0, #4ade80);
+  color: #065f46;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 주문한 상품 목록 */
+.order-item-grid {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.order-item {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #dbe7c9;
+}
+
+.order-item-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 1px solid #dbe7c9;
+}
+
+.order-item-info {
+  flex: 1;
+}
+
+.order-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.order-item-qty {
+  font-size: 13px;
+  color: #5c6d5f;
+  margin-bottom: 4px;
+}
+
+.order-item-price {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* 요약 정보 */
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 14px;
+  margin-top: 6px;
+  border-top: 1px solid #dbe7c9;
+}
+
+.order-summary-left p {
+  font-size: 13px;
+  color: #5c6d5f;
+}
+
+.order-total-label {
+  font-size: 13px;
+  color: #5c6d5f;
+}
+
+.order-total-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: #253126;
+}
+
+/* 액션 버튼 */
+.order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.order-confirm-btn,
+.order-review-btn,
+.order-refund-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+
+  background: #0f2e0f;
+  border: 1px solid #1a4d1a;
+  color: #4ade80;
+  transition: 0.25s ease;
+}
+
+.order-confirm-btn:hover,
+.order-review-btn:hover,
+.order-refund-btn:hover {
+  background: linear-gradient(
+    90deg,
+    #16a34a,
+    #15803d
+  );
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px #16a34a60;
+}
+
+/* 환불 모달 */
+.order-refund-modal {
+  padding: 20px;
+  border-radius: 18px !important;
+}
+
+.order-refund-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.order-refund-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.order-refund-alert {
+  padding: 14px;
+  background: #f0f3e7;
+  border: 1px solid #dbe7c9;
+  border-radius: 14px;
+}
+
+.order-refund-alert-title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.order-refund-alert-desc {
+  font-size: 13px;
+  color: #5c6d5f;
+}
+
+.order-refund-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.order-refund-textarea {
+  min-height: 110px;
+}
+
+.order-refund-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.refund-cancel-btn,
+.refund-submit-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+
+/* 오버레이 */
+.refund-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 46, 15, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* 모달 박스 */
+.refund-modal {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f7fbe8 40%,
+    #f4f2e1 100%
+  );
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* 타이틀 */
+.refund-modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* 내용 */
+.refund-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 안내 박스 */
+.refund-modal-alert {
+  background: #f0f3e7;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.refund-modal-alert-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.refund-modal-alert-desc {
+  font-size: 14px;
+  color: #5c6d5f;
+}
+
+/* 입력 */
+.refund-modal-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.refund-modal-textarea {
+  min-height: 100px;
+}
+
+/* 버튼 */
+.refund-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

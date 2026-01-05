@@ -1,0 +1,244 @@
+/* 전체 페이지 스타일 */
+.alerts-container {
+  width: 100%;
+  min-height: 100vh;
+  background: radial-gradient(
+        circle,
+        rgba(0, 0, 0, 0.06) 2px,
+        transparent 2px
+      )
+      0 0 / 40px 40px,
+    linear-gradient(
+      180deg,
+      #f5ffe8 0%,
+      #ffffff 40%,
+      #f3ffe0 100%
+    );
+  padding-bottom: 140px;
+  overflow-x: hidden;
+}
+
+/* --------------------------------------------- */
+/* Header */
+/* --------------------------------------------- */
+.alerts-header {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f0ffe0
+  );
+  border-bottom: 1px solid #d9e4c9;
+  padding: 18px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  min-width: 1200px;
+}
+
+.alerts-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #acda00;
+  color: #253126;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.back-btn:hover {
+  background: #99c200;
+}
+
+.alerts-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #253126;
+}
+
+.unread-badge {
+  background: #253126;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+.allread-btn {
+  margin-left: auto;
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #c5d2b4;
+  color: #3f4b3f;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.allread-btn:hover {
+  background: #f0f6e6;
+}
+
+/* --------------------------------------------- */
+/* Content */
+/* --------------------------------------------- */
+.alerts-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  min-width: 1200px;
+}
+
+/* --------------------------------------------- */
+/* Empty State */
+/* --------------------------------------------- */
+.alerts-empty {
+  text-align: center;
+  padding: 140px 20px;
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  color: #c7d4bf;
+  margin-bottom: 24px;
+}
+
+.empty-title {
+  font-size: 22px;
+  color: #4e5a4c;
+}
+
+.empty-sub {
+  font-size: 14px;
+  color: #7d8a76;
+  margin-bottom: 24px;
+}
+
+.shop-btn {
+  padding: 14px 30px;
+  background: #253126;
+  color: white;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  transition: 0.25s;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.shop-btn:hover {
+  background: #182018;
+}
+
+/* --------------------------------------------- */
+/* Alerts List */
+/* --------------------------------------------- */
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 카드 */
+.alert-card {
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #f7fbe8 40%,
+    #f4f2e1 100%
+  );
+  padding: 26px;
+  border-radius: 22px;
+  display: flex;
+  gap: 20px;
+  cursor: pointer;
+
+  border: 1px solid #dce5c9;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.alert-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+}
+
+.alert-unread {
+  background: #f6ffe5;
+  border-color: #cfe8a2;
+}
+
+/* 아이콘 */
+.alert-icon-box {
+  padding-top: 6px;
+}
+
+.alert-icon {
+  width: 26px;
+  height: 26px;
+  color: #6d7965;
+}
+
+/* 본문 */
+.alert-body {
+  flex: 1;
+}
+
+.alert-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.alert-title-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alert-title-box h3 {
+  font-size: 18px;
+  color: #253126;
+}
+
+.new-dot {
+  width: 10px;
+  height: 10px;
+  background: #acda00;
+  border-radius: 50%;
+}
+
+.alert-date {
+  color: #656f5b;
+  font-size: 12px;
+}
+
+.alert-message {
+  font-size: 15px;
+  color: #5a6457;
+  line-height: 1.5;
+}
+
+.order-id-badge {
+  margin-top: 12px;
+  display: inline-block;
+  background: rgba(37, 49, 38, 0.1);
+  padding: 6px 14px;
+  border-radius: 18px;
+  font-size: 13px;
+  color: #384236;
+}

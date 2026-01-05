@@ -1,0 +1,330 @@
+/* ============================
+   전체 레이아웃
+============================ */
+.order-tracking-page {
+  min-height: 100vh;
+  background: var(
+    --home-bg,
+    linear-gradient(180deg, #f9fafb, #f5f7fb)
+  );
+  padding-bottom: 60px;
+  font-family: "Pretendard", sans-serif;
+}
+
+/* ============================
+   Header
+============================ */
+.order-tracking-header {
+  background: #ffffffaa;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.order-tracking-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.order-tracking-title {
+  color: var(--text-strong);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* ============================
+   공통 카드 (feature-card)
+============================ */
+.feature-card {
+  background: var(--feature-card-bg);
+  border: 1px solid var(--border-soft);
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: var(--feature-shadow);
+}
+
+/* ============================
+   Section 카드 (history/device 스타일)
+============================ */
+.section-card {
+  background: var(--section-bg, #ffffff);
+  border: 1px solid var(--border-soft);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+/* ============================
+   주문 정보
+============================ */
+.order-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.order-info-id {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.order-info-date {
+  font-size: 14px;
+  color: var(--text-medium);
+}
+
+/* ============================
+   Progress Steps
+============================ */
+.tracking-steps-wrapper {
+  position: relative;
+  margin-top: 16px;
+}
+
+.tracking-line-background {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border-soft);
+}
+
+.tracking-line-progress {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  height: 2px;
+  background: var(--brand-gradient);
+  transition: width 0.4s ease;
+}
+
+.tracking-steps-flex {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border-width: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-icon-active {
+  background: var(--brand-gradient);
+  border-color: transparent;
+  color: #fff;
+}
+
+.step-icon-inactive {
+  background: #f1f3f8;
+  border-color: var(--border-soft);
+  color: var(--text-light);
+}
+
+.step-label {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.step-label-current {
+  color: var(--text-strong);
+}
+
+.step-current-dot {
+  margin-top: 4px;
+  width: 6px;
+  height: 6px;
+  background: var(--brand-gradient);
+  border-radius: 50%;
+}
+
+/* ============================
+   송장번호 Section
+============================ */
+.invoice-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.invoice-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--brand-purple);
+  background: rgba(194, 122, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invoice-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-bottom: 8px;
+}
+
+.invoice-code {
+  background: #f2f4f8;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 20px;
+  color: var(--brand-blue);
+}
+
+.invoice-help {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 8px;
+}
+
+/* ============================
+   배송지 정보
+============================ */
+.delivery-info-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.delivery-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border-soft);
+  background: rgba(240, 242, 248, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delivery-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-bottom: 8px;
+}
+
+.delivery-text {
+  font-size: 14px;
+  color: var(--text-medium);
+}
+
+/* ============================
+   주문 상품 리스트
+============================ */
+.order-items-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-strong);
+  margin-bottom: 16px;
+}
+
+.order-item {
+  display: flex;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.order-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.order-item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.order-item-name {
+  font-size: 16px;
+  color: var(--text-strong);
+  margin-bottom: 4px;
+}
+
+.order-item-desc {
+  font-size: 14px;
+  color: var(--text-medium);
+  margin-bottom: 4px;
+}
+
+.order-item-unit {
+  font-size: 12px;
+  color: var(--text-light);
+}
+
+.order-item-price {
+  font-size: 18px;
+  color: var(--text-strong);
+  text-align: right;
+}
+
+/* ============================
+   총 결제금액
+============================ */
+.total-price-row {
+  border-top: 1px solid var(--border-soft);
+  margin-top: 16px;
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-price-label {
+  font-size: 16px;
+  color: var(--text-medium);
+}
+
+.total-price-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+/* ============================
+   색상 변수
+============================ */
+:root {
+  --text-strong: #0f172a;
+  --text-medium: #475569;
+  --text-light: #94a3b8;
+
+  --border-soft: #e2e8f0;
+
+  --brand-blue: #3b82f6;
+  --brand-purple: #a855f7;
+
+  --brand-gradient: linear-gradient(
+    90deg,
+    #4ade80,
+    #22c55e
+  );
+
+  --feature-card-bg: #ffffffcc;
+  --section-bg: #ffffff;
+
+  --feature-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
