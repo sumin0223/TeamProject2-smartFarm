@@ -12,11 +12,23 @@ class Blind:
 
         self.pwm = GPIO.PWM(SERVO_PIN, 50)  # 50Hz
         self.pwm.start(0)
-
-    def set_angle(self,angle):
-        duty = 2 + (angle / 18)
+        self.pwm.ChangeDutyCycle(2.5)
+        
+    def set_angle(self, angle):
+        # 입력값 제한 (0~90도)
+        if angle > 90: angle = 90
+        if angle < 0: angle = 0
+        
+        print(f"모터 각도 이동: {angle}도")
+        
+        # 듀티 사이클 계산 보정 (2.5 ~ 12.5)
+        duty = 2.5 + (angle / 18)
         self.pwm.ChangeDutyCycle(duty)
-        time.sleep(0.5)
+        
+        # 모터가 물리적으로 이동할 시간을 충분히 줌 (블라인드 무게 고려)
+        time.sleep(0.8) 
+        
+        # 모터 떨림 방지 (신호 끊기)
         self.pwm.ChangeDutyCycle(0)
         
 
@@ -32,7 +44,6 @@ class Blind:
             angle = 90  # 블라인드 열기
         elif action == "CLOSE":
             angle = 0  # 블라인드 닫기
-        print(f"블라인드 각도 설정: {angle}도")
         self.set_angle(angle)
 
 # ===== MQTT 연결 =====

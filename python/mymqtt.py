@@ -71,7 +71,7 @@ class MqttWorker:
         # 카메라 촬영 시작, callback 등록
         Thread(target=self.timelapse_camera.start_timelapse, args=(self.mqtt_publish_photo,)).start()
 
-    # broker 서버와 연결 후 실행될 콜백메서드 - rc가 0이면 접속 성공, sub_topics 구독 신청
+    # broker 서버와 연결 후 실행 될 콜백메서드 - rc가 0이면 접속 성공, sub_topics 구독 신청
     def on_connect(self, client, userdata, flags, rc):
         global sub_topics
         print(client, userdata, flags)
@@ -82,55 +82,81 @@ class MqttWorker:
             print("연결실패.....")
 
     # sub_topics 메시지가 수신되면 자동으로 호출되는 메서드
-    def on_message(self,client, userdata, message):
+    def handle_message(self, topic, payload):
         global nova_serial, slot
-        my_val = message.payload.decode("utf-8")
-        print(message.topic + "===========", my_val)
         
-        # 토픽을 "/" 기준으로 나누어 어떤 액추에이터에 관한 토픽인지 구분
-        topicArr = message.topic.split("/")
-        if(topicArr[0]==nova_serial and int(topicArr[1])==slot):
-            data = json.loads(my_val)
-            if topicArr[2] == "LED":
-                self.led.control_msg(data)
-            elif topicArr[2] == "FAN":
-                self.fan.control_msg(data)
-                self.led.control_msg(data)  # FAN 제어 시 LED도 함께 제어
-            elif topicArr[2] == "HUMIDIFIER":
-                self.humidifier.control_msg(data)
-            elif topicArr[2] == "BLIND":
-                self.blind.on_message(data)
-            elif topicArr[2] == "PUMP":
-                self.pump.run_pump()
-            elif topicArr[2] == "HEATER":
-                data = json.loads(my_val)
-                action = data.get("action", "").upper()
+        try:
+            my_val = payload.decode("utf-8")
+            print(f"[Thread] 처리 시작: {topic} -> {my_val}")
+            
+            topicArr = topic.split("/")
+            
+            # 팜 번호가 맞는지 체크
+            if topicArr[0] == nova_serial and int(topicArr[1]) == slot:
+                
+                # JSON 파싱 시도
+                data = None
+                try:
+                    data = json.loads(my_val)
+                except:
+                    pass # JSON이 아닌 경우
 
-                if action == "ON":
-                    self.heater.on()
-                elif action == "OFF":
-                    self.heater.off()
-            elif topicArr[2] == "timelapse":
-                if my_val == "start":
-                    print("웹 요청으로 타임랩스 시작")
-                    self.start_timelapse()
+                device = topicArr[2]
 
-                    # MyCamera의 getStreaming 을 호출해서 프레임을 publish
-                    self.is_streaming = True
-                    print("start")
-                    self.cam_thread = Thread(target=self.send_camera_frame)
-                    self.cam_thread.start()
-                elif my_val == "end":
-                    print("end")
-                    self.is_streaming = False
+                if device == "LED":
+                    self.led.control_msg(data)
+                    
+                elif device == "FAN":
+                    self.fan.control_msg(data)
+                    self.led.control_msg(data) # 팬 제어 시 LED도 함께 제어
+                    
+                elif device == "HUMIDIFIER":
+                    self.humidifier.control_msg(data)
+                    
+                elif device == "BLIND":
+                    self.blind.on_message(data) 
+                    
+                elif device == "PUMP":
+                    self.pump.run_pump()
+                    
+                elif device == "HEATER":
+                    action = data.get("action", "").upper()
+                    if action == "ON":
+                        self.heater.on()
+                    elif action == "OFF":
+                        self.heater.off()
+                        
+                elif device == "timelapse":
+                    # 타임랩스는 문자열로 올 수 있음
+                    if my_val == "start":
+                        print("웹 요청으로 타임랩스 시작")
+                        self.start_timelapse()
+                        # (카메라 스트리밍 로직 등...)
+                    elif my_val == "end":
+                        print("end")
+                        self.is_streaming = False
+                        
+        except Exception as e:
+            print(f"메시지 처리 중 에러 발생: {e}")
+
+    # 2. on_message는 스레드 생성 역할만 수행
+    def on_message(self, client, userdata, message):
+        print(f"메시지 수신 (Topic: {message.topic})")
+        
+        # 메시지 내용을 스레드에 전달 (target=실행할함수, args=(인자,))
+        task_thread = Thread(target=self.handle_message, args=(message.topic, message.payload))
+        
+        # 데몬 스레드로 설정
+        task_thread.daemon = True 
+        task_thread.start()
 
     # publish 메시지를 보내는 메서드
-    # 센서가 수집하는 모든 데이터를 한번에 모아서 전송하는 방식
+    # 센서가 수집하는 모든 데이터를 5초 간격으로 한번에 모아서 전송하는 방식
     def publish_all_sensor_data(self):
         global pub_topic
         while True:
             try:
-                # 각 센서 객체에서 최신 데이터 가져오기
+                # 각 센서마다 데이터 갱신하기
                 payload = {
                     "temp": self.dht.data["temp"],
                     "humidity": self.dht.data["humi"],
@@ -152,10 +178,28 @@ class MqttWorker:
     def mymqtt_connect(self):
         try:
             print("브로커 연결 시작하기")
-            self.client.connect("192.168.14.116",1883,60)
+            self.client.connect("192.168.14.116",1883,60) # broker 서버 IP 설정
             self.client.loop_start()
             self.publish_all_sensor_data()
         except KeyboardInterrupt:
             pass
         finally:
             print("종료")
+    
+    def clean(self):
+        print("\n[시스템 종료] 자원을 정리합니다...")
+        
+        # 1. MQTT 연결 종료
+        try:
+            self.client.loop_stop() # 백그라운드 루프 중지
+            self.client.disconnect() # 서버 연결 끊기
+            print("- MQTT 연결 종료 완료")
+        except Exception as e:
+            print(f"- MQTT 종료 중 에러: {e}")
+
+        # 2. GPIO 핀 초기화 (모든 액추에이터 끄기)
+        try:
+            gpio.cleanup()
+            print("- GPIO Cleanup 완료")
+        except Exception as e:
+            print(f"- GPIO Cleanup 중 에러: {e}")

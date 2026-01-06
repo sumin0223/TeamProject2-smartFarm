@@ -14,6 +14,7 @@ import mh_z19
 class DHTSensor(Thread):
     def __init__(self):
         Thread.__init__(self)
+        self.daemon = True
         self.mydht11 = adafruit_dht.DHT11(board.D25)
         self.data = {"temp": 0.0, "humi": 0.0}
 
@@ -28,10 +29,8 @@ class DHTSensor(Thread):
 class MCPSensor(Thread):
     def __init__(self):
         Thread.__init__(self)
-        self.daemon = True  # 메인 프로그램 종료 시 스레드도 자동 종료되도록 설정
+        self.daemon = True
 
-        # [변경 1] 하드웨어 SPI(busio) -> 소프트웨어 SPI(bitbangio)로 변경
-        # 물리 핀 위치는 그대로(19, 21, 23번) 유지하되, 명확한 GPIO 번호로 지정했습니다.
         # CLK(23번 핀) = board.D11
         # MISO(21번 핀) = board.D9
         # MOSI(19번 핀) = board.D10
@@ -95,6 +94,7 @@ class MCPSensor(Thread):
 class UltrasonicSensor(Thread):
     def __init__(self):
         Thread.__init__(self)
+        self.daemon = True
 
         # 핀 설정 (D23 -> Trig, D24 -> Echo 사용)
         self.trig = digitalio.DigitalInOut(board.D23)
@@ -155,6 +155,7 @@ class UltrasonicSensor(Thread):
 class CO2Sensor(Thread):
     def __init__(self):
         Thread.__init__(self)
+        self.daemon = True
         self.data = {"co2": 0.0}
 
     def run(self):
