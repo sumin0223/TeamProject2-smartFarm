@@ -56,6 +56,11 @@ class MqttWorker:
         self.blind = Blind(16) # 서보모터 p.16 핀 (블라인드)
         self.heater = Heater(12)    # 히터 (P.12 핀)
         
+        
+        self.ledCO2 = Actuator(24) # P.13 핀에 LED
+        self.ledHeater = Actuator(23) # P.13 핀에 LED
+        self.ledHumidifier = Actuator(18) # P.13 핀에 LED
+        
         # 타임랩스 카메라 객체 생성
         self.timelapse_camera = None
 
@@ -124,8 +129,22 @@ class MqttWorker:
                     self.led.control_msg(data)
                     
                 elif device == "FAN":
+                    action = data.get("action", "").upper().split("/")[1]
+                    if action == "CO2":
+                        self.ledCO2.on()
+                    elif action == "HEATER":
+                        self.ledHeater.on()
+                    elif action == "HUMIDIFIER":
+                        self.ledHumidifier.on()
+                        
                     self.fan.control_msg(data)
-                    self.led.control_msg(data) # 팬 제어 시 LED도 함께 제어
+                    
+                    if action == "CO2":
+                        self.ledCO2.off()
+                    elif action == "HEATER":
+                        self.ledHeater.off()
+                    elif action == "HUMIDIFIER":
+                        self.ledHumidifier.off()
                     
                 elif device == "HUMIDIFIER":
                     self.humidifier.control_msg(data)

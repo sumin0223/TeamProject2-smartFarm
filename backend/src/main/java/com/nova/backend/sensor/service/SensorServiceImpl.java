@@ -43,21 +43,21 @@ public class SensorServiceImpl implements SensorService {
     static {
         // --- 온도 (Temp) ---
         // 온도가 높을 때 -> 팬 가동 (열 식힘)
-        ACTUATOR_MAP.put("TEMP_HIGH", new ActuatorTypeDTO("FAN", "온도","ON"));
+        ACTUATOR_MAP.put("TEMP_HIGH", new ActuatorTypeDTO("FAN", "온도","ON/HEATER"));
         // 온도가 낮을 때 -> 히터 가동
         ACTUATOR_MAP.put("TEMP_LOW", new ActuatorTypeDTO("HEATER", "온도","ON"));
 
         // --- 습도 (Humidity) ---
         // 습도가 높을 때 -> 팬 가동 (환기/제습)
-        ACTUATOR_MAP.put("HUMIDITY_HIGH", new ActuatorTypeDTO("FAN", "습도","ON"));
+        ACTUATOR_MAP.put("HUMIDITY_HIGH", new ActuatorTypeDTO("FAN", "습도","ON/HUMIDIFIER"));
         // 습도가 낮을 때 -> 가습기 가동
         ACTUATOR_MAP.put("HUMIDITY_LOW", new ActuatorTypeDTO("HUMIDIFIER", "습도","ON"));
 
         // --- CO2 ---
         // CO2가 높을 때 -> 팬 가동 (환기)
-        ACTUATOR_MAP.put("CO2_HIGH", new ActuatorTypeDTO("FAN", "CO2","ON"));
+        ACTUATOR_MAP.put("CO2_HIGH", new ActuatorTypeDTO("FAN", "CO2","ON/CO2"));
         // CO2가 낮을 때 -> (이미지에는 명확하지 않으나 보통 그대로 두거나 CO2 발생기 사용. 여기선 비워둠)
-        ACTUATOR_MAP.put("CO2_LOW", new ActuatorTypeDTO("FAN", "CO2","ON"));
+        ACTUATOR_MAP.put("CO2_LOW", new ActuatorTypeDTO("FAN", "CO2","ON/CO2"));
 
         // --- 조도/광량 (Light) ---
         // 광량이 높을 때 -> 블라인드 닫기 (차단)
