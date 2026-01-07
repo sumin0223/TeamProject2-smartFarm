@@ -23,7 +23,7 @@ class Actuator:
         GPIO.output(self.pin, GPIO.LOW)
 
     def control_msg(self,msg):
-        action = msg.get("action", "").upper()
+        action = msg.get("action", "").upper().split("/")[0]
         if action=="ON":
             self.onTime(5) #5초 on
         elif action=="OFF":
