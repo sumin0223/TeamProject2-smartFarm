@@ -55,7 +55,9 @@ public class SecurityConfig {
                                 "/api/users/password/**",
                                 "/alarm/subscribe",
                                 "/alarm/test-send",
-                                "/video-files/**"
+                                "/video-files/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         // 나머지는 인증 필요
                         .anyRequest().authenticated()
