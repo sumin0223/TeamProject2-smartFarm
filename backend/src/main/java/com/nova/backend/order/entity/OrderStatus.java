@@ -19,12 +19,12 @@ public enum OrderStatus {
     /**
      * 3. 최종 완료 단계
      */
-    PURCHASE_CONFIRMED("purchase_confirmed"), // 구매 확정
+    PURCHASE_CONFIRMED("status-confirmed"), // 구매 확정
 
     /**
      * 4. 취소 및 반품 단계
      */
-    CANCELLED("cancelled");           // 환불 완료
+    CANCELLED("status-cancelled");           // 환불 완료
 
     @JsonValue
     private final String value;
