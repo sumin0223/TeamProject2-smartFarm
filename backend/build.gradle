@@ -21,8 +21,10 @@ configurations {
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
