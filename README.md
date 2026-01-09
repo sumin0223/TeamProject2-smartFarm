@@ -134,7 +134,7 @@
 ## 로그인 기능
 https://drive.google.com/file/d/1xUre3cH7n7xE1ugdeM7XMvpgJJXjxTge/view?usp=drive_link
 ## 마이페이지 기능
-[마이페이지 정보 수정.mp4](https://drive.google.com/file/d/1_blTPNMUX3x7_n5tpdCmSY5b8yt8AwrZ/view?usp=sharing)
+[마이페이지 조회 및 정보 수정.mp4](https://drive.google.com/file/d/1_blTPNMUX3x7_n5tpdCmSY5b8yt8AwrZ/view?usp=sharing)
 ## 식물 관리 기능
 [2nd_회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
 
