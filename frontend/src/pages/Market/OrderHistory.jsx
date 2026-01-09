@@ -162,6 +162,7 @@ export default function OrderHistory() {
       <header className="order-header">
         <Button
           variant="ghost"
+          className="order-back-btn"
           onClick={() => navigate("/market")}
         >
           <ArrowLeft size={18} /> 뒤로가기
@@ -224,7 +225,7 @@ export default function OrderHistory() {
                     <div>
                       <p>{item.name}</p>
                       <p>
-                        {item.quantity}개 ·{" "}
+                        {item.quantity}개{" "}
                         {(
                           item.price *
                           item.quantity
@@ -251,30 +252,54 @@ export default function OrderHistory() {
               </div>
 
               {/* 액션 */}
+
+                {/* 주문 상세보기는 항상 */}
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    navigate(`/tracking/${order.id}`)
+                  }
+                >
+                  배송현황
+                </Button>
+
               {order.status === "delivered" && (
+
                 <div className="order-actions">
                   <Button
+                    variant="outline"
                     onClick={() =>
-                      handleConfirmOrder(order.id)
+                      navigate(`/tracking/${order.id}`)
                     }
                   >
-                    <CheckCircle size={16} />
-                    주문 확정
+                    주문 상세보기
                   </Button>
 
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setSelectedOrderId(
-                        order.id
-                      );
-                      setRefundModalOpen(true);
-                    }}
-                  >
-                    <RotateCcw size={16} />
-                    환불 요청
-                  </Button>
+                  {order.status === "delivered" && (
+                    <>
+                      <Button
+                        onClick={() =>
+                          handleConfirmOrder(order.id)
+                        }
+                      >
+                        <CheckCircle size={16} />
+                        주문 확정
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSelectedOrderId(order.id);
+                          setRefundModalOpen(true);
+                        }}
+                      >
+                        <RotateCcw size={16} />
+                        환불 요청
+                      </Button>
+                    </>
+                  )}
                 </div>
+
               )}
             </div>
           );

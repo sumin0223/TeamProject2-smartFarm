@@ -46,7 +46,7 @@
 }
 
 /* 카드 헤더 버튼 공통 */
-.om-card-header button {
+/* .om-card-header button {
   height: 48px;
   padding: 0 22px;
   border-radius: 28px;
@@ -59,12 +59,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-.om-card-header button:hover {
+} */
+/* .om-card-header button:hover {
   background: #1d261f;
   transform: translateY(-1px);
-}
-.om-card button:not(.secondary) {
+} */
+/* .om-card button:not(.secondary) {
   height: 48px;
   border-radius: 28px;
   background: #253126;
@@ -76,7 +76,7 @@
 
 .om-card button:not(.secondary):hover {
   background: #1d261f;
-}
+} */
 
 /* CARD */
 .om-card {
@@ -190,11 +190,11 @@
 }
 
 /* BUTTON AREA */
-.om-card-header button {
+/* .om-card-header button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-}
+} */
 
 /* TRACKING BOX */
 .om-tracking-box {
@@ -528,4 +528,44 @@
   max-height: 270px;      
   padding: 20px 22px;      
   overflow-y: auto;        
+}
+.om-card-header .pm-btn {
+  height: 48px;
+  padding: 0 22px;
+  border-radius: 28px;
+
+  background: linear-gradient(
+    135deg,
+    #4caf50,
+    #81c784
+  );
+  color: white;
+  font-weight: 700;
+
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.om-card-header .pm-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #43a047,
+    #66bb6a
+  );
+  transform: translateY(-2px);
+}
+.pm-btn.outline {
+  background: transparent;
+  border: 2px solid #4caf50;
+  color: #2e7d32;
+}
+
+.pm-btn.outline:hover {
+  background: #4caf50;
+  color: white;
 }
