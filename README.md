@@ -306,6 +306,8 @@
 
 [프리셋 자동변경 완성본.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
 
+[액추에이터 확인 및 팜별 대시보드 상세보기.mp4](https://drive.google.com/file/d/1TvfONO2HhXcFio3zQSD54-yHBC7A8_iQ/view?usp=sharing)
+
 [팜 삭제 완성본.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
 
 ### 타임랩스 기능
