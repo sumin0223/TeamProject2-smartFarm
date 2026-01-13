@@ -93,7 +93,7 @@
 ### 시각 자료
 |실물 모형|
 |-------|
-| ![FarmModel](https://github.com/user-attachments/assets/b9dca21b-882c-4528-b1f5-3455ebe20272) |
+| [FarmModel](https://github.com/user-attachments/assets/b9dca21b-882c-4528-b1f5-3455ebe20272) |
 
 ---------------------------
 
@@ -288,7 +288,7 @@
 --------------------------
 # 주요 기능 (영상)
 ## 전체영상 
-[전체 영상](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
+[전체 영상.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
 
 ## 기능별 영상
 ### 로그인 기능
