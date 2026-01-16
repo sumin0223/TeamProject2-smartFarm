@@ -11,7 +11,7 @@
 
 ![대시보드 스크린샷](https://github.com/user-attachments/assets/01190ef5-1be9-457f-a7ca-5d722ebf9de2)
 
-# NOVA 시연
+# NOVA 시연 영상
 
 [NOVA 영상.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
 
